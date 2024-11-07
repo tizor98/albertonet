@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import Header from "@/presentation/components/share/header";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -21,7 +22,10 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" className="dark">
-            <body className={`${poppins.variable} antialiased scroll-smooth`}>
+            <body
+                className={`${poppins.variable} antialiased scroll-smooth dark:invert bg-zinc-100 dark:bg-zinc-900`}
+            >
+                <Header />
                 {children}
             </body>
         </html>
