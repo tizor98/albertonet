@@ -1,6 +1,14 @@
+"use client";
 import { paths } from "@/config/paths";
 import Link from "next/link";
-import ThemeSwitcher from "./theme-switcher";
+import dynamic from "next/dynamic";
+
+const DynamicThemeSwitcherWithNoSSR = dynamic(
+    () => import("@/presentation/components/share/theme-switcher"),
+    {
+        ssr: false,
+    },
+);
 
 export default function Header() {
     return (
@@ -16,7 +24,7 @@ export default function Header() {
                     <Link href={paths.projects()}>Projects</Link>
                     <Link href={paths.blog()}>Blog</Link>
                     <Link href={paths.contact()}>Contact</Link>
-                    <ThemeSwitcher />
+                    <DynamicThemeSwitcherWithNoSSR />
                 </div>
             </nav>
         </header>

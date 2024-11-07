@@ -4,11 +4,11 @@ const THEME_KEY = "albertonet-theme-key";
 
 export type Theme = "light" | "dark";
 
-export const useTheme = (): {
+export function useTheme(): {
     theme: Theme;
     changeTheme: (theme: Theme) => void;
-} => {
-    const localTheme = window.localStorage.getItem(THEME_KEY) ?? "light";
+} {
+    const localTheme = localStorage.getItem(THEME_KEY) ?? "light";
     const [theme, setTheme] = useState<Theme>(
         localTheme === "dark" ? "dark" : "light",
     );
@@ -25,11 +25,11 @@ export const useTheme = (): {
         switch (newTheme) {
             case "dark":
                 document.querySelector("html")?.classList.add("dark");
-                window.localStorage.setItem(THEME_KEY, "dark");
+                localStorage.setItem(THEME_KEY, "dark");
                 break;
             case "light":
                 document.querySelector("html")?.classList.remove("dark");
-                window.localStorage.setItem(THEME_KEY, "light");
+                localStorage.setItem(THEME_KEY, "light");
                 break;
         }
 
@@ -40,4 +40,4 @@ export const useTheme = (): {
         theme,
         changeTheme,
     };
-};
+}
