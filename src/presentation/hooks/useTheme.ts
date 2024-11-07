@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const THEME_KEY = "albertonet-theme-key";
 
@@ -8,25 +8,28 @@ export const useTheme = (): {
     theme: Theme;
     changeTheme: (theme: Theme) => void;
 } => {
-    const localTheme = localStorage.getItem(THEME_KEY) ?? "light";
-
+    const localTheme = window.localStorage.getItem(THEME_KEY) ?? "light";
     const [theme, setTheme] = useState<Theme>(
         localTheme === "dark" ? "dark" : "light",
     );
 
-    if (theme === "dark") {
-        document.querySelector("html")?.classList.add("dark");
-    }
+    useEffect(() => {
+        if (localTheme === "dark") {
+            document.querySelector("html")?.classList.add("dark");
+        } else {
+            document.querySelector("html")?.classList.remove("dark");
+        }
+    }, [localTheme]);
 
     const changeTheme = (newTheme: Theme) => {
         switch (newTheme) {
             case "dark":
                 document.querySelector("html")?.classList.add("dark");
-                localStorage.setItem(THEME_KEY, "dark");
+                window.localStorage.setItem(THEME_KEY, "dark");
                 break;
             case "light":
                 document.querySelector("html")?.classList.remove("dark");
-                localStorage.setItem(THEME_KEY, "light");
+                window.localStorage.setItem(THEME_KEY, "light");
                 break;
         }
 

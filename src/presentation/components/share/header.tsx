@@ -1,6 +1,6 @@
 import { paths } from "@/config/paths";
 import Link from "next/link";
-import ThmeSwitcher from "./theme-switcher";
+import ThemeSwitcher from "./theme-switcher";
 
 export default function Header() {
     return (
@@ -13,10 +13,10 @@ export default function Header() {
                     </h1>
                 </Link>
                 <div className="flex items-center justify-center gap-4">
-                    <Link href={""}>Portfolio</Link>
-                    <Link href={""}>Blog</Link>
-                    <Link href={""}>Contact</Link>
-                    <ThmeSwitcher />
+                    <Link href={paths.projects()}>Projects</Link>
+                    <Link href={paths.blog()}>Blog</Link>
+                    <Link href={paths.contact()}>Contact</Link>
+                    <ThemeSwitcher />
                 </div>
             </nav>
         </header>
