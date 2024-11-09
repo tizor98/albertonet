@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/presentation/components/share/header";
+import ThemeProvider from "@/presentation/components/share/theme-provider";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -21,12 +22,39 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" className="dark">
+        <html suppressHydrationWarning lang="en">
+            <head>
+                <link
+                    rel="apple-touch-icon"
+                    sizes="180x180"
+                    href="/apple-touch-icon.png"
+                />
+                <link
+                    rel="icon"
+                    type="image/png"
+                    sizes="32x32"
+                    href="/favicon-32x32.png"
+                />
+                <link
+                    rel="icon"
+                    type="image/png"
+                    sizes="16x16"
+                    href="/favicon-16x16.png"
+                />
+                <link rel="manifest" href="/site.webmanifest" />
+            </head>
             <body
-                className={`${poppins.variable} antialiased scroll-smooth dark:invert bg-zinc-100 dark:bg-zinc-900`}
+                className={`${poppins.variable} antialiased scroll-smooth bg-zinc-100 dark:bg-zinc-900`}
             >
-                <Header />
-                {children}
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                >
+                    <Header />
+                    {children}
+                </ThemeProvider>
             </body>
         </html>
     );
