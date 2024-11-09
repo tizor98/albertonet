@@ -15,7 +15,10 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
     metadataBase: new URL(BASE_URL),
-    title: "albertonet",
+    title: {
+        default: "albertonet",
+        template: "%s | albertonet",
+    },
     description: "Personal blog and comunity around software development.",
     openGraph: {
         title: "albertonet",
