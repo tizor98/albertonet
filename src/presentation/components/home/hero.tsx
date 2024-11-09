@@ -1,6 +1,6 @@
 import profileImg from "@/assets/profile.jpg";
 import {
-    AWS_CERTIFICATION_URL,
+    CLOUD_CERTIFICATION_URL,
     GITHUB_URL,
     LINKEDIN_URL,
 } from "@/config/contants";
@@ -26,7 +26,7 @@ export default function Hero() {
                     Software Developer focused on Backend with Java and Golang,
                     Frontend with React, Mobile development with React Native,
                     and cloud services with AWS (
-                    <ExternalLink href={AWS_CERTIFICATION_URL}>
+                    <ExternalLink href={CLOUD_CERTIFICATION_URL}>
                         <span className="underline">
                             Certified Developer - Associate
                         </span>
