@@ -5,8 +5,11 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import Link from "next/link";
 import { paths } from "@/config/paths";
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "./language-switcher";
 
 export default function NavMobile() {
+    const t = useTranslations("home");
     const [active, setActive] = useState(false);
 
     const onClick = () => {
@@ -22,6 +25,7 @@ export default function NavMobile() {
             >
                 {active ? <X /> : <Menu />}
             </Button>
+            <LanguageSwitcher />
             <ThemeSwitcher />
             {active && (
                 <Button
@@ -33,19 +37,19 @@ export default function NavMobile() {
                         className="z-10 hover:text-blue-800 dark:hover:text-blue-400 duration-150"
                         href={paths.projects()}
                     >
-                        Projects
+                        {t("projectLink")}
                     </Link>
                     <Link
                         className="z-10 hover:text-blue-800 dark:hover:text-blue-400 duration-150"
                         href={paths.blog()}
                     >
-                        Blog
+                        {t("blogLink")}
                     </Link>
                     <Link
                         className="z-10 hover:text-blue-800 dark:hover:text-blue-400 duration-150"
                         href={paths.contact()}
                     >
-                        Contact
+                        {t("contactLink")}
                     </Link>
                 </Button>
             )}

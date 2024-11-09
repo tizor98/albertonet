@@ -8,8 +8,10 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/presentation/components/ui/dropdown-menu";
+import { useTranslations } from "next-intl";
 
 export default function ThemeSwitcher() {
+    const t = useTranslations("home");
     const { setTheme } = useTheme();
 
     return (
@@ -23,13 +25,13 @@ export default function ThemeSwitcher() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setTheme("light")}>
-                    Light
+                    {t("lightTheme")}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    Dark
+                    {t("darkTheme")}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("system")}>
-                    System
+                    {t("systemTheme")}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

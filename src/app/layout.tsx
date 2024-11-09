@@ -3,6 +3,8 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/presentation/components/share/header";
 import ThemeProvider from "@/presentation/components/share/theme-provider";
+import { getLocale, getMessages } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -16,13 +18,16 @@ export const metadata: Metadata = {
     description: "Main Website for albertonet mark.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const locale = await getLocale();
+    const msg = await getMessages();
+
     return (
-        <html suppressHydrationWarning lang="en">
+        <html suppressHydrationWarning lang={locale}>
             <head>
                 <link
                     rel="apple-touch-icon"
@@ -46,15 +51,17 @@ export default function RootLayout({
             <body
                 className={`${poppins.variable} antialiased scroll-smooth bg-zinc-100 dark:bg-zinc-900`}
             >
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                    disableTransitionOnChange
-                >
-                    <Header />
-                    {children}
-                </ThemeProvider>
+                <NextIntlClientProvider messages={msg}>
+                    <ThemeProvider
+                        attribute="class"
+                        defaultTheme="system"
+                        enableSystem
+                        disableTransitionOnChange
+                    >
+                        <Header />
+                        {children}
+                    </ThemeProvider>
+                </NextIntlClientProvider>
             </body>
         </html>
     );

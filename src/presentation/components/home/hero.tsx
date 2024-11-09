@@ -5,11 +5,13 @@ import {
     LINKEDIN_URL,
 } from "@/config/contants";
 import { ChartColumnIncreasing, Cpu, MonitorPlay } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import type { PropsWithChildren } from "react";
 
 export default function Hero() {
+    const t = useTranslations("home");
     return (
         <section
             id="hero"
@@ -17,35 +19,42 @@ export default function Hero() {
         >
             <div className="flex flex-col items-start lg:items-center p-5 gap-5 lg:text-xl">
                 <h1 className="text-4xl font-bold tracking-wide">
-                    Hi, I'm Alberto
+                    {t("hero.title")}
                 </h1>
-                <p>
+                <div>
                     <Cpu className="inline-flex pr-1 text-blue-700 dark:text-blue-200" />
-                    I'm a{" "}
-                    <span className="font-bold underline">self-taught</span>{" "}
-                    Software Developer focused on Backend with Java and Golang,
-                    Frontend with React, Mobile development with React Native,
-                    and cloud services with AWS (
-                    <ExternalLink href={CLOUD_CERTIFICATION_URL}>
-                        <span className="underline">
-                            Certified Developer - Associate
-                        </span>
-                    </ExternalLink>
-                    ) and Cloudflare
-                </p>
+                    {t.rich("hero.point1", {
+                        important0: (chunks) => (
+                            <span className="font-bold underline">
+                                {chunks}
+                            </span>
+                        ),
+                        important1: (chunks) => (
+                            <ExternalLink href={CLOUD_CERTIFICATION_URL}>
+                                <span className="underline">{chunks}</span>
+                            </ExternalLink>
+                        ),
+                    })}
+                </div>
                 <p>
                     <MonitorPlay className="inline-flex pr-1" />
-                    I'm also a{" "}
-                    <span className="font-bold underline">content creator</span>{" "}
-                    and owner of this (hoppefully) successfull blog you're
-                    visiting
+                    {t.rich("hero.point2", {
+                        important0: (chunks) => (
+                            <span className="font-bold underline">
+                                {chunks}
+                            </span>
+                        ),
+                    })}
                 </p>
                 <p>
                     <ChartColumnIncreasing className="inline-flex pr-1 text-green-800 dark:text-green-200" />
-                    Here you can find programming-related blogs, review my
-                    projects, and{" "}
-                    <span className="font-bold underline">contact me</span> for
-                    freelance or full-time jobs
+                    {t.rich("hero.point3", {
+                        important0: (chunks) => (
+                            <span className="font-bold underline">
+                                {chunks}
+                            </span>
+                        ),
+                    })}
                 </p>
                 <div className="flex gap-3 self-start">
                     <ExternalLink href={LINKEDIN_URL}>
