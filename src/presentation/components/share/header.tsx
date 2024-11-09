@@ -2,8 +2,11 @@ import { paths } from "@/config/paths";
 import Link from "next/link";
 import ThemeSwitcher from "./theme-switcher";
 import NavMobile from "./nav-mobile";
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "./language-switcher";
 
 export default function Header() {
+    const t = useTranslations("home");
     return (
         <header className="w-full">
             <nav className="container mx-auto my-5 px-10 flex items-center justify-between">
@@ -23,20 +26,21 @@ export default function Header() {
                         className="hover:text-blue-800 dark:hover:text-blue-400 duration-150"
                         href={paths.projects()}
                     >
-                        Projects
+                        {t("projectLink")}
                     </Link>
                     <Link
                         className="hover:text-blue-800 dark:hover:text-blue-400 duration-150"
                         href={paths.blog()}
                     >
-                        Blog
+                        {t("blogLink")}
                     </Link>
                     <Link
                         className="hover:text-blue-800 dark:hover:text-blue-400 duration-150"
                         href={paths.contact()}
                     >
-                        Contact
+                        {t("contactLink")}
                     </Link>
+                    <LanguageSwitcher />
                     <ThemeSwitcher />
                 </div>
                 <NavMobile />
