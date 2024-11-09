@@ -9,9 +9,9 @@ export default function Header() {
     const t = useTranslations("home");
     return (
         <header className="w-full">
-            <nav className="container mx-auto my-5 px-10 flex items-center justify-between">
+            <nav className="container mx-auto mb-1 md:mb-5 mt-5 px-7 md:px-10 flex items-center justify-between">
                 <Link href={paths.home()}>
-                    <h1 className="font-semibold text-3xl dark:text-white">
+                    <h1 className="font-semibold text-2xl md:text-3xl dark:text-white">
                         <span className="text-yellow-700 dark:invert">
                             {"</>"}
                         </span>

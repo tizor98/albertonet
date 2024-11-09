@@ -17,7 +17,7 @@ export default function NavMobile() {
     };
 
     return (
-        <div className="lg:hidden flex items-center gap-2">
+        <div className="lg:hidden flex items-center gap-1">
             <Button
                 onClick={onClick}
                 variant={"ghost"}
@@ -31,7 +31,7 @@ export default function NavMobile() {
                 <Button
                     onClick={onClick}
                     variant={"ghost"}
-                    className="absolute z-0 top-0 h-full left-0 right-0 mt-20 p-10 flex flex-col items-start justify-start gap-5 text-2xl bg-zinc-100 dark:bg-zinc-900 cursor-default"
+                    className="absolute z-0 top-0 h-fit border border-zinc-400 rounded-3xl left-0 right-0 mt-20 p-10 flex flex-col items-start justify-start gap-5 text-2xl text-white dark:text-black bg-zinc-900 dark:bg-zinc-100 cursor-default"
                 >
                     <Link
                         className="z-10 hover:text-blue-800 dark:hover:text-blue-400 duration-150"

@@ -15,7 +15,7 @@ export default function Hero() {
     return (
         <section
             id="hero"
-            className="container flex flex-col lg:flex-row items-center gap-10 p-10"
+            className="container flex flex-col lg:flex-row items-center p-5 gap-10 md:p-10"
         >
             <div className="flex flex-col items-start lg:items-center p-5 gap-5 lg:text-xl">
                 <h1 className="text-4xl font-bold tracking-wide">
@@ -111,7 +111,7 @@ function ExternalLink({ href, children }: ExternalLinkProps) {
                     {children}
                 </Link>
             ) : (
-                <div>{children}</div>
+                <span>{children}</span>
             )}
         </>
     );
