@@ -13,10 +13,12 @@ export default function Hero() {
     return (
         <section
             id="hero"
-            className="container mx-auto flex flex-col lg:flex-row items-center gap-10 p-10"
+            className="container flex flex-col lg:flex-row items-center gap-10 p-10"
         >
             <div className="flex flex-col items-start lg:items-center p-5 gap-5 lg:text-xl">
-                <h2 className="text-4xl font-bold">Hi, I'm Alberto</h2>
+                <h1 className="text-4xl font-bold tracking-wide">
+                    Hi, I'm Alberto
+                </h1>
                 <p>
                     <Cpu className="inline-flex pr-1 text-blue-700 dark:text-blue-200" />
                     I'm a{" "}

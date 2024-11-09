@@ -1,7 +1,6 @@
 import { paths } from "@/config/paths";
 import Link from "next/link";
 import ThemeSwitcher from "./theme-switcher";
-import { Menu, X } from "lucide-react";
 import NavMobile from "./nav-mobile";
 
 export default function Header() {
