@@ -24,7 +24,7 @@ export default function ProjectCard({ project, className }: Props) {
     const l = useLocale() as Locale;
     const t = useTranslations();
     return (
-        <Card className={cn("min-h-full", className)}>
+        <Card className={cn("min-h-fit md:min-h-full", className)}>
             <CardHeader>
                 <CardTitle className="flex justify-between items-start gap-1">
                     <p className="flex-1">
