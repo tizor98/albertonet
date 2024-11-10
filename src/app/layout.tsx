@@ -5,6 +5,7 @@ import Header from "@/presentation/components/share/header";
 import { getLocale, getMessages } from "next-intl/server";
 import { BASE_URL } from "@/config/contants";
 import Providers from "@/presentation/components/share/providers";
+import { Toaster } from "@/presentation/components/ui/sonner";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -78,6 +79,7 @@ export default async function RootLayout({
                 <Providers msg={msg}>
                     <Header />
                     {children}
+                    <Toaster />
                 </Providers>
             </body>
         </html>
