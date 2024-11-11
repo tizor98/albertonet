@@ -1,11 +1,20 @@
 version: 1
+backend:
+  phases:
+    preBuild:
+      commands:
+        - corepack enable pnpm && pnpm install
+        - amplify pull --appId $AWS_APP_ID --envName $AWS_BRANCH
+    build:
+      commands:
+        # Caching and building backend resources
+        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
 frontend:
   phases:
     preBuild:
       commands:
         - env | grep -e CLOUD_CERTIFICATION_URL -e LINKEDIN_URL -e GITHUB_URL >> .env.production
         - corepack enable pnpm && pnpm install
-        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
     build:
       commands:
         - pnpm build
