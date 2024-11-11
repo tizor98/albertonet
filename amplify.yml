@@ -4,7 +4,6 @@ backend:
     preBuild:
       commands:
         - corepack enable pnpm && pnpm install
-        - amplify pull --appId $AWS_APP_ID --envName $AWS_BRANCH
     build:
       commands:
         # Caching and building backend resources
