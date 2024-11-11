@@ -12,6 +12,7 @@ frontend:
   phases:
     preBuild:
       commands:
+        - env | grep -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY >> .env.production
         - env | grep -e CLOUD_CERTIFICATION_URL -e LINKEDIN_URL -e GITHUB_URL >> .env.production
         - corepack enable pnpm && pnpm install
     build:
