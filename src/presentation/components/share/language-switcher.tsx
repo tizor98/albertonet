@@ -9,7 +9,7 @@ import {
 } from "@/presentation/components/ui/dropdown-menu";
 import { changeLanguage } from "@/presentation/actions/language";
 import { useLocale } from "next-intl";
-import type { Locale } from "@/config/i18n/i18n";
+import type { Locale } from "@/infrastructure/i18n/i18n";
 
 export default function LanguageSwitcher() {
     const locale = useLocale() as Locale;

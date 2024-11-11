@@ -3,7 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/presentation/components/share/header";
 import { getLocale, getMessages } from "next-intl/server";
-import { BASE_URL } from "@/config/contants";
+import { BASE_URL } from "@/infrastructure/contants";
 import Providers from "@/presentation/components/share/providers";
 import { Toaster } from "@/presentation/components/ui/sonner";
 

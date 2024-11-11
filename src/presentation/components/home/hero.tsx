@@ -3,7 +3,7 @@ import {
     CLOUD_CERTIFICATION_URL,
     GITHUB_URL,
     LINKEDIN_URL,
-} from "@/config/contants";
+} from "@/infrastructure/contants";
 import { ChartColumnIncreasing, Cpu, MonitorPlay } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";

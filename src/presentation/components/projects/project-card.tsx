@@ -13,7 +13,7 @@ import TextWithSpaces from "../ui/text-with-spaces";
 import { CircleCheck, Construction } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
-import { i18n, type Locale } from "@/config/i18n/i18n";
+import { i18n, type Locale } from "@/infrastructure/i18n/i18n";
 
 interface Props {
     project: Project;

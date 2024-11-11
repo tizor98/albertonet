@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { paths } from "@/config/paths";
+import { paths } from "@/infrastructure/paths";
 import { useTranslations } from "next-intl";
 
 export default function ContactSendConfirmation() {

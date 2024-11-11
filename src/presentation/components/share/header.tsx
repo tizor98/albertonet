@@ -1,4 +1,4 @@
-import { paths } from "@/config/paths";
+import { paths } from "@/infrastructure/paths";
 import Link from "next/link";
 import ThemeSwitcher from "./theme-switcher";
 import NavMobile from "./nav-mobile";

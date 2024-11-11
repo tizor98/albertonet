@@ -1,4 +1,4 @@
-import type { Locale } from "@/config/i18n/i18n";
+import type { Locale } from "@/infrastructure/i18n/i18n";
 
 export type Project = {
     inProgress: boolean;

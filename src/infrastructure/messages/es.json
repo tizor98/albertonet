@@ -38,7 +38,7 @@
         "name": "nombre",
         "email": "correo",
         "message": "mensaje",
-        "messageSend": "Tu mensaje fue envaido satisfactoriamente",
+        "messageSend": "Tu mensaje fue enviado satisfactoriamente",
         "messageError": "Un error inesperado ocurrió. Por favor instantalo más tarde",
         "notification": {
             "send": "!!Perfecto!! Tu mensaje fue enviado",

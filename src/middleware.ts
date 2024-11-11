@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { NEXT_LOCALE } from "./config/contants";
-import { i18n, type Locale } from "./config/i18n/i18n";
+import { NEXT_LOCALE } from "./infrastructure/contants";
+import { i18n, type Locale } from "./infrastructure/i18n/i18n";
 
 export async function middleware(request: NextRequest) {
     if (request.cookies.has(NEXT_LOCALE)) return;

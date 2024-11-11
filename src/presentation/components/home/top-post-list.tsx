@@ -1,7 +1,7 @@
 import { PostService } from "@/domain/services/posts";
 import { Button } from "../ui/button";
 import { ArrowBigRight } from "lucide-react";
-import { paths } from "@/config/paths";
+import { paths } from "@/infrastructure/paths";
 import PostCard from "../posts/post-card";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";

@@ -1,4 +1,4 @@
-import { paths } from "@/config/paths";
+import { paths } from "@/infrastructure/paths";
 import { sendMessage } from "@/presentation/actions/contact";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
