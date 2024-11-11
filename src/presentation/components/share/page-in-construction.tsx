@@ -1,4 +1,4 @@
-import { paths } from "@/config/paths";
+import { paths } from "@/infrastructure/paths";
 import { ArrowBigLeft, Construction } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";

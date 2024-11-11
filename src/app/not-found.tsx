@@ -1,4 +1,4 @@
-import { paths } from "@/config/paths";
+import { paths } from "@/infrastructure/paths";
 import { Button } from "@/presentation/components/ui/button";
 import { useTranslations } from "next-intl";
 import Link from "next/link";

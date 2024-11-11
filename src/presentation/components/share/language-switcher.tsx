@@ -8,8 +8,11 @@ import {
     DropdownMenuTrigger,
 } from "@/presentation/components/ui/dropdown-menu";
 import { changeLanguage } from "@/presentation/actions/language";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/infrastructure/i18n/i18n";
 
 export default function LanguageSwitcher() {
+    const locale = useLocale() as Locale;
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -19,10 +22,16 @@ export default function LanguageSwitcher() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => changeLanguage("en")}>
+                <DropdownMenuItem
+                    disabled={locale === "en"}
+                    onClick={() => changeLanguage("en")}
+                >
                     English
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => changeLanguage("es")}>
+                <DropdownMenuItem
+                    disabled={locale === "es"}
+                    onClick={() => changeLanguage("es")}
+                >
                     Español
                 </DropdownMenuItem>
             </DropdownMenuContent>

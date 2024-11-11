@@ -1,11 +1,11 @@
 import { ProjectService } from "@/domain/services/project";
 import ProjectCard from "../projects/project-card";
 import Link from "next/link";
-import { paths } from "@/config/paths";
+import { paths } from "@/infrastructure/paths";
 import { Button } from "../ui/button";
 import { ArrowBigRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { i18n } from "@/config/i18n/i18n";
+import { i18n } from "@/infrastructure/i18n/i18n";
 
 export default async function TopProjectList() {
     const t = await getTranslations("home");

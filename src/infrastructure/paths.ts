@@ -11,4 +11,7 @@ export const paths = {
     contact() {
         return "/contact";
     },
+    contactSend() {
+        return "/contact/send";
+    },
 };

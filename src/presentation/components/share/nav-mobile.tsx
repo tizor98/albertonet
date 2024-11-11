@@ -4,7 +4,7 @@ import ThemeSwitcher from "./theme-switcher";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import Link from "next/link";
-import { paths } from "@/config/paths";
+import { paths } from "@/infrastructure/paths";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./language-switcher";
 

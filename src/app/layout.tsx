@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/presentation/components/share/header";
-import ThemeProvider from "@/presentation/components/share/theme-provider";
 import { getLocale, getMessages } from "next-intl/server";
-import { NextIntlClientProvider } from "next-intl";
+import { BASE_URL } from "@/infrastructure/contants";
+import Providers from "@/presentation/components/share/providers";
+import { Toaster } from "@/presentation/components/ui/sonner";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -14,8 +15,32 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-    title: "albertonet",
-    description: "Main Website for albertonet mark.",
+    metadataBase: new URL(BASE_URL),
+    title: {
+        default: "albertonet",
+        template: "%s | albertonet",
+    },
+    description: "Personal blog and comunity around software development.",
+    openGraph: {
+        title: "albertonet",
+        description: "Personal blog and comunity around software development.",
+        url: new URL(BASE_URL),
+        siteName: "albertonet",
+        locale: "en",
+        alternateLocale: "es",
+        type: "website",
+    },
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+            index: true,
+            follow: true,
+            "max-video-preview": -1,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+        },
+    },
 };
 
 export default async function RootLayout({
@@ -51,17 +76,11 @@ export default async function RootLayout({
             <body
                 className={`${poppins.variable} antialiased scroll-smooth bg-zinc-100 dark:bg-zinc-900`}
             >
-                <NextIntlClientProvider messages={msg}>
-                    <ThemeProvider
-                        attribute="class"
-                        defaultTheme="system"
-                        enableSystem
-                        disableTransitionOnChange
-                    >
-                        <Header />
-                        {children}
-                    </ThemeProvider>
-                </NextIntlClientProvider>
+                <Providers msg={msg}>
+                    <Header />
+                    {children}
+                    <Toaster />
+                </Providers>
             </body>
         </html>
     );

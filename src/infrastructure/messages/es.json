@@ -1,7 +1,8 @@
 {
     "generic": {
         "underConstruction": "en construcción",
-        "completed": "completado"
+        "completed": "completado",
+        "send": "enviar"
     },
     "home": {
         "projectLink": "Proyectos",
@@ -31,5 +32,24 @@
     "projects": {
         "seeRepo": "Ver repo",
         "seeDeploy": "Ver despliegue"
+    },
+    "contact": {
+        "isCompany": "¿El mensaje es de parte de una empresa?",
+        "name": "nombre",
+        "email": "correo",
+        "message": "mensaje",
+        "messageSend": "Tu mensaje fue enviado satisfactoriamente",
+        "messageError": "Un error inesperado ocurrió. Por favor instantalo más tarde",
+        "notification": {
+            "send": "!!Perfecto!! Tu mensaje fue enviado",
+            "goHome": "Ir a inicio",
+            "other": "Enviar otro mensaje"
+        },
+        "error": {
+            "nameIsBlank": "El nombre no puede estar vacío",
+            "emailIsBlank": "El email no puede estar vacío",
+            "emailIsNotValid": "El email no es valido",
+            "messageToShort": "El mensaje debe ser de más de 10 letras"
+        }
     }
 }
