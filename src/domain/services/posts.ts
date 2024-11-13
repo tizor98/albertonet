@@ -1,25 +1,15 @@
 import type { Post } from "../types/post";
-import { downloadData, list } from "aws-amplify/storage";
-
-const BUCKET_NAME_FROM_BACKEND = "albertonet-bucket";
+import { storageAdapter } from "@/infrastructure/storage-adapter";
 
 export const PostService = {
     async getTopPosts(): Promise<Post[]> {
         await new Promise((r) => setTimeout(r, 2000));
-        const topPosts = await list({
-            path: "posts/top",
-            options: {
-                bucket: BUCKET_NAME_FROM_BACKEND,
-                listAll: true,
-            },
-        });
 
-        console.log(topPosts);
-
-        const postsPath = topPosts.items.map((item) => item.path);
+        const postsPath = await storageAdapter.getObjectsPath("posts/top");
 
         const getPostPromises: Promise<Post>[] = [];
         for (const path of postsPath) {
+            if (!path.endsWith(".mdx")) continue;
             getPostPromises.push(this.getPostByPath(path));
         }
 
@@ -29,48 +19,21 @@ export const PostService = {
     },
 
     async getPostBySlug(slug: string): Promise<Post> {
-        const data = await downloadData({
-            path: `posts/${slug}`,
-            options: {
-                bucket: BUCKET_NAME_FROM_BACKEND,
-            },
-        }).result;
+        const object = await storageAdapter.getObjectByPrefixAndName(
+            "posts/",
+            slug,
+        );
 
-        if (!data.metadata) {
-            throw new Error(`Post metadata not found for post ${slug}`);
-        }
-
-        return fromObjectToPost(slug, data);
+        return storageAdapter.fromObjectToPost(slug, object);
     },
 
     async getPostByPath(path: string): Promise<Post> {
-        const data = await downloadData({
-            path,
-            options: {
-                bucket: BUCKET_NAME_FROM_BACKEND,
-            },
-        }).result;
+        const object = await storageAdapter.getObjectByPath(path);
+        console.log(object);
 
-        if (!data.metadata) {
-            throw new Error(`Post metadata not found for post ${path}`);
-        }
-
-        return fromObjectToPost(
+        return storageAdapter.fromObjectToPost(
             path.split("/").at(path.split("/").length - 1) ?? "",
-            data,
+            object,
         );
     },
-};
-
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-const fromObjectToPost = async (slug: string, data: any): Promise<Post> => {
-    return {
-        title: data.metadata.title,
-        slug,
-        description: data.metadata.description,
-        categories: data.metadata.categories.split(";"),
-        content: await data.body.text(),
-        publicationDate: new Date(data.metadata.publicationDate),
-        lastModifiedDate: data.lastModified,
-    };
 };
