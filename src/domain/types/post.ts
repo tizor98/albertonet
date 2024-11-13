@@ -1,10 +1,9 @@
 export type Post = {
     title: string;
-    categories: Category[];
+    categories: string[];
     description: string;
     slug: string;
-};
-
-export type Category = {
-    name: string;
+    content: string;
+    publicationDate: Date;
+    lastModifiedDate: Date | undefined;
 };
