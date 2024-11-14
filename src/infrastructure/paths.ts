@@ -8,6 +8,9 @@ export const paths = {
     blog() {
         return "/blog";
     },
+    blogPost(slug: string) {
+        return `/blog/${slug}`;
+    },
     contact() {
         return "/contact";
     },

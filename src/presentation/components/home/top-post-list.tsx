@@ -2,15 +2,15 @@ import { PostService } from "@/domain/services/posts";
 import { Button } from "../ui/button";
 import { ArrowBigRight } from "lucide-react";
 import { paths } from "@/infrastructure/paths";
-import PostCard from "../posts/post-card";
+import PostCard from "./top-post-card";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 export default async function TopPostsList() {
     const t = await getTranslations("home");
-    const posts = await PostService.getTopPosts();
+    const topPosts = await PostService.getTopPosts();
 
-    if (0 === posts.length) return <></>;
+    if (0 === topPosts.length) return <></>;
 
     return (
         <section
@@ -21,8 +21,8 @@ export default async function TopPostsList() {
                 {t("topPosts")}
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
-                {posts.map((post) => (
-                    <PostCard key={post.title} post={post} />
+                {topPosts.map((topPost) => (
+                    <PostCard key={topPost.slug} topPost={topPost} />
                 ))}
             </div>
             <Button variant={"link"} className="self-start">
