@@ -14,7 +14,7 @@ export default function TopPostCard({ topPost }: Props) {
                     {topPost.title}
                 </h3>
                 <p className="text-xs tracking-tight font-light">
-                    {topPost.publicationDate}
+                    {new Date(topPost.publicationDate).toLocaleDateString()}
                 </p>
                 <div className="flex gap-1">
                     {topPost.categories.split(";").map((category) => {

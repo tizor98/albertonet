@@ -22,7 +22,7 @@
         }
     },
     "error": {
-        "pageInConstruction": "!!Esta página se encuentra en construcción!!",
+        "pageInConstruction": "¡¡Esta página se encuentra en construcción!!",
         "comeBackSoon": "Vuelve pronto",
         "goHomepage": "Ir a inicio",
         "notFound": "404. Esta página no fue encontrado",
@@ -41,7 +41,7 @@
         "messageSend": "Tu mensaje fue enviado satisfactoriamente",
         "messageError": "Un error inesperado ocurrió. Por favor instantalo más tarde",
         "notification": {
-            "send": "!!Perfecto!! Tu mensaje fue enviado",
+            "send": "¡¡Perfecto!! Tu mensaje fue enviado",
             "goHome": "Ir a inicio",
             "other": "Enviar otro mensaje"
         },
@@ -51,5 +51,9 @@
             "emailIsNotValid": "El email no es valido",
             "messageToShort": "El mensaje debe ser de más de 10 letras"
         }
+    },
+    "blog": {
+        "title": "Publicaciones",
+        "recent": "¡Nuevo!"
     }
 }
