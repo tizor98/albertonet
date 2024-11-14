@@ -5,6 +5,7 @@ import {
     ListObjectsCommand,
     S3Client,
 } from "@aws-sdk/client-s3";
+import { parseFrontmatter } from "./storage-adapter-utils";
 
 const BUCKET_NAME = process.env.MY_BUCKET_NAME ?? "";
 
@@ -49,38 +50,46 @@ export class StorageAdapter {
     async getObjectByPrefixAndName(
         prefix: string,
         name: string,
-    ): Promise<GetObjectCommandOutput> {
+    ): Promise<GetObjectCommandOutput | null> {
         const getCommand = new GetObjectCommand({
             Bucket: BUCKET_NAME,
             Key: `${prefix}${name}`,
         });
 
-        return this.s3Client.send(getCommand);
+        try {
+            const response = await this.s3Client.send(getCommand);
+            return response;
+        } catch {
+            return null;
+        }
     }
 
     async fromObjectToPost(
         name: string,
         data: GetObjectCommandOutput,
     ): Promise<Post> {
-        if (
-            !data.Metadata ||
-            !data.Metadata.categories ||
-            !data.Metadata.title ||
-            !data.Metadata.publicationdate
-        ) {
+        if (!data.Body) {
             throw new Error(
-                `Object metadata not found, and needed to parse to a post. For object: ${name}`,
+                `Object body not found, and needed to parse to a post. For object: ${name}`,
             );
         }
-        return {
-            title: data.Metadata.title,
+
+        const rawContent = await data.Body.transformToString();
+        const { metadata, content } = parseFrontmatter(rawContent);
+
+        const post: Post = {
+            title: metadata.title,
             slug: name,
-            description: data.Metadata.description,
-            categories: data.Metadata.categories.split(";"),
-            content: (await data.Body?.transformToString()) as string,
-            publicationDate: new Date(data.Metadata.publicationdate),
-            lastModifiedDate: data.LastModified,
+            description: metadata.description,
+            categories: metadata.categories.split(";"),
+            content: content,
+            publicationDate: new Date(metadata.publicationDate),
+            lastModifiedDate: new Date(metadata.lastModifiedDate),
         };
+        if (metadata.image) {
+            post.image = metadata.image;
+        }
+        return post;
     }
 }
 

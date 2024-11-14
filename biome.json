@@ -23,6 +23,9 @@
       "style": {
         "noNonNullAssertion": "info"
       },
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
+      },
       "recommended": true,
       "suspicious": {
         "noExplicitAny": "off"
