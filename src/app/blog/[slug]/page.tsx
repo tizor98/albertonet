@@ -15,8 +15,8 @@ export default async function BlogPost({ params }: Props) {
     if (!post) notFound();
 
     return (
-        <main className="container mx-auto h-full flex flex-col items-center justify-center mb-20">
-            <section id="post" className="max-w-6xl">
+        <main className="container mx-auto h-full flex flex-col items-center justify-start">
+            <section id="post" className="max-w-6xl mt-10">
                 <PostDetail post={post} />
             </section>
         </main>

@@ -5,7 +5,7 @@ export const PostService = {
     async getPosts(): Promise<Post[]> {
         const postsPath = await storageAdapter.getObjectsPath("posts/");
 
-        const getPostPromises: Promise<Post>[] = [];
+        const getPostPromises: Promise<Post | null>[] = [];
         for (const path of postsPath) {
             if (!path.endsWith(".mdx")) continue;
             getPostPromises.push(this.getPostByPath(path));
@@ -13,7 +13,7 @@ export const PostService = {
 
         const posts = await Promise.all(getPostPromises);
 
-        return posts;
+        return posts.filter(Boolean) as Post[];
     },
 
     async getTopPosts(): Promise<TopPost[]> {
@@ -21,7 +21,10 @@ export const PostService = {
             "posts/top/",
             "topPosts.json",
         );
-        if (!object) throw new Error("Top posts definition was not found");
+        if (!object) {
+            console.warn("Top posts definition was not found");
+            return [];
+        }
 
         const topPostsJson = await object.Body?.transformToString();
         const topPosts: TopPost[] = JSON.parse(topPostsJson ?? "");
@@ -39,9 +42,10 @@ export const PostService = {
         return storageAdapter.fromObjectToPost(slug, object);
     },
 
-    async getPostByPath(path: string): Promise<Post> {
+    async getPostByPath(path: string): Promise<Post | null> {
         const object = await storageAdapter.getObjectByPath(path);
-        console.log(object);
+
+        if (!object) return null;
 
         return storageAdapter.fromObjectToPost(
             path.split("/").at(-1)?.replace(".mdx", "") ?? "",

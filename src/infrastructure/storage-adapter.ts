@@ -39,12 +39,20 @@ export class StorageAdapter {
         return objectsPath as string[];
     }
 
-    async getObjectByPath(path: string): Promise<GetObjectCommandOutput> {
+    async getObjectByPath(
+        path: string,
+    ): Promise<GetObjectCommandOutput | null> {
         const getCommand = new GetObjectCommand({
             Bucket: BUCKET_NAME,
             Key: path,
         });
-        return this.s3Client.send(getCommand);
+
+        try {
+            const response = await this.s3Client.send(getCommand);
+            return response;
+        } catch {
+            return null;
+        }
     }
 
     async getObjectByPrefixAndName(
