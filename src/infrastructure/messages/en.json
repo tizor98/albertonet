@@ -55,5 +55,8 @@
     "blog": {
         "title": "Posts",
         "recent": "¡New!"
+    },
+    "metadata": {
+        "contact": "Contact"
     }
 }

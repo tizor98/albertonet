@@ -1,19 +1,13 @@
 import { getRequestConfig } from "next-intl/server";
-import { cookies } from "next/headers";
-import { NEXT_LOCALE } from "../contants";
-import { i18n, type Locale } from "./i18n";
+import type { Locale } from ".";
+import { routing } from "./routing";
 
-export default getRequestConfig(async () => {
-    const c = await cookies();
-    const localeCookie = c.get(NEXT_LOCALE);
+export default getRequestConfig(async ({ requestLocale }) => {
+    let locale = await requestLocale;
 
-    let locale: Locale | undefined;
-    if (localeCookie?.value) {
-        locale = localeCookie.value as Locale;
-    }
-
-    if (!locale || (locale !== "en" && locale !== "es")) {
-        locale = i18n.defaultLocale;
+    // Ensure that a valid locale is used
+    if (!locale || !routing.locales.includes(locale as Locale)) {
+        locale = routing.defaultLocale;
     }
 
     return {

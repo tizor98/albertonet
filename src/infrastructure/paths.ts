@@ -2,9 +2,6 @@ export const paths = {
     home() {
         return "/";
     },
-    projects() {
-        return "/projects";
-    },
     blog() {
         return "/blog";
     },
@@ -16,5 +13,8 @@ export const paths = {
     },
     contactSend() {
         return "/contact/send";
+    },
+    githubAccount() {
+        return "https://www.github.com/tizor98";
     },
 };

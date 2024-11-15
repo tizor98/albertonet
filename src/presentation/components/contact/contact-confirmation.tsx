@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/infrastructure/i18n/routing";
 import { Button } from "../ui/button";
 import { paths } from "@/infrastructure/paths";
 import { useTranslations } from "next-intl";

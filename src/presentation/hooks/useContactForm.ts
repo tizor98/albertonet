@@ -1,7 +1,7 @@
+import { useRouter } from "@/infrastructure/i18n/routing";
 import { paths } from "@/infrastructure/paths";
 import { sendMessage } from "@/presentation/actions/contact";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 

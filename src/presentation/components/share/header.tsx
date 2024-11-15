@@ -1,5 +1,5 @@
 import { paths } from "@/infrastructure/paths";
-import Link from "next/link";
+import { Link } from "@/infrastructure/i18n/routing";
 import ThemeSwitcher from "./theme-switcher";
 import NavMobile from "./nav-mobile";
 import { useTranslations } from "next-intl";
@@ -22,12 +22,6 @@ export default function Header() {
                     id="navbar-default"
                     className="hidden lg:flex items-center justify-center gap-4"
                 >
-                    <Link
-                        className="hover:text-blue-800 dark:hover:text-blue-400 duration-150"
-                        href={paths.projects()}
-                    >
-                        {t("projectLink")}
-                    </Link>
                     <Link
                         className="hover:text-blue-800 dark:hover:text-blue-400 duration-150"
                         href={paths.blog()}

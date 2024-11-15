@@ -1,6 +1,6 @@
 import { paths } from "@/infrastructure/paths";
 import { ArrowBigLeft, Construction } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/infrastructure/i18n/routing";
 import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
 
