@@ -13,6 +13,8 @@ const poppins = Poppins({
     variable: "--font-poppins",
 });
 
+export const dynamic = "force-static";
+
 export default async function GlobalDefaultNotFound() {
     const msg = await getMessages();
 

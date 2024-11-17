@@ -44,6 +44,7 @@ export const metadata: Metadata = {
             "max-snippet": -1,
         },
     },
+    creator: "Alberto Ortiz",
 };
 
 export async function generateStaticParams() {
@@ -71,7 +72,6 @@ export default async function RootLayout({
 
     return (
         <html suppressHydrationWarning lang={locale}>
-            <Head />
             <body
                 className={`${poppins.variable} antialiased scroll-smooth bg-zinc-100 dark:bg-zinc-900`}
             >
@@ -90,28 +90,3 @@ export interface LocaleParam {
         locale: string;
     }>;
 }
-
-const Head = () => {
-    return (
-        <head>
-            <link
-                rel="apple-touch-icon"
-                sizes="180x180"
-                href="/static/apple-touch-icon.png"
-            />
-            <link
-                rel="icon"
-                type="image/png"
-                sizes="32x32"
-                href="/static/favicon-32x32.png"
-            />
-            <link
-                rel="icon"
-                type="image/png"
-                sizes="16x16"
-                href="/static/favicon-16x16.png"
-            />
-            <link rel="manifest" href="/site.webmanifest" />
-        </head>
-    );
-};

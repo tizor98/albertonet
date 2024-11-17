@@ -4,19 +4,68 @@ import { notFound } from "next/navigation";
 import type { Locale } from "@/infrastructure/i18n";
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/infrastructure/i18n/routing";
+import type { Metadata } from "next";
+import { BASE_URL } from "@/infrastructure/contants";
+import { paths } from "@/infrastructure/paths";
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<
+    {
+        locale: "en" | "es";
+        slug?: string;
+    }[]
+> {
     const slugs = await PostService.getPostsSlug();
     const locales = routing.locales.map((locale) => ({
         locale,
     }));
     if (!slugs || slugs.length === 0) return locales;
     return slugs.flatMap((slug) => {
-        return locales.map((locale) => ({
+        return locales.map(({ locale }) => ({
             locale,
             slug,
         }));
     });
+}
+
+export async function generateMetadata({
+    params,
+}: Props): Promise<Metadata | undefined> {
+    const { slug } = await params;
+    if (!slug) return;
+
+    const post = await PostService.getPostBySlug(slug);
+
+    if (!post) return;
+
+    const title = post.title;
+    const publishedTime = post.publicationDate;
+    const description = post.description;
+    const ogImage = post.image
+        ? post.image
+        : `${BASE_URL}/og?title=${encodeURIComponent(title)}`;
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            type: "article",
+            publishedTime: publishedTime.toISOString().split("T")[0],
+            url: `${BASE_URL}${paths.blogPost(post.slug)}`,
+            images: [
+                {
+                    url: ogImage,
+                },
+            ],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: [ogImage],
+        },
+    };
 }
 
 interface Props {

@@ -57,6 +57,8 @@
         "recent": "¡Nuevo!"
     },
     "metadata": {
-        "contact": "Contacto"
+        "contact": "Contacto",
+        "send": "Notificado",
+        "blog": "Blog"
     }
 }

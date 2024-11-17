@@ -1,26 +1,34 @@
+"use client";
 import { Link } from "@/infrastructure/i18n/routing";
 import { Button } from "../ui/button";
 import { paths } from "@/infrastructure/paths";
 import { useTranslations } from "next-intl";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 export default function ContactSendConfirmation() {
-    const t = useTranslations();
+    const t = useTranslations("contact");
+
+    useEffect(() => {
+        toast.success(t("messageSend"));
+    });
+
     return (
         <section
             id="contact-notification"
             className="w-full min-h-96 flex items-center justify-center"
         >
             <div className="flex flex-col gap-5 text-center">
-                <h2>{t("contact.notification.send")}</h2>
+                <h2>{t("notification.send")}</h2>
                 <div className="flex gap-3">
                     <Link href={paths.home()}>
                         <Button type="submit">
-                            {t("contact.notification.goHome")}
+                            {t("notification.goHome")}
                         </Button>
                     </Link>
                     <Link href={paths.contact()}>
                         <Button variant={"secondary"}>
-                            {t("contact.notification.other")}
+                            {t("notification.other")}
                         </Button>
                     </Link>
                 </div>

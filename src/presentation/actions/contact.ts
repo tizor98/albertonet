@@ -1,9 +1,11 @@
 "use server";
 import { isValidEmail } from "@/lib/utils";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { MessageService } from "@/domain/services/message";
+import { paths } from "@/infrastructure/paths";
+import { redirect } from "@/infrastructure/i18n/routing";
 
-type FormStateStatus = "pending" | "send" | "error";
+type FormStateStatus = "pending" | "error";
 
 interface FormState {
     email?: string;
@@ -42,6 +44,17 @@ export async function sendMessage(
     }
 
     let status: FormStateStatus = "pending";
+    if (0 < errors.length) {
+        return {
+            name: name.toString(),
+            email: email.toString(),
+            message: message.toString(),
+            isCompany: isCompany?.toString() === "on",
+            status,
+            errors,
+        };
+    }
+
     try {
         await MessageService.sendMessagge(
             JSON.stringify({
@@ -51,18 +64,22 @@ export async function sendMessage(
                 isCompany: isCompany.toString() === "on",
             }),
         );
-        status = "send";
     } catch (error) {
         console.error(error);
         status = "error";
+        return {
+            name: name.toString(),
+            email: email.toString(),
+            message: message.toString(),
+            isCompany: isCompany?.toString() === "on",
+            status,
+            errors,
+        };
     }
 
-    return {
-        name: name.toString(),
-        email: email.toString(),
-        message: message.toString(),
-        isCompany: isCompany?.toString() === "on",
-        status,
-        errors,
-    };
+    const locale = await getLocale();
+    return redirect({
+        href: paths.contactSend(),
+        locale,
+    });
 }

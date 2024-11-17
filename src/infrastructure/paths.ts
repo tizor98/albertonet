@@ -14,7 +14,4 @@ export const paths = {
     contactSend() {
         return "/contact/send";
     },
-    githubAccount() {
-        return "https://www.github.com/tizor98";
-    },
 };

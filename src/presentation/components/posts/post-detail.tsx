@@ -21,7 +21,7 @@ export default function PostDetail({ post }: Props) {
                         dateModified: post.lastModifiedDate,
                         description: post.description,
                         image: post.image
-                            ? `${BASE_URL}${post.image}`
+                            ? `${BASE_URL}/${post.image}`
                             : `/og?title=${encodeURIComponent(post.title)}`,
                         url: `${BASE_URL}/blog/${post.slug}`,
                         author: {
