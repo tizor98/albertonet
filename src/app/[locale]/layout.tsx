@@ -47,6 +47,8 @@ export const metadata: Metadata = {
     creator: "Alberto Ortiz",
 };
 
+export const dynamic = "force-static"; // Since it only change with the locales that are known at build time
+
 export async function generateStaticParams() {
     return routing.locales.map((locale) => ({
         locale,

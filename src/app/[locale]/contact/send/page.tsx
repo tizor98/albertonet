@@ -4,6 +4,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/infrastructure/i18n/routing";
 import type { Metadata } from "next";
 
+export const dynamic = "force-static"; // Since it only change with the locales that are known at build time
+
 export async function generateStaticParams() {
     return routing.locales.map((locale) => ({
         locale,

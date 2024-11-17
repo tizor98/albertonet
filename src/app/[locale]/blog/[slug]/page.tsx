@@ -8,6 +8,8 @@ import type { Metadata } from "next";
 import { BASE_URL } from "@/infrastructure/contants";
 import { paths } from "@/infrastructure/paths";
 
+export const revalidate = 86400; // invalidate every day
+
 export async function generateStaticParams(): Promise<
     {
         locale: "en" | "es";

@@ -4,6 +4,8 @@ import { Button } from "@/presentation/components/ui/button";
 import "./globals.css";
 import Link from "next/link";
 
+export const dynamic = "force-static";
+
 export default function DefaultGlobalError() {
     return (
         <html lang="en">
