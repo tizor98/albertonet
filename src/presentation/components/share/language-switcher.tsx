@@ -7,12 +7,28 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/presentation/components/ui/dropdown-menu";
-import { changeLanguage } from "@/presentation/actions/language";
 import { useLocale } from "next-intl";
-import type { Locale } from "@/infrastructure/i18n/i18n";
+import { usePathname, useRouter } from "@/infrastructure/i18n/routing";
+import type { Locale } from "@/infrastructure/i18n";
+import { useTransition } from "react";
+import { useParams } from "next/navigation";
 
 export default function LanguageSwitcher() {
-    const locale = useLocale() as Locale;
+    const [isPending, startTransition] = useTransition();
+    const pathname = usePathname();
+    const params = useParams();
+    const router = useRouter();
+
+    const onChangeLanguage = (newLocale: Locale) => {
+        startTransition(() => {
+            // params is not known by typescript, but we are sure that this is valid. So we put never
+            router.replace({ pathname, params } as never, {
+                locale: newLocale,
+            });
+        });
+    };
+
+    const locale = useLocale;
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -23,14 +39,14 @@ export default function LanguageSwitcher() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuItem
-                    disabled={locale === "en"}
-                    onClick={() => changeLanguage("en")}
+                    disabled={locale() === "en" || isPending}
+                    onClick={() => onChangeLanguage("en")}
                 >
                     English
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                    disabled={locale === "es"}
-                    onClick={() => changeLanguage("es")}
+                    disabled={locale() === "es" || isPending}
+                    onClick={() => onChangeLanguage("es")}
                 >
                     Español
                 </DropdownMenuItem>

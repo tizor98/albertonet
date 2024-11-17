@@ -1,11 +1,11 @@
 import { ProjectService } from "@/domain/services/project";
 import ProjectCard from "../projects/project-card";
-import Link from "next/link";
-import { paths } from "@/infrastructure/paths";
 import { Button } from "../ui/button";
 import { ArrowBigRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { i18n } from "@/infrastructure/i18n/i18n";
+import { i18n } from "@/infrastructure/i18n";
+import { Link } from "@/infrastructure/i18n/routing";
+import { GITHUB_ACCOUNT } from "@/infrastructure/contants";
 
 export default async function TopProjectList() {
     const t = await getTranslations("home");
@@ -30,7 +30,7 @@ export default async function TopProjectList() {
                 ))}
             </div>
             <Button variant={"link"} className="self-start">
-                <Link href={paths.projects()}>
+                <Link href={GITHUB_ACCOUNT} target="_blank">
                     <div className="flex items-center text-lg gap-1">
                         <ArrowBigRight />
                         <p>{t("seeMore")}</p>

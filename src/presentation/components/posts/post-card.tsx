@@ -7,11 +7,11 @@ import {
     CardHeader,
     CardTitle,
 } from "../ui/card";
-import Link from "next/link";
 import { paths } from "@/infrastructure/paths";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Star } from "lucide-react";
+import { Link } from "@/infrastructure/i18n/routing";
 
 interface Props {
     post: Post;

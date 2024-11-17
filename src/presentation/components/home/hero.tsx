@@ -4,10 +4,10 @@ import {
     GITHUB_URL,
     LINKEDIN_URL,
 } from "@/infrastructure/contants";
+import { Link } from "@/infrastructure/i18n/routing";
 import { ChartColumnIncreasing, Cpu, MonitorPlay } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import Link from "next/link";
 import type { PropsWithChildren } from "react";
 
 export default function Hero() {

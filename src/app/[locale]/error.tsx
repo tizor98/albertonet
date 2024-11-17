@@ -4,7 +4,7 @@ import { Button } from "@/presentation/components/ui/button";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
-export default function DefaultNotFound() {
+export default function DefaultError() {
     const t = useTranslations("error");
     return (
         <main className="container mx-auto min-h-[600px] flex flex-col items-center justify-center gap-5">

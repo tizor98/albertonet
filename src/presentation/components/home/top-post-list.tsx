@@ -3,8 +3,8 @@ import { Button } from "../ui/button";
 import { ArrowBigRight } from "lucide-react";
 import { paths } from "@/infrastructure/paths";
 import PostCard from "./top-post-card";
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { Link } from "@/infrastructure/i18n/routing";
 
 export default async function TopPostsList() {
     const t = await getTranslations("home");

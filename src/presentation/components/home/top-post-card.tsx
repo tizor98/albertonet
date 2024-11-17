@@ -1,6 +1,6 @@
 import type { TopPost } from "@/domain/types/post";
+import { Link } from "@/infrastructure/i18n/routing";
 import { paths } from "@/infrastructure/paths";
-import Link from "next/link";
 
 interface Props {
     topPost: TopPost;

@@ -16,6 +16,20 @@ export const PostService = {
         return posts.filter(Boolean) as Post[];
     },
 
+    async getPostsSlug(): Promise<string[]> {
+        const postsPath = await storageAdapter.getObjectsPath("posts/");
+
+        const slugs: string[] = [];
+        for (const path of postsPath) {
+            if (!path.endsWith(".mdx")) continue;
+            const slug = path.split("/").at(-1)?.replace(".mdx", "");
+            if (slug) {
+                slugs.push(slug);
+            }
+        }
+        return slugs;
+    },
+
     async getTopPosts(): Promise<TopPost[]> {
         const object = await storageAdapter.getObjectByPrefixAndName(
             "posts/top/",
