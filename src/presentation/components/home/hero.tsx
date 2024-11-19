@@ -93,6 +93,7 @@ export default function Hero() {
                     className="aspect-square rounded-lg"
                     src={profileImg}
                     alt="alberto profile image"
+                    priority
                 />
             </div>
         </section>
