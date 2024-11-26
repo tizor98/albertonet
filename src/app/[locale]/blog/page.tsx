@@ -4,7 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/infrastructure/i18n/routing";
 import type { Metadata } from "next";
 
-export const revalidate = 86400; // invalidate every day
+export const revalidate = 2_592_000; // invalidate every month
 
 export const dynamicParams = false; // to 404 on unknown paths on locale param
 

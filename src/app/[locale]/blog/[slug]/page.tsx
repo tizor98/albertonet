@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 import { BASE_URL } from "@/infrastructure/contants";
 import { paths } from "@/infrastructure/paths";
 
-export const revalidate = 86400; // invalidate every day
+export const revalidate = 2_592_000; // invalidate every month
 
 export async function generateStaticParams(): Promise<
     {

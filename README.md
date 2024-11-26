@@ -25,5 +25,5 @@ Albertonet is built using modern web technologies:
 
 - **Frontend**: Nexjs with ReactJs
 - **Backend**: Serverless functions
-- **Hosting**: *Pending*
+- **Hosting**: AWS services
 - **Version Control**: Git (GitHub for repository management)
