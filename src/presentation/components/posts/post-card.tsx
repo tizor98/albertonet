@@ -41,18 +41,21 @@ export default function PostCard({ post, className }: Props) {
                     </Link>
                 </CardTitle>
                 <CardDescription>
-                    {post.publicationDate.toLocaleDateString()}
+                    <div>
+                        <p>Alberto Ortiz</p>
+                        <p>{post.publicationDate.toLocaleDateString()}</p>
+                    </div>
                 </CardDescription>
             </CardHeader>
             <CardContent className="text-sm lg:text-base font-medium pb-3">
                 <p className="line-clamp-4">{post.description}</p>
             </CardContent>
-            <CardFooter className="flex justify-start gap-3">
+            <CardFooter className="flex flex-wrap justify-start gap-2 text-sm">
                 {post.categories.map((category) => {
                     return (
                         <p
                             key={category}
-                            className="bg-blue-300 dark:bg-blue-800 text-black dark:text-white px-2 py-1 rounded-lg"
+                            className="bg-blue-300 dark:bg-blue-800 text-center text-black dark:text-white px-2 py-1 rounded-lg"
                         >
                             {category}
                         </p>
