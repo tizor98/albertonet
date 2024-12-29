@@ -26,7 +26,7 @@ export default function PostDetail({ post }: Props) {
                         url: `${BASE_URL}/blog/${post.slug}`,
                         author: {
                             "@type": "Person",
-                            name: "Albertonet",
+                            name: "Alberto Ortiz",
                         },
                     }),
                 }}
@@ -34,7 +34,8 @@ export default function PostDetail({ post }: Props) {
             <h1 className="title font-semibold text-2xl tracking-tighter">
                 {post.title}
             </h1>
-            <div className="flex justify-between items-center mt-2 mb-8 text-sm">
+            <div className="flex flex-col justify-center items-start mt-2 mb-8 text-sm">
+                <p>Alberto Ortiz</p>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400">
                     {post.publicationDate.toLocaleDateString()}
                 </p>

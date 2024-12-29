@@ -38,7 +38,7 @@ const dummyData: Project[] = [
                 detail: "Albertonet es donde presento mi portafolio de software, incluyendo aplicaciones web full-stack, aplicaciones móviles, y otros proyectos que he construido a lo largo de los años.\nAdemás, es un blog para escribir sobre programación, tecnología, tendencias de la industria, y reflexiones personales sobre ser un desarrollador de software. Puedes encontrar:\n\nProyectos: Una lista de mis proyectos profesionales de desarrollo de software. \nBlog: Una sección donde comparto artículos, tutoriales y reflexiones sobre desarrollo de software, buenas prácticas y mucho más.\nContacto: Un formulario donde puedes ponerte en contacto para discutir posibles colaboraciones, oportunidades de trabajo, o simplemente hacer preguntas acerca de mi trabajo.",
             },
         },
-        inProgress: true,
+        inProgress: false,
         repoUrl: "https://github.com/tizor98/albertonet",
         deployUrl: "https://www.albertonet.com/",
         lastDeployDate: new Date(),

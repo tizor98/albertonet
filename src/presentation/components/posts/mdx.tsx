@@ -29,19 +29,29 @@ function Table({ data }: { data: { headers: any[]; rows: any[] } }) {
 function CustomLink(props: any) {
     const href = props.href;
 
-    if (href.startsWith("/")) {
+    if (href.startsWith("/") || href.startsWith("#")) {
         return (
-            <Link href={href} {...props}>
+            <Link
+                className="text-blue-700 dark:text-blue-400"
+                href={href}
+                {...props}
+            >
                 {props.children}
             </Link>
         );
     }
 
-    if (href.startsWith("#")) {
-        return <a {...props} />;
-    }
-
-    return <a target="_blank" rel="noopener noreferrer" {...props} />;
+    return (
+        <Link
+            className="text-blue-700 dark:text-blue-400"
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            {...props}
+        >
+            {props.children}
+        </Link>
+    );
 }
 
 function RoundedImage(props: any) {
