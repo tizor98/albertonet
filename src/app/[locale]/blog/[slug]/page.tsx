@@ -87,7 +87,7 @@ export default async function BlogPost({ params }: Props) {
 
     return (
         <main className="container mx-auto h-full flex flex-col items-center justify-start">
-            <section id="post" className="max-w-6xl my-10">
+            <section id="post" className="max-w-full lg:max-w-6xl my-10 px-5">
                 <PostDetail post={post} />
             </section>
         </main>
