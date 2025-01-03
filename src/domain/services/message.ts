@@ -1,7 +1,8 @@
-import { workerAdapter } from "@/infrastructure/serverless-adapter";
+import { messageAdapter } from "@/infrastructure/message-adapter";
+import type { ContactMessage } from "../types/message";
 
 export const MessageService = {
-    async sendMessagge(data: string): Promise<void> {
-        return workerAdapter.sendEmail(data);
+    async sendContactNotification(data: ContactMessage): Promise<void> {
+        return messageAdapter.sendContactEmail(data);
     },
 };

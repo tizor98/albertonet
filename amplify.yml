@@ -1,17 +1,9 @@
 version: 1
-backend:
-  phases:
-    preBuild:
-      commands:
-        - corepack enable pnpm && pnpm install
-    build:
-      commands:
-        # Caching and building backend resources
-        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
 frontend:
   phases:
     preBuild:
       commands:
+        - env | grep -e EMAIL_DESTINATION -e EMAIL_SOURCE >> .env.production
         - env | grep -e MY_AWS_REGION -e MY_BUCKET_NAME >> .env.production
         - env | grep -e MY_AWS_ACCESS_KEY_ID -e MY_AWS_SECRET_ACCESS_KEY >> .env.production
         - env | grep -e CLOUD_CERTIFICATION_URL -e LINKEDIN_URL -e GITHUB_URL >> .env.production
