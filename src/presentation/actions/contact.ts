@@ -56,14 +56,12 @@ export async function sendMessage(
     }
 
     try {
-        await MessageService.sendMessagge(
-            JSON.stringify({
-                name,
-                email,
-                message,
-                isCompany: isCompany.toString() === "on",
-            }),
-        );
+        await MessageService.sendContactNotification({
+            name: name.toString(),
+            email: email.toString(),
+            message: message.toString(),
+            isCompany: isCompany.toString() === "on",
+        });
     } catch (error) {
         console.error(error);
         status = "error";
