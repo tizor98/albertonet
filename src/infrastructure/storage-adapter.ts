@@ -1,89 +1,65 @@
 import type { Post } from "@/domain/types/post";
-import {
-    GetObjectCommand,
-    type GetObjectCommandOutput,
-    ListObjectsCommand,
-    S3Client,
-} from "@aws-sdk/client-s3";
 import { parseFrontmatter } from "./storage-adapter-utils";
-
-const BUCKET_NAME = process.env.MY_BUCKET_NAME ?? "";
-
-const s3Client = new S3Client({
-    credentials: {
-        accessKeyId: process.env.MY_AWS_ACCESS_KEY_ID ?? "",
-        secretAccessKey: process.env.MY_AWS_SECRET_ACCESS_KEY ?? "",
-    },
-    region: process.env.MY_AWS_REGION ?? "",
-});
+import { opendir, readFile } from "node:fs/promises";
+import { join } from "node:path";
 
 export class StorageAdapter {
-    constructor(private readonly s3Client: S3Client) {}
+    private postDir = join(process.cwd(), "posts");
 
-    async getObjectsPath(prefix: string, maxItems = 5): Promise<string[]> {
-        const listCommand = new ListObjectsCommand({
-            Bucket: BUCKET_NAME,
-            Prefix: prefix,
-            MaxKeys: maxItems,
-        });
+    async getPostPaths(): Promise<string[]> {
+        const dir = await opendir(this.postDir);
 
-        const objectList = await this.s3Client.send(listCommand);
+        const objectList: string[] = [];
 
-        if (!objectList.Contents) return [];
+        for await (const dirent of dir) {
+            if (!dirent.isFile()) continue;
+            objectList.push(join(dirent.parentPath, dirent.name));
+        }
 
-        const objectsPath =
-            objectList.Contents.filter((item) => undefined !== item.Key).map(
-                (item) => item.Key,
-            ) ?? [];
-
-        return objectsPath as string[];
+        if (!objectList.length) return [];
+        return objectList;
     }
 
-    async getObjectByPath(
-        path: string,
-    ): Promise<GetObjectCommandOutput | null> {
-        const getCommand = new GetObjectCommand({
-            Bucket: BUCKET_NAME,
-            Key: path,
-        });
-
+    async getPostByPath(path: string): Promise<string | null> {
         try {
-            const response = await this.s3Client.send(getCommand);
+            const response = await readFile(path, { encoding: "utf-8" });
             return response;
         } catch {
             return null;
         }
     }
 
-    async getObjectByPrefixAndName(
-        prefix: string,
-        name: string,
-    ): Promise<GetObjectCommandOutput | null> {
-        const getCommand = new GetObjectCommand({
-            Bucket: BUCKET_NAME,
-            Key: `${prefix}${name}`,
-        });
-
+    async getPostBySlug(slug: string): Promise<string | null> {
         try {
-            const response = await this.s3Client.send(getCommand);
+            const response = await readFile(join(this.postDir, `${slug}.mdx`), {
+                encoding: "utf-8",
+            });
             return response;
         } catch {
             return null;
         }
     }
 
-    async fromObjectToPost(
-        name: string,
-        data: GetObjectCommandOutput,
-    ): Promise<Post> {
-        if (!data.Body) {
-            throw new Error(
-                `Object body not found, and needed to parse to a post. For object: ${name}`,
+    async getTopPosts(): Promise<string | null> {
+        try {
+            const response = await readFile(
+                join(this.postDir, "topPosts.json"),
+                {
+                    encoding: "utf-8",
+                },
             );
+            return response;
+        } catch {
+            return null;
+        }
+    }
+
+    async fromObjectToPost(name: string, data: string): Promise<Post> {
+        if (!data.length) {
+            throw new Error(`Object content not found. For object: ${name}`);
         }
 
-        const rawContent = await data.Body.transformToString();
-        const { metadata, content } = parseFrontmatter(rawContent);
+        const { metadata, content } = parseFrontmatter(data);
 
         const post: Post = {
             title: metadata.title,
@@ -101,4 +77,4 @@ export class StorageAdapter {
     }
 }
 
-export const storageAdapter = new StorageAdapter(s3Client);
+export const storageAdapter = new StorageAdapter();
