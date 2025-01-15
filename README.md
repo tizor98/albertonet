@@ -23,7 +23,5 @@ Albertonet is a space where I can present my software development portfolio, inc
 
 Albertonet is built using modern web technologies:
 
-- **Frontend**: Nexjs with ReactJs
-- **Backend**: Serverless functions
+- **Frontend and Backend**: Nexjs
 - **Hosting**: AWS services
-- **Version Control**: Git (GitHub for repository management)
