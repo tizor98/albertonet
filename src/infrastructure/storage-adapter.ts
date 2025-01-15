@@ -4,7 +4,7 @@ import { opendir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 export class StorageAdapter {
-    private postDir = join(process.cwd(), "posts");
+    private postDir = join(process.cwd(), "public", "posts");
 
     async getPostPaths(): Promise<string[]> {
         const dir = await opendir(this.postDir);

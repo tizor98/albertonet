@@ -6,7 +6,7 @@ const withNextIntl = createNextIntlPlugin(
 );
 const nextConfig: NextConfig = {
     outputFileTracingIncludes: {
-        "/posts": ["./posts/**/*"],
+        "/posts": ["./public//**/*"],
     },
 };
 
