@@ -7,7 +7,6 @@ export class StorageAdapter {
     private postDir = join(process.cwd(), "public", "posts");
 
     async getPostPaths(): Promise<string[]> {
-        console.log({ postDir: this.postDir, proc: process.cwd() });
         const dir = await opendir(this.postDir);
 
         const objectList: string[] = [];
