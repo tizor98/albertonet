@@ -3,7 +3,7 @@ import { storageAdapter } from "@/infrastructure/storage-adapter";
 
 export const PostService = {
     async getPosts(): Promise<Post[]> {
-        const postsPath = await storageAdapter.getPostPaths();
+        const postsPath = await storageAdapter.getObjectsPath("posts/");
 
         const getPostPromises: Promise<Post | null>[] = [];
         for (const path of postsPath) {
@@ -17,7 +17,7 @@ export const PostService = {
     },
 
     async getPostsSlug(): Promise<string[]> {
-        const postsPath = await storageAdapter.getPostPaths();
+        const postsPath = await storageAdapter.getObjectsPath("posts/");
 
         const slugs: string[] = [];
         for (const path of postsPath) {
@@ -31,18 +31,25 @@ export const PostService = {
     },
 
     async getTopPosts(): Promise<TopPost[]> {
-        const object = await storageAdapter.getTopPosts();
+        const object = await storageAdapter.getObjectByPrefixAndName(
+            "posts/top/",
+            "topPosts.json",
+        );
         if (!object) {
             console.warn("Top posts definition was not found");
             return [];
         }
 
-        const topPosts: TopPost[] = JSON.parse(object ?? "");
+        const topPostsJson = await object.Body?.transformToString();
+        const topPosts: TopPost[] = JSON.parse(topPostsJson ?? "");
         return topPosts;
     },
 
     async getPostBySlug(slug: string): Promise<Post | null> {
-        const object = await storageAdapter.getPostBySlug(slug);
+        const object = await storageAdapter.getObjectByPrefixAndName(
+            "posts/",
+            `${slug}.mdx`,
+        );
 
         if (!object) return null;
 
@@ -50,7 +57,7 @@ export const PostService = {
     },
 
     async getPostByPath(path: string): Promise<Post | null> {
-        const object = await storageAdapter.getPostByPath(path);
+        const object = await storageAdapter.getObjectByPath(path);
 
         if (!object) return null;
 
