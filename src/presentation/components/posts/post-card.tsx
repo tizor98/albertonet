@@ -35,7 +35,7 @@ export default function PostCard({ post, className }: Props) {
             <CardHeader className="pb-3">
                 <CardTitle className="flex justify-start items-start pr-9">
                     <Link href={paths.blogPost(post.slug)}>
-                        <p className="flex-1 line-clamp-2 hover:text-blue-500 hover:dark:text-blue-800 duration-150">
+                        <p className="flex-1 line-clamp-2 hover:text-blue-500 dark:hover:text-blue-800 duration-150">
                             {post.title}
                         </p>
                     </Link>
