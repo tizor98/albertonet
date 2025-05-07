@@ -4,18 +4,14 @@ import {
     type GetObjectCommandOutput,
     ListObjectsCommand,
     S3Client,
+    type S3ClientConfig,
 } from "@aws-sdk/client-s3";
-import { parseFrontmatter } from "./storage-adapter-utils";
+import { getObjectClientOpts, parseFrontmatter } from "./storage-adapter-utils";
 
 const BUCKET_NAME = process.env.MY_BUCKET_NAME ?? "";
 
-const s3Client = new S3Client({
-    credentials: {
-        accessKeyId: process.env.MY_AWS_ACCESS_KEY_ID ?? "",
-        secretAccessKey: process.env.MY_AWS_SECRET_ACCESS_KEY ?? "",
-    },
-    region: process.env.MY_AWS_REGION ?? "",
-});
+const s3ClientOpts: S3ClientConfig = getObjectClientOpts();
+const s3Client = new S3Client(s3ClientOpts);
 
 export class StorageAdapter {
     constructor(private readonly s3Client: S3Client) {}

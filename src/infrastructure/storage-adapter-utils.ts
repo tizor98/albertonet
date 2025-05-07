@@ -24,3 +24,18 @@ export function parseFrontmatter(fileContent: string) {
 
     return { metadata: metadata as ParseMetadata, content };
 }
+
+export function getObjectClientOpts() {
+    const s3ClientOpts: any = {
+        credentials: {
+            accessKeyId: process.env.MY_AWS_ACCESS_KEY_ID ?? "",
+            secretAccessKey: process.env.MY_AWS_SECRET_ACCESS_KEY ?? "",
+        },
+        region: process.env.MY_AWS_REGION ?? "",
+    };
+
+    if (process.env.NODE_ENV === "development") {
+        s3ClientOpts.endpoint = process.env.LOCAL_OBJECT_BUCKET_ENDPOINT;
+    }
+    return s3ClientOpts;
+}
