@@ -3,6 +3,7 @@
 Welcome to **Albertonet**! This is my personal website where I showcase my professional software development projects and share insights through a personal blog. As a passionate software developer, I use this platform to display my work, discuss technology, and document my journey.
 
 ## Table of Contents
+
 - [Albertonet](#albertonet)
   - [Table of Contents](#table-of-contents)
   - [About](#about)
@@ -24,4 +25,4 @@ Albertonet is a space where I can present my software development portfolio, inc
 Albertonet is built using modern web technologies:
 
 - **Frontend and Backend**: Nexjs
-- **Hosting**: AWS services
+- **Hosting**: AWS services (amplify, s3, etc.)
