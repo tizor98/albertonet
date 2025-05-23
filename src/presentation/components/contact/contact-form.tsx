@@ -1,11 +1,11 @@
 "use client";
-import { Input } from "../ui/input";
-import { Switch } from "../ui/switch";
-import { Label } from "../ui/label";
-import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
-import { Textarea } from "../ui/textarea";
 import { useContactForm } from "../../hooks/useContactForm";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Switch } from "../ui/switch";
+import { Textarea } from "../ui/textarea";
 
 export default function ContactForm() {
     const t = useTranslations();

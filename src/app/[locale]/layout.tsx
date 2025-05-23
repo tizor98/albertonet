@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "../globals.css";
-import Header from "@/presentation/components/share/header";
-import { getMessages, setRequestLocale } from "next-intl/server";
 import { BASE_URL } from "@/infrastructure/contants";
-import Providers from "@/presentation/components/share/providers";
-import { Toaster } from "@/presentation/components/ui/sonner";
 import type { Locale } from "@/infrastructure/i18n";
 import { routing } from "@/infrastructure/i18n/routing";
+import Header from "@/presentation/components/share/header";
+import Providers from "@/presentation/components/share/providers";
+import { Toaster } from "@/presentation/components/ui/sonner";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 const poppins = Poppins({

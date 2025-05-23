@@ -1,12 +1,12 @@
 "use client";
-import { Menu, X } from "lucide-react";
-import ThemeSwitcher from "./theme-switcher";
-import { Button } from "../ui/button";
-import { useState } from "react";
 import { Link } from "@/infrastructure/i18n/routing";
 import { paths } from "@/infrastructure/paths";
+import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { Button } from "../ui/button";
 import LanguageSwitcher from "./language-switcher";
+import ThemeSwitcher from "./theme-switcher";
 
 export default function NavMobile() {
     const t = useTranslations("home");

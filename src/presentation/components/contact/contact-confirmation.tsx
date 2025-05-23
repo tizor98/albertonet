@@ -1,10 +1,10 @@
 "use client";
 import { Link } from "@/infrastructure/i18n/routing";
-import { Button } from "../ui/button";
 import { paths } from "@/infrastructure/paths";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
 
 export default function ContactSendConfirmation() {
     const t = useTranslations("contact");

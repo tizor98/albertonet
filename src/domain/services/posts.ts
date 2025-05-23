@@ -1,5 +1,5 @@
-import type { Post, TopPost } from "../types/post";
 import { storageAdapter } from "@/infrastructure/storage-adapter";
+import type { Post, TopPost } from "../types/post";
 
 export const PostService = {
     async getPosts(): Promise<Post[]> {

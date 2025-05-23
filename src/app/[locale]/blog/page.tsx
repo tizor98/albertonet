@@ -1,8 +1,8 @@
-import PostList from "@/presentation/components/posts/post-list";
-import type { LocaleParam } from "../layout";
-import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/infrastructure/i18n/routing";
+import PostList from "@/presentation/components/posts/post-list";
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { LocaleParam } from "../layout";
 
 export const revalidate = 2_592_000; // invalidate every month
 

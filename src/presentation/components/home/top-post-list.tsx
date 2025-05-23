@@ -1,10 +1,10 @@
 import { PostService } from "@/domain/services/posts";
-import { Button } from "../ui/button";
-import { ArrowBigRight } from "lucide-react";
-import { paths } from "@/infrastructure/paths";
-import PostCard from "./top-post-card";
-import { getTranslations } from "next-intl/server";
 import { Link } from "@/infrastructure/i18n/routing";
+import { paths } from "@/infrastructure/paths";
+import { ArrowBigRight } from "lucide-react";
+import { getTranslations } from "next-intl/server";
+import { Button } from "../ui/button";
+import PostCard from "./top-post-card";
 
 export default async function TopPostsList() {
     const t = await getTranslations("home");

@@ -1,8 +1,8 @@
-import ContactForm from "@/presentation/components/contact/contact-form";
-import type { LocaleParam } from "../layout";
-import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/infrastructure/i18n/routing";
+import ContactForm from "@/presentation/components/contact/contact-form";
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { LocaleParam } from "../layout";
 
 export const dynamic = "force-static"; // Since it only change with the locales that are known at build time
 

@@ -1,9 +1,9 @@
-import { paths } from "@/infrastructure/paths";
 import { Link } from "@/infrastructure/i18n/routing";
-import ThemeSwitcher from "./theme-switcher";
-import NavMobile from "./nav-mobile";
+import { paths } from "@/infrastructure/paths";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./language-switcher";
+import NavMobile from "./nav-mobile";
+import ThemeSwitcher from "./theme-switcher";
 
 export default function Header() {
     const t = useTranslations("home");

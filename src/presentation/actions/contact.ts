@@ -1,9 +1,9 @@
 "use server";
+import { MessageService } from "@/domain/services/message";
+import { redirect } from "@/infrastructure/i18n/routing";
+import { paths } from "@/infrastructure/paths";
 import { isValidEmail } from "@/lib/utils";
 import { getLocale, getTranslations } from "next-intl/server";
-import { MessageService } from "@/domain/services/message";
-import { paths } from "@/infrastructure/paths";
-import { redirect } from "@/infrastructure/i18n/routing";
 
 type FormStateStatus = "pending" | "error";
 

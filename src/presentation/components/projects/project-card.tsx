@@ -1,4 +1,9 @@
 import type { Project } from "@/domain/types/project";
+import { type Locale, i18n } from "@/infrastructure/i18n";
+import { Link } from "@/infrastructure/i18n/routing";
+import { cn } from "@/lib/utils";
+import { CircleCheck, Construction } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { Button } from "../ui/button";
 import {
     Card,
@@ -9,11 +14,6 @@ import {
     CardTitle,
 } from "../ui/card";
 import TextWithSpaces from "../ui/text-with-spaces";
-import { CircleCheck, Construction } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useLocale, useTranslations } from "next-intl";
-import { i18n, type Locale } from "@/infrastructure/i18n";
-import { Link } from "@/infrastructure/i18n/routing";
 
 interface Props {
     project: Project;
