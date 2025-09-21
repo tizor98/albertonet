@@ -24,7 +24,7 @@ export default function PostCard({ post, className }: Props) {
     return (
         <Card className={cn("min-h-fit md:min-h-full relative", className)}>
             <div className="absolute top-1 right-1 flex gap-1 items-center justify-end w-36">
-                {new Date().getTime() - post.publicationDate.getTime() <
+                {Date.now() - post.publicationDate.getTime() <
                     1000 * 60 * 60 * 24 * 7 * 30 && (
                     <>
                         <Star className="fill-black dark:fill-white" />

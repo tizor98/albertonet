@@ -10,7 +10,7 @@ export default async function TopPostsList() {
     const t = await getTranslations("home");
     const topPosts = await PostService.getTopPosts();
 
-    if (0 === topPosts.length) return <></>;
+    if (0 === topPosts.length) return;
 
     return (
         <section

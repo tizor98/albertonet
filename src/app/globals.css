@@ -69,6 +69,15 @@
     @apply visible;
 }
 
+pre::-webkit-scrollbar {
+    display: none;
+}
+
+pre {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
 .prose a {
     @apply underline transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
 }
@@ -141,15 +150,6 @@
     /* Override removing top margin, causing layout shift */
     margin-top: 1.25em !important;
     margin-bottom: 1.25em !important;
-}
-
-pre::-webkit-scrollbar {
-    display: none;
-}
-
-pre {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
 }
 
 /* Remove Safari input shadow on mobile */

@@ -17,7 +17,7 @@ interface FormState {
 }
 
 export async function sendMessage(
-    state: FormState,
+    _state: FormState,
     formData: FormData,
 ): Promise<FormState> {
     const t = await getTranslations("contact.error");
