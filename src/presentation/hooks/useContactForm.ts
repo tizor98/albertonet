@@ -1,7 +1,7 @@
-import { sendMessage } from "@/presentation/actions/contact";
 import { useTranslations } from "next-intl";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
+import { sendMessage } from "@/presentation/actions/contact";
 
 export function useContactForm() {
     const t = useTranslations("contact");
@@ -11,16 +11,14 @@ export function useContactForm() {
     });
 
     useEffect(() => {
-        if (formState.status === "error") {
+        if (formState.status?.startsWith("error")) {
             toast.error(t("messageError"));
         }
     }, [formState.status, t]);
 
-    const isFormLoading = isPending;
-
     return {
         formState,
         action,
-        isFormLoading,
+        isFormLoading: isPending,
     };
 }

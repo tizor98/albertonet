@@ -1,4 +1,3 @@
-import type { Post } from "@/domain/types/post";
 import {
     GetObjectCommand,
     type GetObjectCommandOutput,
@@ -6,6 +5,7 @@ import {
     S3Client,
     type S3ClientConfig,
 } from "@aws-sdk/client-s3";
+import type { Post } from "@/domain/types/post";
 import { getObjectClientOpts, parseFrontmatter } from "./storage-adapter-utils";
 
 const BUCKET_NAME = process.env.MY_BUCKET_NAME ?? "";

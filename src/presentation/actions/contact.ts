@@ -5,7 +5,7 @@ import { redirect } from "@/infrastructure/i18n/routing";
 import { paths } from "@/infrastructure/paths";
 import { isValidEmail } from "@/lib/utils";
 
-type FormStateStatus = "pending" | "error";
+type FormStateStatus = "pending" | `error-${string}`;
 
 interface FormState {
     email?: string;
@@ -64,7 +64,7 @@ export async function sendMessage(
         });
     } catch (error) {
         console.error(error);
-        status = "error";
+        status = `error-${crypto.randomUUID()}`;
         return {
             name: name.toString(),
             email: email.toString(),
