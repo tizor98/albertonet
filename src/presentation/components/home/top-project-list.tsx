@@ -11,7 +11,7 @@ export default async function TopProjectList() {
     const t = await getTranslations("home");
     const projects = await ProjectService.getTopProjects();
 
-    if (0 === projects.length) return <></>;
+    if (0 === projects.length) return;
 
     return (
         <section

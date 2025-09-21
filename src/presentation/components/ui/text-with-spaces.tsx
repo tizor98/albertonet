@@ -5,7 +5,7 @@ export default function TextWithSpaces({ text }: { text: string }) {
     return (
         <>
             {textList.map((linea, index) => (
-                <Fragment key={useId()}>
+                <Fragment key={index}>
                     {linea}
                     {index < textList.length - 1 && <br />}{" "}
                 </Fragment>
