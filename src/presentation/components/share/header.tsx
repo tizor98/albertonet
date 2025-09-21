@@ -1,6 +1,6 @@
+import { useTranslations } from "next-intl";
 import { Link } from "@/infrastructure/i18n/routing";
 import { paths } from "@/infrastructure/paths";
-import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./language-switcher";
 import NavMobile from "./nav-mobile";
 import ThemeSwitcher from "./theme-switcher";

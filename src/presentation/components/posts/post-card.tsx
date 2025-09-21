@@ -1,9 +1,9 @@
+import { Star } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { Post } from "@/domain/types/post";
 import { Link } from "@/infrastructure/i18n/routing";
 import { paths } from "@/infrastructure/paths";
 import { cn } from "@/lib/utils";
-import { Star } from "lucide-react";
-import { useTranslations } from "next-intl";
 import {
     Card,
     CardContent,

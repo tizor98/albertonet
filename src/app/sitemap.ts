@@ -1,7 +1,7 @@
+import type { MetadataRoute } from "next";
 import { PostService } from "@/domain/services/posts";
 import { BASE_URL } from "@/infrastructure/contants";
 import { paths } from "@/infrastructure/paths";
-import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const blogs = await PostService.getPosts();

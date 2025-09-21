@@ -1,9 +1,9 @@
+import { ArrowBigRight } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { ProjectService } from "@/domain/services/project";
 import { GITHUB_ACCOUNT } from "@/infrastructure/contants";
 import { i18n } from "@/infrastructure/i18n";
 import { Link } from "@/infrastructure/i18n/routing";
-import { ArrowBigRight } from "lucide-react";
-import { getTranslations } from "next-intl/server";
 import ProjectCard from "../projects/project-card";
 import { Button } from "../ui/button";
 

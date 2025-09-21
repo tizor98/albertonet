@@ -1,9 +1,9 @@
-import type { Project } from "@/domain/types/project";
-import { type Locale, i18n } from "@/infrastructure/i18n";
-import { Link } from "@/infrastructure/i18n/routing";
-import { cn } from "@/lib/utils";
 import { CircleCheck, Construction } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import type { Project } from "@/domain/types/project";
+import { i18n, type Locale } from "@/infrastructure/i18n";
+import { Link } from "@/infrastructure/i18n/routing";
+import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import {
     Card,

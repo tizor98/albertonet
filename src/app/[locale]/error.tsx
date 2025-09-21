@@ -1,8 +1,8 @@
 "use client";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { paths } from "@/infrastructure/paths";
 import { Button } from "@/presentation/components/ui/button";
-import { useTranslations } from "next-intl";
-import Link from "next/link";
 
 export default function DefaultError() {
     const t = useTranslations("error");

@@ -1,3 +1,7 @@
+import { ChartColumnIncreasing, Cpu, MonitorPlay } from "lucide-react";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import type { PropsWithChildren } from "react";
 import profileImg from "@/assets/profile.jpg";
 import {
     CLOUD_CERTIFICATION_URL,
@@ -5,10 +9,6 @@ import {
     LINKEDIN_URL,
 } from "@/infrastructure/contants";
 import { Link } from "@/infrastructure/i18n/routing";
-import { ChartColumnIncreasing, Cpu, MonitorPlay } from "lucide-react";
-import { useTranslations } from "next-intl";
-import Image from "next/image";
-import type { PropsWithChildren } from "react";
 
 export default function Hero() {
     const t = useTranslations("home");

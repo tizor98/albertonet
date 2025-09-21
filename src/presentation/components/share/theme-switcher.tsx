@@ -1,4 +1,7 @@
 "use client";
+import { Moon, Sun } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 import { Button } from "@/presentation/components/ui/button";
 import {
     DropdownMenu,
@@ -6,9 +9,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/presentation/components/ui/dropdown-menu";
-import { Moon, Sun } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useTheme } from "next-themes";
 
 export default function ThemeSwitcher() {
     const t = useTranslations("home");

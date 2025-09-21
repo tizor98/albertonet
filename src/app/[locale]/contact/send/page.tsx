@@ -1,7 +1,7 @@
-import { routing } from "@/infrastructure/i18n/routing";
-import ContactSendConfirmation from "@/presentation/components/contact/contact-confirmation";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { routing } from "@/infrastructure/i18n/routing";
+import ContactSendConfirmation from "@/presentation/components/contact/contact-confirmation";
 import type { LocaleParam } from "../../layout";
 
 export const dynamic = "force-static"; // Since it only change with the locales that are known at build time

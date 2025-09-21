@@ -1,9 +1,9 @@
+import { setRequestLocale } from "next-intl/server";
+import { Suspense } from "react";
 import { routing } from "@/infrastructure/i18n/routing";
 import Hero from "@/presentation/components/home/hero";
 import TopPostsList from "@/presentation/components/home/top-post-list";
 import TopProjectList from "@/presentation/components/home/top-project-list";
-import { setRequestLocale } from "next-intl/server";
-import { Suspense } from "react";
 import type { LocaleParam } from "./layout";
 
 export const revalidate = 2_592_000; // invalidate every month

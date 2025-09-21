@@ -1,5 +1,5 @@
-import type { ContactMessage } from "@/domain/types/message";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+import type { ContactMessage } from "@/domain/types/message";
 
 const source = process.env.EMAIL_SOURCE ?? "";
 const recipient = process.env.EMAIL_DESTINATION ?? "";

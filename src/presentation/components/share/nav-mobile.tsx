@@ -1,9 +1,9 @@
 "use client";
-import { Link } from "@/infrastructure/i18n/routing";
-import { paths } from "@/infrastructure/paths";
 import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { Link } from "@/infrastructure/i18n/routing";
+import { paths } from "@/infrastructure/paths";
 import { Button } from "../ui/button";
 import LanguageSwitcher from "./language-switcher";
 import ThemeSwitcher from "./theme-switcher";

@@ -1,7 +1,7 @@
-import { Link } from "@/infrastructure/i18n/routing";
-import { paths } from "@/infrastructure/paths";
 import { ArrowBigLeft, Construction } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/infrastructure/i18n/routing";
+import { paths } from "@/infrastructure/paths";
 import { Button } from "../ui/button";
 
 export default function PageInConstruction() {

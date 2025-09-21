@@ -1,6 +1,6 @@
+import { useTranslations } from "next-intl";
 import { Link } from "@/infrastructure/i18n/routing";
 import { paths } from "@/infrastructure/paths";
-import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
 
 export default function NotFoundGeneric() {

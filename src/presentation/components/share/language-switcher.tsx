@@ -1,4 +1,8 @@
 "use client";
+import { Languages } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useLocale } from "next-intl";
+import { useTransition } from "react";
 import type { Locale } from "@/infrastructure/i18n";
 import { usePathname, useRouter } from "@/infrastructure/i18n/routing";
 import { Button } from "@/presentation/components/ui/button";
@@ -8,10 +12,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/presentation/components/ui/dropdown-menu";
-import { Languages } from "lucide-react";
-import { useLocale } from "next-intl";
-import { useParams } from "next/navigation";
-import { useTransition } from "react";
 
 export default function LanguageSwitcher() {
     const [isPending, startTransition] = useTransition();

@@ -1,12 +1,12 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 import { PostService } from "@/domain/services/posts";
 import { BASE_URL } from "@/infrastructure/contants";
 import type { Locale } from "@/infrastructure/i18n";
 import { routing } from "@/infrastructure/i18n/routing";
 import { paths } from "@/infrastructure/paths";
 import PostDetail from "@/presentation/components/posts/post-detail";
-import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
 
 export const revalidate = 2_592_000; // invalidate every month
 

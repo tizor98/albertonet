@@ -1,10 +1,10 @@
+import { Poppins } from "next/font/google";
+import { getMessages, setRequestLocale } from "next-intl/server";
+import { Toaster } from "sonner";
 import { i18n } from "@/infrastructure/i18n";
 import Header from "@/presentation/components/share/header";
 import NotFoundGeneric from "@/presentation/components/share/not-found-generic";
 import Providers from "@/presentation/components/share/providers";
-import { getMessages, setRequestLocale } from "next-intl/server";
-import { Poppins } from "next/font/google";
-import { Toaster } from "sonner";
 
 const poppins = Poppins({
     subsets: ["latin"],

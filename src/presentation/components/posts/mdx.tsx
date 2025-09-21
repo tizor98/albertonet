@@ -1,8 +1,8 @@
-import { Link } from "@/infrastructure/i18n/routing";
-import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
 import Image from "next/image";
+import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
 import React from "react";
 import { highlight } from "sugar-high";
+import { Link } from "@/infrastructure/i18n/routing";
 
 function Table({ data }: { data: { headers: any[]; rows: any[] } }) {
     const headers = data.headers.map((header: any) => (
