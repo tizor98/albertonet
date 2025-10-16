@@ -1,0 +1,16 @@
+---
+import { languages } from "../i18n/messages";
+import { getUrlInNewLang } from "../i18n/utils";
+
+const currentRoute = Astro.url;
+---
+
+<div class="dropdown dropdown-hover dropdown-end">
+  <summary role="button" class="btn rounded-2xl">
+    <span class="icon-[mdi--language] dark:text-white w-5 h-5"></span>
+  </summary>
+  <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+      <li><a href={getUrlInNewLang(currentRoute, "en")}>{languages.en}</a></li>
+      <li><a href={getUrlInNewLang(currentRoute, "es")}>{languages.es}</a></li>
+  </ul>
+</div>

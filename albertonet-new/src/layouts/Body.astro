@@ -1,0 +1,12 @@
+---
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+---
+
+<body class="antialiased scroll-smooth bg-zinc-100 dark:bg-zinc-900 min-h-screen flex flex-col">
+    <Header />
+    <main class="flex-1">
+        <slot />
+    </main>
+    <Footer />
+</body>

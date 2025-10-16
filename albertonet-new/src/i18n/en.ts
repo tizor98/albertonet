@@ -1,0 +1,65 @@
+export const en = {
+    generic: {
+        underConstruction: "in progress",
+        completed: "completed",
+        send: "send",
+    },
+    home: {
+        projectLink: "Projects",
+        blogLink: "Blog",
+        contactLink: "Contact",
+        darkTheme: "Dark",
+        lightTheme: "Light",
+        systemTheme: "System",
+        topProjects: "Top 3 projects",
+        topPosts: "Top blog posts",
+        seeMore: "See more ...",
+        hero: {
+            title: "Hi, I'm Alberto",
+            point1: "I'm a <important0>self-taught</important0> Software Developer focused on Backend with Java and Golang, Frontend with React, Mobile development with React Native, and cloud services with AWS (<important1>Certified Developer - Associate</important1>) and Cloudflare",
+            point2: "I'm also a <important0>content creator</important0> and owner of this (hoppefully) successfull blog you're visiting",
+            point3: "Here you can find programming-related blogs, review my projects, and <important0>contact me</important0> for freelance or full-time jobs",
+        },
+    },
+    error: {
+        pageInConstruction: "¡¡This page is under construction!!",
+        comeBackSoon: "Come back soon",
+        goHomepage: "Go to homepage",
+        notFound: "404. This page was not found",
+        internalError:
+            "500. An unexpected error ocurred. Please try again later",
+        goBack: "Go back to home",
+    },
+    projects: {
+        seeRepo: "See repo",
+        seeDeploy: "See deploy",
+    },
+    contact: {
+        isCompany: "The message is from a company?",
+        name: "name",
+        email: "email",
+        message: "message",
+        messageSend: "Your message was send successfully",
+        messageError: "An unexpected error ocurr. Please try again later",
+        notification: {
+            send: "¡¡Perfect!! Your message was send",
+            goHome: "Go home",
+            other: "Send other message",
+        },
+        error: {
+            nameIsBlank: "Name can not be blank",
+            emailIsBlank: "Email can not be blank",
+            emailIsNotValid: "Email is not valid",
+            messageToShort: "Message must be at least of 10 characters",
+        },
+    },
+    blog: {
+        title: "Posts",
+        recent: "¡New!",
+    },
+    metadata: {
+        contact: "Contact",
+        send: "Contacted",
+        blog: "Blog",
+    },
+} as const;

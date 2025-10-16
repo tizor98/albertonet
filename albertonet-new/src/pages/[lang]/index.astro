@@ -1,0 +1,32 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+import Body from "../../layouts/Body.astro";
+
+export async function getStaticPaths() {
+    return [{ params: { lang: "en" } }, { params: { lang: "es" } }];
+}
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<Body>
+		<h1>Welcome to AlbertoNet</h1>
+		<p>This is the personal website of Alberto Montalesi.</p>
+		<p>
+			You can find my blog posts, projects, and more information about me here. Feel free to explore and get in touch!
+		</p>
+		<p>
+			Visit my <a href="/en/blog/">blog</a> to read my latest articles.
+		</p>
+	</Body>
+</html>
