@@ -10,10 +10,6 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
     site: "https://albertonet.com",
     integrations: [mdx(), sitemap()],
-    i18n: {
-        defaultLocale: "en",
-        locales: ["en", "es"],
-    },
     vite: {
         plugins: [tailwindcss()],
     },

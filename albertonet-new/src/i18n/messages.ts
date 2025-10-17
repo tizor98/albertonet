@@ -6,7 +6,9 @@ export const languages = {
     en: "English",
 };
 
-export const defaultLang = "en";
+export const availableLanguages = Object.keys(languages);
+
+export const DEFAULT_LANG = "en";
 
 export const messages = {
     en: en,

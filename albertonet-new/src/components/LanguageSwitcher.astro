@@ -1,8 +1,9 @@
 ---
 import { languages } from "../i18n/messages";
-import { getUrlInNewLang } from "../i18n/utils";
+import { getLangFromUrl, transformUrlToLang } from "../i18n/utils";
 
 const currentRoute = Astro.url;
+const lang = getLangFromUrl(currentRoute);
 ---
 
 <div class="dropdown dropdown-hover dropdown-end">
@@ -10,7 +11,17 @@ const currentRoute = Astro.url;
     <span class="icon-[mdi--language] dark:text-white w-5 h-5"></span>
   </summary>
   <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-      <li><a href={getUrlInNewLang(currentRoute, "en")}>{languages.en}</a></li>
-      <li><a href={getUrlInNewLang(currentRoute, "es")}>{languages.es}</a></li>
+      <li><a id="en" class={lang === "en" ? "pointer-events-none text-gray-500" : ""} href={transformUrlToLang(currentRoute, "en")}>{languages.en}</a></li>
+      <li><a id="es" class={lang === "es" ? "pointer-events-none text-gray-500" : ""} href={transformUrlToLang(currentRoute, "es")}>{languages.es}</a></li>
   </ul>
 </div>
+
+<script>
+document.getElementById("en")?.addEventListener("click", () => {
+  localStorage.setItem("lang", "en");
+})
+
+document.getElementById("es")?.addEventListener("click", () => {
+  localStorage.setItem("lang", "es");
+})
+</script>

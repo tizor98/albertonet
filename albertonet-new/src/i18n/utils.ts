@@ -1,6 +1,6 @@
-import { defaultLang, messages } from "./messages";
+import { DEFAULT_LANG, messages } from "./messages";
 
-export function getUrlInNewLang(url: URL, newLang: keyof typeof messages) {
+export function transformUrlToLang(url: URL, newLang: keyof typeof messages) {
     const [, , ...rest] = url.pathname.split("/");
     return `/${newLang}/${rest.join("/")}${url.search}${url.hash}`;
 }
@@ -8,10 +8,10 @@ export function getUrlInNewLang(url: URL, newLang: keyof typeof messages) {
 export function getLangFromUrl(url: URL): keyof typeof messages {
     const [, lang] = url.pathname.split("/");
     if (lang in messages) return lang as keyof typeof messages;
-    return defaultLang;
+    return DEFAULT_LANG;
 }
 
-type Root = (typeof messages)[typeof defaultLang];
+type Root = (typeof messages)[typeof DEFAULT_LANG];
 
 // Resolve a dot-separated path P on object T, returning the nested value type or never
 type NestedProp<T, P extends string> = P extends `${infer Head}.${infer Rest}`
@@ -42,7 +42,7 @@ export function useTranslations<P extends Path<Root>>(
 export function useTranslations(lang: keyof typeof messages, path?: string) {
     return function t(key?: string) {
         let val = messages[lang as keyof typeof messages] as any;
-        let fallback = messages[defaultLang] as any;
+        let fallback = messages[DEFAULT_LANG] as any;
         if (path) {
             const parts = path.split(".");
             for (const p of parts) {

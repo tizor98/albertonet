@@ -1,13 +1,12 @@
 ---
 import BaseHead from "../../components/BaseHead.astro";
-import Footer from "../../components/Footer.astro";
-import Header from "../../components/Header.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
+import { availableLanguages } from "../../i18n/messages";
 import { getLangFromUrl, useTranslations } from "../../i18n/utils";
 import Body from "../../layouts/Body.astro";
 
 export async function getStaticPaths() {
-    return [{ params: { lang: "en" } }, { params: { lang: "es" } }];
+	return availableLanguages.map((lang) => ({ params: { lang } }));
 }
 
 const lang = getLangFromUrl(Astro.url);
