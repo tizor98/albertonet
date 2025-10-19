@@ -5,3 +5,7 @@
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
+
+.adaptive-text {
+    @apply text-black dark:text-white;
+}

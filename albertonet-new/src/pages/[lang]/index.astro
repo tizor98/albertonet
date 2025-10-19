@@ -1,9 +1,9 @@
 ---
-import BaseHead from "../../components/BaseHead.astro";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
-import { availableLanguages } from "../../i18n/messages";
-import { getLangFromUrl, useTranslations } from "../../i18n/utils";
-import Body from "../../layouts/Body.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
+import { availableLanguages } from "@/config/i18n/messages";
+import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
+import BaseHead from "@/presentation/components/BaseHead.astro";
+import Body from "@/presentation/layouts/Body.astro";
 
 export async function getStaticPaths() {
 	return availableLanguages.map((lang) => ({ params: { lang } }));
