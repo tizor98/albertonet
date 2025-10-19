@@ -1,0 +1,42 @@
+---
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang, "home");
+---
+
+<div class="dropdown dropdown-hover dropdown-end">
+  <summary role="button" class="btn rounded-2xl">
+    <span class="icon-[mdi--white-balance-sunny] w-5 h-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"></span>
+    <span class="absolute icon-[mdi--moon-and-stars] dark:text-white w-5 h-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"></span>
+  </summary>
+  <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-32 p-2 shadow-sm">
+      <li><button id="light">{t("lightTheme")}</button></li>
+      <li><button id="dark">{t("darkTheme")}</button></li>
+      <li><button id="system">{t("systemTheme")}</button></li>
+  </ul>
+</div>
+
+<script>
+document.getElementById("light")?.addEventListener("click", e => {
+  e.preventDefault();
+  localStorage.setItem("theme", "light");
+  document.documentElement.classList.remove("dark");
+})
+
+document.getElementById("dark")?.addEventListener("click", e => {
+  e.preventDefault();
+  localStorage.setItem("theme", "dark");
+  document.documentElement.classList.add("dark");
+})
+
+document.getElementById("system")?.addEventListener("click", e => {
+  e.preventDefault();
+  localStorage.removeItem("theme");
+  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+})
+</script>

@@ -4,6 +4,7 @@ import { useTranslations } from "../i18n/utils";
 import { paths } from "../lib/paths";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
 import HeaderLink from "./HeaderLink.astro";
+import ThemeSwitcher from "./ThemeSwitcher.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang, "home");
@@ -36,6 +37,7 @@ const t = useTranslations(lang, "home");
 				{t("contactLink")}
 			</HeaderLink>
 			<LanguageSwitcher />
+			<ThemeSwitcher />
 		</div>
 	</nav>
 </header>

@@ -10,3 +10,21 @@ import Header from "../components/Header.astro";
     </main>
     <Footer />
 </body>
+
+<script>
+const theme = localStorage.getItem("theme");
+if (theme && theme === "dark") {
+  document.documentElement.classList.add("dark");
+}
+if (theme && theme === "light") {
+  document.documentElement.classList.remove("dark");
+}
+
+if (!theme) {
+  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+}
+</script>

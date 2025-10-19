@@ -10,7 +10,7 @@ const lang = getLangFromUrl(currentRoute);
   <summary role="button" class="btn rounded-2xl">
     <span class="icon-[mdi--language] dark:text-white w-5 h-5"></span>
   </summary>
-  <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+  <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-32 p-2 shadow-sm">
       <li><a id="en" class={lang === "en" ? "pointer-events-none text-gray-500" : ""} href={transformUrlToLang(currentRoute, "en")}>{languages.en}</a></li>
       <li><a id="es" class={lang === "es" ? "pointer-events-none text-gray-500" : ""} href={transformUrlToLang(currentRoute, "es")}>{languages.es}</a></li>
   </ul>
