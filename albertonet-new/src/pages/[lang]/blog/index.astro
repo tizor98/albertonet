@@ -5,12 +5,14 @@ import BaseHead from "@/presentation/components/BaseHead.astro";
 import Body from "@/presentation/layouts/Body.astro";
 import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
+import { getBlogNameFromLang, getLangFromUrl } from "@/config/i18n/utils";
+import { paths } from "@/config/paths";
 
-const posts = (await getCollection("blog")).sort(
+const lang = getLangFromUrl(Astro.url);
+const blogName = getBlogNameFromLang(lang);
+const posts = (await getCollection(blogName)).sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-
-const { lang } = Astro.params;
 
 export async function getStaticPaths() {
     return [{ params: { lang: "en" } }, { params: { lang: "es" } }];
@@ -28,7 +30,7 @@ export async function getStaticPaths() {
 				{
 					posts.map((post) => (
 						<li>
-							<a href={`/${lang}/blog/${post.id.split('/').at(-1)}/`}>
+							<a href={paths.blogPost(lang, post.data.slug)}>
 								{post.data.heroImage && (
 									<Image width={720} height={360} src={post.data.heroImage} alt="" />
 								)}

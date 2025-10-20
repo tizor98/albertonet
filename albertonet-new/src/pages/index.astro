@@ -11,7 +11,7 @@ import BaseHead from "@/presentation/components/BaseHead.astro";
 </html>
 
 <script>
-import { availableLanguages, DEFAULT_LANG } from "../i18n/messages";
+import { availableLanguages, DEFAULT_LANG } from "@/config/i18n/messages";
 
 let localStorageLang: string | null = localStorage.getItem("lang") ?? "";
 localStorageLang = availableLanguages.includes(localStorageLang) ? localStorageLang : null;

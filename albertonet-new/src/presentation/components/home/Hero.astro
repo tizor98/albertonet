@@ -1,0 +1,50 @@
+---
+import HeaderLink from "../HeaderLink.astro";
+import LinkedIn from "../LinkedIn.astro";
+import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
+import { GITHUB_URL, LINKEDIN_URL } from "@/consts";
+import Github from "../Github.astro";
+import profileImg from "@/presentation/assets/profile.jpg";
+import { Image } from "astro:assets";
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang, "home");
+---
+
+<section
+    id="hero"
+    class="container flex flex-col lg:flex-row items-center p-5 gap-10 md:p-10"
+>
+    <div class="flex flex-col items-start lg:items-center p-5 gap-5 lg:text-xl adaptive-text">
+        <h1 class="text-4xl font-bold tracking-wide">
+            {t("hero.title")}
+        </h1>
+        <div>
+            <span class="icon-[mdi--cpu-64-bit] inline-flex pr-1 text-blue-700 dark:text-blue-200"></span>
+            {t("hero.point1")}
+        </div>
+        <p>
+            <span class="icon-[mdi--monitor-edit] inline-flex pr-1"></span>
+            {t("hero.point2")}
+        </p>
+        <p>
+            <span class="icon-[mdi--chart-areaspline] inline-flex pr-1 text-green-800 dark:text-green-200"></span>
+            {t("hero.point3")}
+        </p>
+        <div class="flex gap-3 self-start">
+            <HeaderLink href={LINKEDIN_URL}>
+                <LinkedIn />
+            </HeaderLink>
+            <HeaderLink href={GITHUB_URL}>
+                <Github />
+            </HeaderLink>
+        </div>
+    </div>
+    <div class="w-5/6 max-w-[500px]">
+        <Image
+            class="aspect-square rounded-lg"
+            src={profileImg}
+            alt="alberto profile image"
+        />
+    </div>
+</section>

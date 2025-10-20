@@ -1,21 +1,25 @@
 ---
 import { type CollectionEntry, getCollection, render } from "astro:content";
 import BlogPost from "@/presentation/layouts/BlogPost.astro";
+import { getBlogNameFromLang } from "@/config/i18n/utils";
+import type { PostEntry } from "@/content.config";
 
 export async function getStaticPaths() {
-    const posts = await getCollection("blog");
+    const blogNameEs = getBlogNameFromLang("es");
+    const blogNameEn = getBlogNameFromLang("en");
+    const promisePostEs = getCollection(blogNameEs);
+    const promisePostEn = getCollection(blogNameEn);
+    const posts = (await Promise.all([promisePostEs, promisePostEn])).flat();
     const paths = posts.map((post) => {
-        const [lang, ...slug] = post.id.split("/");
         return {
-            params: { lang, slug: slug.join("/") || undefined },
+            params: { lang: post.data.lang, slug: post.data.slug || undefined },
             props: post,
         };
     });
-
     return paths;
 }
 
-type Props = CollectionEntry<"blog">;
+type Props = PostEntry;
 
 const post = Astro.props;
 const { Content } = await render(post);

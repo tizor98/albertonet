@@ -1,8 +1,20 @@
+import type { CollectionKey } from "astro:content";
 import { DEFAULT_LANG, messages } from "./messages";
 
 export function transformUrlToLang(url: URL, newLang: keyof typeof messages) {
     const [, , ...rest] = url.pathname.split("/");
     return `/${newLang}/${rest.join("/")}${url.search}${url.hash}`;
+}
+
+export function getBlogNameFromLang(
+    lang: keyof typeof messages,
+): CollectionKey {
+    switch (lang) {
+        case "en":
+            return "blogEn";
+        case "es":
+            return "blogEs";
+    }
 }
 
 export function getLangFromUrl(url: URL): keyof typeof messages {
