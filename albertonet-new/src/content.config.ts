@@ -14,7 +14,6 @@ const postSchema = (lang: string, image: ImageFunction) =>
         description: z.string(),
         pubDate: z.coerce.date(),
         updatedDate: z.coerce.date().optional(),
-        lastModifiedDate: z.coerce.date().optional(),
         categories: z.string().default("Uncategorized"),
         heroImage: image().optional(),
     });
