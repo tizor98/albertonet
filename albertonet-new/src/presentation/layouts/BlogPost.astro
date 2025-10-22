@@ -4,20 +4,23 @@ import Body from "./Body.astro";
 import FormattedDate from "../components/ui/FormattedDate.astro";
 import { Image } from "astro:assets";
 import type { PostEntry } from "@/content.config";
+import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
 
 type Props = PostEntry["data"];
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
-const { lang } = Astro.params;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang, "blog");
 ---
 
-<html lang={lang} class="dark">
+<!doctype html>
+<html lang={lang}>
 	<head>
 		<BaseHead title={title} description={description} />
 	</head>
 
 	<Body>
-		<article>
+		<section>
 			<div class="w-full">
 				{heroImage && <Image class="block m-auto" width={1020} height={510} src={heroImage} alt="" />}
 			</div>
@@ -26,24 +29,20 @@ const { lang } = Astro.params;
 					<div class="date">
 						<FormattedDate date={pubDate} />
 						{
-							pubDate && (
+							updatedDate && (
 								<div class="text-sm italic">
-									Last updated on <FormattedDate date={pubDate} />
+									{t("lastUpdated")} <FormattedDate date={updatedDate} />
 								</div>
 							)
 						}
 					</div>
 					<h1 class="text-gray-800 dark:text-gray-200">{title}</h1>
-					<hr />
+					<hr class="bg-black dark:bg-white" />
 				</div>
-				<div
-					class="prose
-      prose-h1:font-bold prose-h1:text-xl 
-      prose-a:text-blue-600 prose-p:text-justify prose-img:rounded-xl 
-      prose-headings:underline">
-						<slot />
-				</div>
+				<article class="prose prose-custom">
+					<slot />
+				</article>
 			</div>
-		</article>
+		</section>
 	</Body>
 </html>

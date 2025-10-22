@@ -57,6 +57,7 @@ export const es = {
     blog: {
         title: "Publicaciones",
         recent: "¡Nuevo!",
+        lastUpdated: "Actualizado por última vez el",
     },
     metadata: {
         contact: "Contacto",

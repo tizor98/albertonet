@@ -56,6 +56,7 @@ export const en = {
     blog: {
         title: "Posts",
         recent: "¡New!",
+        lastUpdated: "Last updated on",
     },
     metadata: {
         contact: "Contact",
