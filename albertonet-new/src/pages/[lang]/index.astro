@@ -1,10 +1,11 @@
 ---
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
 import { availableLanguages } from "@/config/i18n/messages";
-import BaseHead from "@/presentation/components/BaseHead.astro";
+import BaseHead from "@/presentation/components/nav/BaseHead.astro";
 import Body from "@/presentation/layouts/Body.astro";
 import Hero from "@/presentation/components/home/Hero.astro";
 import TopPostList from "@/presentation/components/home/TopPostList.astro";
+import TopProjectList from "@/presentation/components/home/TopProjectList.astro";
 
 export async function getStaticPaths() {
 	return availableLanguages.map((lang) => ({ params: { lang } }));
@@ -20,5 +21,6 @@ export async function getStaticPaths() {
 	<Body class="w-full flex flex-col items-center justify-start gap-10 mb-10">
 		<Hero />
 		<TopPostList />
+		<TopProjectList />
 	</Body>
 </html>

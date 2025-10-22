@@ -1,0 +1,35 @@
+---
+import { getLangFromUrl } from "@/config/i18n/utils";
+import { paths } from "@/config/paths";
+import type { PostEntry } from "@/content.config";
+import FormattedDate from "../ui/FormattedDate.astro";
+import { Image } from "astro:assets";
+
+interface Props {
+    post: PostEntry;
+}
+
+const { post } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+---
+
+<a href={paths.blogPost(lang, post.data.slug)} class="flex flex-col items-start justify-start gap-2 shadow-2xl dark:shadow-none rounded-2xl">
+    {post.data.heroImage && (
+        <Image width={600} class="rounder-2xl" src={post.data.heroImage} alt={post.data.title} />
+    )}
+    <h4 class="title adaptive-text px-4">{post.data.title}</h4>
+    <p class="text-gray-700 dark:text-gray-200 px-4">
+        <FormattedDate date={post.data.pubDate} />
+    </p>
+    <div class="m-0 text-xs tracking-tight flex flex-wrap gap-1 px-4 pb-4">
+        {post.data.categories.split(";").map((category) => {
+            return (
+                <p
+                    class="bg-yellow-300 dark:bg-yellow-800 text-center text-black dark:text-white px-2 py-1 rounded-lg"
+                >
+                    {category}
+                </p>
+            );
+        })}
+    </div>
+</a>

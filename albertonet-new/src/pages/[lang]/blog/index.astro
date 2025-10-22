@@ -1,12 +1,11 @@
 ---
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
-import FormattedDate from "@/presentation/components/FormattedDate.astro";
-import BaseHead from "@/presentation/components/BaseHead.astro";
+import BaseHead from "@/presentation/components/nav/BaseHead.astro";
 import Body from "@/presentation/layouts/Body.astro";
 import { getCollection } from "astro:content";
-import { Image } from "astro:assets";
 import { getBlogNameFromLang, getLangFromUrl } from "@/config/i18n/utils";
-import { paths } from "@/config/paths";
+import PostCard from "@/presentation/components/cross/PostCard.astro";
+
 
 const lang = getLangFromUrl(Astro.url);
 const blogName = getBlogNameFromLang(lang);
@@ -24,25 +23,13 @@ export async function getStaticPaths() {
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
-	<Body>
-		<sectio class="prose">
-			<ul>
-				{
-					posts.map((post) => (
-						<li>
-							<a href={paths.blogPost(lang, post.data.slug)}>
-								{post.data.heroImage && (
-									<Image width={720} height={360} src={post.data.heroImage} alt="" />
-								)}
-								<h4 class="title">{post.data.title}</h4>
-								<p class="date">
-									<FormattedDate date={post.data.pubDate} />
-								</p>
-							</a>
-						</li>
-					))
-				}
-			</ul>
-		</sectio>
+	<Body class="container mx-auto h-full flex flex-col items-start justify-start gap-5">
+		<section class="container flex flex-col items-start gap-5 px-8 justify-start">
+			{
+				posts.map((post) => (
+					<PostCard post={post} />
+				))
+			}
+		</section>
 	</Body>
 </html>

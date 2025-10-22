@@ -1,0 +1,61 @@
+---
+import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
+import type { Project } from "@/core/types";
+import TransparentButton from "../ui/TransparentButton.astro";
+import DefaultButton from "../ui/DefaultButton.astro";
+interface Props {
+    project: Project
+    class?: string;
+}
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang);
+const { project, class: className } = Astro.props;
+---
+
+<div class:list={["rounded-lg border border-zinc-200 bg-white text-zinc-950 shadow-xs dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 min-h-fit md:min-h-full", className]}>
+    <div class="flex flex-col gap-1 p-6 pt-7">
+        <div class="text-2xl font-semibold tracking-tight flex justify-between items-start gap-1">
+            <p class="flex-1">
+                {project.locale[lang].title}
+            </p>
+            <div class="flex gap-1 items-center justify-end w-36">
+                {project.inProgress ? (
+                    <>
+                        <span class="text-yellow-400 icon-[mdi--construction-outline]" />
+                        <span class="text-xs">
+                            {t("generic.underConstruction")}
+                        </span>
+                    </>
+                ) : (
+                    <>
+                    <span class="text-green-500 icon-[mdi--check-decagram]" />
+                        <span class="text-xs">
+                            {t("generic.completed")}
+                        </span>
+                    </>
+                )}
+            </div>
+        </div>
+        <div class="text-sm text-zinc-500 dark:text-zinc-400">
+            {project.locale[lang].description}
+        </div>
+    </div>
+    <div class="p-6 pt-0 text-sm font-light text-zinc-700 dark:text-zinc-300">
+        <div>
+            {project.locale[lang].detail.split("\n").map((line) => <p>{line}</p>)}
+        </div>
+    </div>
+    <div class="flex items-center p-6 pt-0 justify-between">
+        {project.repoUrl && (
+            <TransparentButton href={project.repoUrl}>
+                {t("projects.seeRepo")}
+            </TransparentButton>
+        )}
+        {project.deployUrl && (
+            <DefaultButton href={project.deployUrl}>
+                {t("projects.seeDeploy")}
+            </DefaultButton>
+        )}
+    </div>
+</div>

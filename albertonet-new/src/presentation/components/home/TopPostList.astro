@@ -2,13 +2,14 @@
 import { getCollection } from 'astro:content';
 import { getBlogNameFromLang, getLangFromUrl, useTranslations } from '@/config/i18n/utils';
 import { paths } from '@/config/paths';
-import Link from '../Link.astro';
-import TopPostCard from './TopPostCard.astro';
+import Link from '../ui/Link.astro';
+import PostCard from '../cross/PostCard.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const blogName = getBlogNameFromLang(lang)
-const allTopPosts = await getCollection(blogName);
-const topPosts = allTopPosts.filter(post => post.data.lang === lang);
+const topPosts = (await getCollection(blogName))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .slice(0, 5);
 
 const t = useTranslations(lang, "home")
 ---
@@ -17,14 +18,12 @@ const t = useTranslations(lang, "home")
     id="top-posts-list"
     class="container flex flex-col items-center gap-5 px-8"
 >
-    <h2 class="text-3xl font-semibold tracking-wide">
+    <h2 class="text-3xl font-semibold tracking-wide adaptive-text">
         {t("topPosts")}
     </h2>
-    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
-        {topPosts.map((topPost) => (
-            <TopPostCard topPost={topPost} />
-        ))}
-    </div>
+    <section class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-5 self-start">
+        {topPosts.map((post) => (<PostCard post={post} />))}
+    </section>
     <Link href={paths.blog(lang)} class="self-start">
         <div class="flex items-center text-lg gap-1">
             <span class="icon-[mdi--arrow-right-box]"></span>

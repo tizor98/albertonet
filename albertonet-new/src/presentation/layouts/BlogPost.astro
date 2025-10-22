@@ -1,7 +1,7 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
+import BaseHead from "../components/nav/BaseHead.astro";
 import Body from "./Body.astro";
-import FormattedDate from "../components/FormattedDate.astro";
+import FormattedDate from "../components/ui/FormattedDate.astro";
 import { Image } from "astro:assets";
 import type { PostEntry } from "@/content.config";
 
@@ -18,67 +18,32 @@ const { lang } = Astro.params;
 
 	<Body>
 		<article>
-			<div class="hero-image">
-				{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+			<div class="w-full">
+				{heroImage && <Image class="block m-auto" width={1020} height={510} src={heroImage} alt="" />}
 			</div>
-			<div class="prose">
-				<div class="title">
+			<div class="p-4 m-auto max-w-[1000px]">
+				<div class="prose mb-4 text-center font-bold text-gray-800 dark:text-gray-200">
 					<div class="date">
 						<FormattedDate date={pubDate} />
 						{
-							updatedDate && (
-								<div class="last-updated-on">
-									Last updated on <FormattedDate date={updatedDate} />
+							pubDate && (
+								<div class="text-sm italic">
+									Last updated on <FormattedDate date={pubDate} />
 								</div>
 							)
 						}
 					</div>
-					<h1>{title}</h1>
+					<h1 class="text-gray-800 dark:text-gray-200">{title}</h1>
 					<hr />
 				</div>
-				<slot />
+				<div
+					class="prose
+      prose-h1:font-bold prose-h1:text-xl 
+      prose-a:text-blue-600 prose-p:text-justify prose-img:rounded-xl 
+      prose-headings:underline">
+						<slot />
+				</div>
 			</div>
 		</article>
 	</Body>
 </html>
-
-
-<style>
-	main {
-		width: calc(100% - 2em);
-		max-width: 100%;
-		margin: 0;
-	}
-	.hero-image {
-		width: 100%;
-	}
-	.hero-image img {
-		display: block;
-		margin: 0 auto;
-		border-radius: 12px;
-		box-shadow: var(--box-shadow);
-	}
-	.prose {
-		width: 720px;
-		max-width: calc(100% - 2em);
-		margin: auto;
-		padding: 1em;
-		color: rgb(var(--gray-dark));
-	}
-	.title {
-		margin-bottom: 1em;
-		padding: 1em 0;
-		text-align: center;
-		line-height: 1;
-	}
-	.title h1 {
-		margin: 0 0 0.5em 0;
-	}
-	.date {
-		margin-bottom: 0.5em;
-		color: rgb(var(--gray));
-	}
-	.last-updated-on {
-		font-style: italic;
-	}
-</style>
