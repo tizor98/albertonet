@@ -1,11 +1,10 @@
 ---
-import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
 import { availableLanguages } from "@/config/i18n/messages";
+import { getLangFromUrl } from "@/config/i18n/utils";
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
 import BaseHead from "@/presentation/components/nav/BaseHead.astro";
 import Body from "@/presentation/layouts/Body.astro";
-import Hero from "@/presentation/components/home/Hero.astro";
-import TopPostList from "@/presentation/components/home/TopPostList.astro";
-import TopProjectList from "@/presentation/components/home/TopProjectList.astro";
+import ContactForm from "@/presentation/components/contact/Contact.astro";
 
 export const prerender = true;
 
@@ -13,16 +12,15 @@ export async function getStaticPaths() {
 	return availableLanguages.map((lang) => ({ params: { lang } }));
 }
 
+const lang = getLangFromUrl(Astro.url);
 ---
 
 <!doctype html>
-<html lang="en" class="dark">
+<html lang={lang} class="dark">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
-	<Body class="w-full flex flex-col items-center justify-start gap-10 mb-10">
-		<Hero />
-		<TopPostList />
-		<TopProjectList />
+	<Body class="container mx-auto h-full flex flex-col justify-start gap-5">
+		<ContactForm />
 	</Body>
 </html>

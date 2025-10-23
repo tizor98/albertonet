@@ -11,6 +11,7 @@ import expressiveCode from "astro-expressive-code";
 // https://astro.build/config
 export default defineConfig({
     site: "https://albertonet.com",
+    output: "server",
     integrations: [
         expressiveCode({
             themes: ["dracula"],

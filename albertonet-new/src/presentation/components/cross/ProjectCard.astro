@@ -1,8 +1,9 @@
 ---
 import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
 import type { Project } from "@/core/types";
-import TransparentButton from "../ui/TransparentButton.astro";
-import DefaultButton from "../ui/DefaultButton.astro";
+import TransparentLink from "../ui/TransparentLink.astro";
+import DefaultLink from "../ui/DefaultLink.astro";
+
 interface Props {
     project: Project
     class?: string;
@@ -29,7 +30,7 @@ const { project, class: className } = Astro.props;
                     </>
                 ) : (
                     <>
-                    <span class="text-green-700 icon-[mdi--check-decagram]" />
+                    <span class="text-green-600 icon-[mdi--check-circle-outline]" />
                         <span class="text-xs">
                             {t("generic.completed")}
                         </span>
@@ -48,14 +49,14 @@ const { project, class: className } = Astro.props;
     </div>
     <div class="flex items-center p-6 pt-0 justify-between">
         {project.repoUrl && (
-            <TransparentButton href={project.repoUrl}>
+            <TransparentLink href={project.repoUrl}>
                 {t("projects.seeRepo")}
-            </TransparentButton>
+            </TransparentLink>
         )}
         {project.deployUrl && (
-            <DefaultButton href={project.deployUrl}>
+            <DefaultLink href={project.deployUrl}>
                 {t("projects.seeDeploy")}
-            </DefaultButton>
+            </DefaultLink>
         )}
     </div>
 </div>

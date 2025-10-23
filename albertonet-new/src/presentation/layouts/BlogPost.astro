@@ -5,7 +5,7 @@ import FormattedDate from "../components/ui/FormattedDate.astro";
 import { Image } from "astro:assets";
 import type { PostEntry } from "@/content.config";
 import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
-import defaultBlogImage from "@/presentation/assets/blog-placeholder-1.jpg";
+import defaultBlogImage from "@/presentation/assets/blog-placeholder-1.png";
 
 type Props = PostEntry["data"];
 
@@ -23,7 +23,7 @@ const t = useTranslations(lang, "blog");
 	<Body>
 		<section>
 			<div class="w-full">
-				{<Image class="block m-auto" width={1020} height={510} src={heroImage} alt="" />}
+				<Image transition:animate={"fade"} id={title} class="block m-auto rounded-xl" width={1020} height={510} fit="cover" src={heroImage} alt="" />
 			</div>
 			<div class="p-4 m-auto max-w-[1000px]">
 				<div class="prose mb-4 m-auto text-center font-bold text-gray-800 dark:text-gray-200">

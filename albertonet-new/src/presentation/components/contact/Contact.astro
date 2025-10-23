@@ -1,0 +1,92 @@
+---
+import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
+import DefaultButton from "../ui/DefaultButton.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section
+    class="w-full px-10 mt-18 flex items-start justify-center"
+>
+    <form
+        id="contact-form"
+        class="w-full max-w-xl flex flex-col gap-5 mt-5 lg:mt-10 adaptive-text"
+    >
+        <input
+            class="custom-input"
+            name="name"
+            type="text"
+            placeholder={t("contact.name")}
+            required
+        />
+        <input
+            class="custom-input"
+            name="email"
+            type="email"
+            placeholder={t("contact.email")}
+            required
+        />
+        <input
+            class="custom-text-area"
+            type="text"
+            name="message"
+            min="10"
+            placeholder={t("contact.message")}
+            required
+        />
+        <div class="w-full flex gap-3 items-center justify-between">
+            <label class="custom-label" for="isCompany">{t("contact.isCompany")}</label>
+            <input
+                class="toggle text-gray-600 checked:text-gray-200 border-2 border-zinc-800 dark:border-zinc-200"
+                type="checkbox"
+                id="isCompany"
+                name="isCompany"
+            />
+        </div>
+        <div id="errors" class="text-red-500 flex flex-col gap-0 text-sm tracking-tight">
+        </div>
+        
+        <DefaultButton type="submit" class="uppercase">
+            {t("generic.send")}
+        </DefaultButton>
+    </form>
+</section>
+
+<script>
+import { actions} from "astro:actions";
+
+const form = document.getElementById("contact-form") as HTMLFormElement;
+const errors = document.getElementById("errors") as HTMLDivElement;
+
+if (form && errors) {
+    document.addEventListener("submit", e => {
+        e.preventDefault();
+        sendForm(form, errors);
+    });
+}
+
+async function sendForm(form: HTMLFormElement, errors: HTMLDivElement) {
+    try {
+        const formData = new FormData(form);
+        const response = await actions.sendNotification({
+            name: formData.get("name")?.toString() ?? "",
+            email: formData.get("email")?.toString() ?? "",
+            message: formData.get("message")?.toString() ?? "",
+            isCompany: formData.get("isCompany") === "true",
+        });
+        if (response.data?.errros) {
+            const errorsElems = response.data.errros.map(err => {
+                const p = document.createElement("p");
+                p.textContent = err;
+                return p;
+            });
+            errors.append(...errorsElems);
+            return;
+        }
+        console.log(response);
+    } catch (error) {
+        console.error(error);
+    }
+}
+</script>

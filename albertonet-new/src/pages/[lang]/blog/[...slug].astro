@@ -4,6 +4,8 @@ import BlogPost from "@/presentation/layouts/BlogPost.astro";
 import { getBlogNameFromLang } from "@/config/i18n/utils";
 import type { PostEntry } from "@/content.config";
 
+export const prerender = true;
+
 export async function getStaticPaths() {
     const blogNameEs = getBlogNameFromLang("es");
     const blogNameEn = getBlogNameFromLang("en");
