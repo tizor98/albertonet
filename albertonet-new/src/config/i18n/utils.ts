@@ -44,12 +44,12 @@ type Path<T> = T extends object
 // overload: no path -> key is complete key set
 export function useTranslations(
     lang: keyof typeof messages,
-): (key: Path<Root>) => string | undefined;
+): (key: Path<Root>) => string;
 // overload: with dot path -> key is constrained to inner keys of that nested path
 export function useTranslations<P extends Path<Root>>(
     lang: keyof typeof messages,
     path: P,
-): (key?: Path<NestedProp<Root, P>>) => string | undefined;
+): (key?: Path<NestedProp<Root, P>>) => string;
 
 export function useTranslations(lang: keyof typeof messages, path?: string) {
     return function t(key?: string) {

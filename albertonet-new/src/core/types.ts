@@ -14,3 +14,10 @@ export type ProjectDetail = {
     description: string;
     detail: string;
 };
+
+export type ContactMessage = {
+    name: string;
+    email: string;
+    message: string;
+    isCompany: boolean;
+};
