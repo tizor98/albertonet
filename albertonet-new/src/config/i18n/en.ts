@@ -1,3 +1,5 @@
+import { CLOUD_CERTIFICATION_URL } from "@/consts";
+
 export const en = {
     generic: {
         underConstruction: "in progress",
@@ -16,9 +18,9 @@ export const en = {
         seeMore: "See more ...",
         hero: {
             title: "Hi, I'm Alberto",
-            point1: "I'm a <important0>self-taught</important0> Software Developer focused on Backend with Java and Golang, Frontend with React, Mobile development with React Native, and cloud services with AWS (<important1>Certified Developer - Associate</important1>) and Cloudflare",
-            point2: "I'm also a <important0>content creator</important0> and owner of this (hoppefully) successfull blog you're visiting",
-            point3: "Here you can find programming-related blogs, review my projects, and <important0>contact me</important0> for freelance or full-time jobs",
+            point1: `I'm a <span class="font-bold underline">self-taught</span> Software Developer focused on Backend with Java and Golang, Frontend with React, Mobile development with React Native, and cloud services with AWS (<a href="${CLOUD_CERTIFICATION_URL}" target="_blank"><span class="underline">Certified Developer - Associate</span></a>) and Cloudflare`,
+            point2: `I'm also a <span class="font-bold underline">content creator</span> and owner of this personal space you're visiting`,
+            point3: `Here you can find programming-related blogs, review my projects, and <span class="font-bold underline">contact me</span> for freelance or full-time jobs`,
         },
     },
     error: {

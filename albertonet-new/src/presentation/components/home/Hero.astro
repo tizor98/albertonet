@@ -20,16 +20,16 @@ const t = useTranslations(lang, "home");
             {t("hero.title")}
         </h1>
         <div>
-            <span class="icon-[mdi--cpu-64-bit] inline-flex pr-1 text-blue-700 dark:text-blue-200"></span>
-            {t("hero.point1")}
+            <span class="icon-[mdi--integrated-circuit] pr-1 text-blue-900 dark:text-blue-200"></span>
+            <span set:html={t("hero.point1")} />
         </div>
         <p>
-            <span class="icon-[mdi--monitor-edit] inline-flex pr-1"></span>
-            {t("hero.point2")}
+            <span class="icon-[mdi--monitor-edit] pr-1"></span>
+            <span set:html={t("hero.point2")} />
         </p>
         <p>
-            <span class="icon-[mdi--chart-areaspline] inline-flex pr-1 text-green-800 dark:text-green-200"></span>
-            {t("hero.point3")}
+            <span class="icon-[mdi--chart-areaspline] pr-1 text-green-800 dark:text-green-200"></span>
+            <span set:html={t("hero.point3")} />
         </p>
         <div class="flex gap-3 self-start">
             <HeaderLink href={LINKEDIN_URL}>
