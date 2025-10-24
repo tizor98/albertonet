@@ -9,7 +9,7 @@ import expressiveCode from "astro-expressive-code";
 
 // https://astro.build/config
 export default defineConfig({
-    site: "https://albertonet.com",
+    site: "https://www.albertonet.com",
     output: "server",
     adapter: awsAmplify(),
     integrations: [
