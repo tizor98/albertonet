@@ -1,0 +1,21 @@
+---
+import { GITHUB_ACCOUNT, LINKEDIN_URL } from "@/consts";
+import LinkedIn from "../ui/LinkedIn.astro";
+import Github from "../ui/Github.astro";
+
+const today = new Date();
+---
+
+<footer class="flex flex-col w-full mt-8 pb-5 justify-center gap-1 items-center">
+	<span class="adaptive-text">&copy; {today.getFullYear()} Albertonet. All rights reserved.</span>
+	<div class="flex gap-2">
+		<a href={LINKEDIN_URL} target="_blank" class="adaptive-text">
+			<span class="sr-only">Follow me on LinkedIn</span>
+			<LinkedIn />
+		</a>
+		<a href={GITHUB_ACCOUNT} target="_blank" class="adaptive-text">
+			<span class="sr-only">Follow me on GitHub</span>
+			<Github />
+		</a>
+	</div>
+</footer>

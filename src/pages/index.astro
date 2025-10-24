@@ -1,0 +1,24 @@
+---
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
+import BaseHead from "@/presentation/components/nav/BaseHead.astro";
+
+export const prerender = true;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+</html>
+
+<script>
+import { availableLanguages, DEFAULT_LANG } from "@/config/i18n/messages";
+import { navigate } from "astro:transitions/client";
+
+let localStorageLang: string | null = localStorage.getItem("lang") ?? "";
+localStorageLang = availableLanguages.includes(localStorageLang) ? localStorageLang : null;
+const targetLang = localStorageLang || DEFAULT_LANG;
+
+navigate(`/${targetLang}/`);
+</script>

@@ -24,5 +24,6 @@ Albertonet is a space where I can present my software development portfolio, inc
 
 Albertonet is built using modern web technologies:
 
-- **Frontend and Backend**: Nexjs
-- **Hosting**: AWS services (amplify, s3, etc.)
+- **Framework**: Astro
+- **Styling**: TailwindCss
+- **Hosting**: AWS services (amplify)

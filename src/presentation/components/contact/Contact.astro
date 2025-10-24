@@ -1,0 +1,158 @@
+---
+import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
+import DefaultButton from "../ui/DefaultButton.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section
+    class="w-full px-10 mt-18 flex items-start justify-center"
+>
+    <form
+        id="contact-form"
+        class="w-full max-w-xl flex flex-col gap-5 mt-5 lg:mt-10 adaptive-text"
+    >
+        <input
+            class="custom-input"
+            name="name"
+            type="text"
+            placeholder={t("contact.name")}
+            required
+        />
+        <input
+            class="custom-input"
+            name="email"
+            type="email"
+            placeholder={t("contact.email")}
+            required
+        />
+        <input
+            class="custom-text-area"
+            type="text"
+            name="message"
+            minlength=10
+            placeholder={t("contact.message")}
+            required
+        />
+        <div class="w-full flex gap-3 items-center justify-between">
+            <label class="custom-label" for="isCompany">{t("contact.isCompany")}</label>
+            <input
+                class="toggle text-gray-600 checked:text-gray-200 border-2 border-zinc-800 dark:border-zinc-200"
+                type="checkbox"
+                id="isCompany"
+                name="isCompany"
+            />
+        </div>
+        <div id="errors" class="text-red-500 flex flex-col gap-0 text-sm tracking-tight">
+        </div>
+        
+        <DefaultButton id="contact-button" type="submit" class="uppercase cursor-pointer">
+            {t("generic.send")}
+        </DefaultButton>
+    </form>
+    <div id="error-toast" class="hidden toast transition-all duration-1000 ease-in-out">
+        <div class="alert alert-error">
+            <span class="text-black font-semibold">{t("error.internalError")}</span>
+        </div>
+    </div>
+</section>
+
+<script>
+import { availableLanguages, DEFAULT_LANG } from "@/config/i18n/messages";
+import { paths } from "@/config/paths";
+import { actions} from "astro:actions";
+import { navigate } from "astro:transitions/client";
+
+const form = document.getElementById("contact-form") as HTMLFormElement;
+const errors = document.getElementById("errors") as HTMLDivElement;
+
+if (form && errors) {
+    document.addEventListener("submit", e => {
+        e.preventDefault();
+        sendForm(form, errors);
+    });
+}
+
+async function sendForm(form: HTMLFormElement, errors: HTMLDivElement) {
+    try {
+        clearErrors(errors);
+
+        showLoading(true);
+        const formData = new FormData(form);
+        const response = await actions.sendNotification(formData);
+
+        if (response.error?.code === "BAD_REQUEST") {
+            const issues = response.error.message.split(";").map((issue) => {
+                const p = document.createElement("p");
+                p.textContent = issue;
+                return p;
+            });
+            errors.append(...issues);
+            showErrorModal();
+            return;
+        }
+
+        if (response.error) {
+            showErrorModal();
+            return;
+        }
+
+        redirectToSendConfirmation();
+    } catch (error) {
+        console.error(error);
+        showErrorModal();
+    } finally {
+        showLoading(false);
+    }
+}
+
+function clearErrors(errors: HTMLDivElement) {
+    if (!errors.hasChildNodes()) return;
+    const maxIterations = 100;
+    let iterations = 0;
+    
+    while (errors.hasChildNodes() && iterations < maxIterations) {
+        const node = errors.firstChild;
+        if (node) errors.removeChild(node);
+        iterations++;
+    }
+}
+
+function showErrorModal() {
+    const toast = document.getElementById("error-toast");
+    if (toast) {
+        let timeout = null;
+        try {
+            toast.classList.remove("hidden");
+            timeout = setTimeout(() => {
+                toast.classList.add("hidden");
+            }, 1500)
+        } catch {
+            if (timeout) {
+                clearTimeout(timeout);
+                timeout = null;
+            }
+            if (toast) {
+                toast.classList.add("hidden");
+            }
+        }
+    }
+}
+
+function redirectToSendConfirmation() {
+    let localStorageLang: string | null = localStorage.getItem("lang") ?? "";
+    localStorageLang = availableLanguages.includes(localStorageLang) ? localStorageLang : null;
+    const lang = localStorageLang ?? DEFAULT_LANG;
+    navigate(paths.contactSend(lang));
+}
+
+function showLoading(show: boolean) {
+    if (show) {
+        document.getElementById("contact-button")?.setAttribute("disabled", "true");
+        return;
+    }
+
+    document.getElementById("contact-button")?.removeAttribute("disabled");
+}
+</script>

@@ -1,0 +1,37 @@
+---
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
+import BaseHead from "@/presentation/components/nav/BaseHead.astro";
+import Body from "@/presentation/layouts/Body.astro";
+import { getCollection } from "astro:content";
+import { getBlogNameFromLang, getLangFromUrl } from "@/config/i18n/utils";
+import PostCard from "@/presentation/components/cross/PostCard.astro";
+import { availableLanguages } from "@/config/i18n/messages";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+	return availableLanguages.map((lang) => ({ params: { lang } }));
+}
+
+const lang = getLangFromUrl(Astro.url);
+const blogName = getBlogNameFromLang(lang);
+const posts = (await getCollection(blogName)).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<!doctype html>
+<html lang={lang} class="dark">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<Body class="container mx-auto h-full flex flex-col items-start justify-start gap-5">
+		<section class="container flex items-start gap-5 px-8 justify-start">
+			{
+				posts.map((post) => (
+					<PostCard post={post} showDescription />
+				))
+			}
+		</section>
+	</Body>
+</html>

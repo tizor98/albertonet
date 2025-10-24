@@ -1,13 +1,18 @@
 {
-    "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+    "$schema": "https://biomejs.dev/schemas/2.2.7/schema.json",
     "vcs": {
-        "enabled": false,
+        "enabled": true,
         "clientKind": "git",
         "useIgnoreFile": true
     },
     "files": {
         "ignoreUnknown": false,
-        "includes": ["**", "!**/node_modules/**/*", "!**/.next/**/*"]
+        "includes": [
+            "**",
+            "!**/node_modules/**/*",
+            "!**/.astro/**/*",
+            "!**/.css/**/*"
+        ]
     },
     "formatter": {
         "enabled": true,
@@ -18,6 +23,10 @@
     "linter": {
         "enabled": true,
         "rules": {
+            "correctness": {
+                "noUnusedImports": "off",
+                "noUnusedVariables": "off"
+            },
             "style": {
                 "noNonNullAssertion": "info",
                 "noParameterAssign": "error",
