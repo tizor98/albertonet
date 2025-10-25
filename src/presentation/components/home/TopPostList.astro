@@ -21,7 +21,7 @@ const t = useTranslations(lang, "home")
     <h2 class="text-3xl font-semibold tracking-wide adaptive-text">
         {t("topPosts")}
     </h2>
-    <section class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-5 self-start">
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 self-center md:self-start">
         {topPosts.map((post) => (<PostCard post={post} />))}
     </section>
     <Link href={paths.blog(lang)} class="self-start">

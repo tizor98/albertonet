@@ -43,7 +43,7 @@
             "security": {
                 "noDangerouslySetInnerHtml": "off"
             },
-            "recommended": true,
+            "recommended": false,
             "suspicious": {
                 "noExplicitAny": "off"
             }

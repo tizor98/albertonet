@@ -11,32 +11,30 @@ const t = useTranslations(lang, "home");
     <span class="absolute icon-[mdi--moon-and-stars] w-4 h-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"></span>
   </summary>
   <ul class="menu dropdown-content bg-white text-black dark:bg-base-100 dark:text-white rounded-box z-1 w-32 p-2 shadow-sm">
-      <li><button id="light">{t("lightTheme")}</button></li>
-      <li><button id="dark">{t("darkTheme")}</button></li>
-      <li><button id="system">{t("systemTheme")}</button></li>
+      <li><button onclick="setTheme('light')" id="light">{t("lightTheme")}</button></li>
+      <li><button onclick="setTheme('dark')" id="dark">{t("darkTheme")}</button></li>
+      <li><button onclick="setTheme('system')" id="system">{t("systemTheme")}</button></li>
   </ul>
 </div>
 
-<script>
-document.getElementById("light")?.addEventListener("click", e => {
-  e.preventDefault();
-  localStorage.setItem("theme", "light");
-  document.documentElement.classList.remove("dark");
-})
+<script is:inline>
 
-document.getElementById("dark")?.addEventListener("click", e => {
-  e.preventDefault();
-  localStorage.setItem("theme", "dark");
-  document.documentElement.classList.add("dark");
-})
-
-document.getElementById("system")?.addEventListener("click", e => {
-  e.preventDefault();
-  localStorage.removeItem("theme");
-  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    document.documentElement.classList.add("dark");
+function setTheme(theme) {
+  if (theme === 'system') {
+    localStorage.removeItem("theme");
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   } else {
-    document.documentElement.classList.remove("dark");
+    localStorage.setItem("theme", theme);
   }
-})
+
+  if (theme === 'light') {
+    document.documentElement.classList.remove("dark");
+  } else if (theme === 'dark') {
+    document.documentElement.classList.add("dark");
+  }
+}
 </script>
