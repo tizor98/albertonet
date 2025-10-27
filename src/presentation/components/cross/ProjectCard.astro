@@ -5,11 +5,11 @@ import TransparentLink from "../ui/TransparentLink.astro";
 import DefaultLink from "../ui/DefaultLink.astro";
 
 interface Props {
-    project: Project
+    project: Project;
     class?: string;
 }
 
-const lang = getLangFromUrl(Astro.url)
+const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const { project, class: className } = Astro.props;
 ---

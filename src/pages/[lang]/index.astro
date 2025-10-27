@@ -10,9 +10,8 @@ import TopProjectList from "@/presentation/components/home/TopProjectList.astro"
 export const prerender = true;
 
 export async function getStaticPaths() {
-	return availableLanguages.map((lang) => ({ params: { lang } }));
+    return availableLanguages.map((lang) => ({ params: { lang } }));
 }
-
 ---
 
 <!doctype html>

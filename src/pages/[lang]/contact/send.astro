@@ -9,10 +9,10 @@ import SendConfirmation from "@/presentation/components/contact/SendConfirmation
 export const prerender = true;
 
 export async function getStaticPaths() {
-	return availableLanguages.map((lang) => ({ params: { lang } }));
+    return availableLanguages.map((lang) => ({ params: { lang } }));
 }
 
-const lang = getLangFromUrl(Astro.url)
+const lang = getLangFromUrl(Astro.url);
 ---
 
 <!doctype html>

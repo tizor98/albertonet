@@ -1,17 +1,21 @@
 ---
-import { getCollection } from 'astro:content';
-import { getBlogNameFromLang, getLangFromUrl, useTranslations } from '@/config/i18n/utils';
-import { paths } from '@/config/paths';
-import Link from '../ui/Link.astro';
-import PostCard from '../cross/PostCard.astro';
+import { getCollection } from "astro:content";
+import {
+    getBlogNameFromLang,
+    getLangFromUrl,
+    useTranslations,
+} from "@/config/i18n/utils";
+import { paths } from "@/config/paths";
+import Link from "../ui/Link.astro";
+import PostCard from "../cross/PostCard.astro";
 
 const lang = getLangFromUrl(Astro.url);
-const blogName = getBlogNameFromLang(lang)
+const blogName = getBlogNameFromLang(lang);
 const topPosts = (await getCollection(blogName))
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
     .slice(0, 5);
 
-const t = useTranslations(lang, "home")
+const t = useTranslations(lang, "home");
 ---
 
 <section

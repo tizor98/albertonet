@@ -9,7 +9,13 @@ import defaultBlogImage from "@/presentation/assets/blog-placeholder-1.png";
 
 type Props = PostEntry["data"];
 
-const { title, description, pubDate, updatedDate, heroImage = defaultBlogImage } = Astro.props;
+const {
+    title,
+    description,
+    pubDate,
+    updatedDate,
+    heroImage = defaultBlogImage,
+} = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang, "blog");
 ---

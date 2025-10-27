@@ -30,7 +30,7 @@
         @apply text-slate-700;
     }
 
-    .prose-custom :is(h1,h2,h3,h4,h5,h6) {
+    .prose-custom :is(h1, h2, h3, h4, h5, h6) {
         /* headings color */
         @apply text-slate-900;
     }
@@ -104,7 +104,7 @@
         @apply text-slate-300;
     }
 
-    .dark .prose-custom :is(h1,h2,h3,h4,h5,h6) {
+    .dark .prose-custom :is(h1, h2, h3, h4, h5, h6) {
         @apply text-white;
     }
 
