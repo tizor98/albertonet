@@ -9,36 +9,38 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang, "home");
 ---
 
-<div class="lg:hidden flex items-center gap-1">
-    <button
-        class="hidden"
-    >
-        <div class="btn rounded-2xl bg-white text-black dark:bg-base-100 dark:text-white">
-            <span id="open" class="mdi--microsoft-xbox-controller-menu w-5"  />
-        </div>
-        <span id="close" class="hidden mdi--hamburger-menu adaptive-text" />
+<div class="lg:hidden flex items-center gap-0.5 md:gap-1">
+    <button onclick="showNav()" class="btn rounded-2xl bg-white text-black dark:bg-base-100 dark:text-white">
+        <span id="open" class="icon-[mdi--hamburger-menu] w-4 h-4 transition-all ease-in-out trasition-all"  />
+        <span id="close" class="hidden icon-[mdi--cross-circle-outline] adaptive-text w-4 h-4 ease-in-out transition-all" />
     </button>
     <LanguageSwitcher />
     <ThemeSwitcher />
-    <div
-        id="navbar-default"
-        class="hidden absolute z-50 top-0 h-fit border border-zinc-400 rounded-3xl left-0 right-0 mt-20 p-10 flex flex-col items-start justify-start gap-5 text-2xl text-white dark:text-black bg-zinc-900 dark:bg-zinc-100 cursor-default"
+    <button
+        onclick="showNav()"
+        id="navbar-mobile"
+        class="hidden absolute z-50 top-0 h-fit border border-zinc-400 rounded-3xl left-0 right-0 mt-16 p-10 flex-col items-start justify-start gap-3 text-2xl bg-zinc-900 dark:bg-zinc-100 cursor-default"
     >
         <Link
-            class="z-50 hover:text-blue-800 dark:hover:text-blue-400 duration-150"
             href={paths.blog(lang)}
         >
-            {t("blogLink")}
+            <div class="text-white dark:text-black z-50 hover:text-blue-800 dark:hover:text-blue-400 duration-150">{t("blogLink")}</div>
         </Link>
         <Link
-            class="z-50 hover:text-blue-800 dark:hover:text-blue-400 duration-150"
             href={paths.contact(lang)}
         >
-            {t("contactLink")}
+            <div class="text-white dark:text-black z-50 hover:text-blue-800 dark:hover:text-blue-400 duration-150">{t("contactLink")}</div>
         </Link>
-    </div>
+    </button>
 </div>
 
-<script>
+<script is:inline>
+
+function showNav() {
+    document.getElementById("navbar-mobile")?.classList.toggle("hidden");
+    document.getElementById("navbar-mobile")?.classList.toggle("flex");
+    document.getElementById("open")?.classList.toggle("hidden");
+    document.getElementById("close")?.classList.toggle("hidden");
+}
 
 </script>

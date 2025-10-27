@@ -1,0 +1,18 @@
+---
+interface Props extends astroHTML.JSX.HTMLAttributes {
+    type?: "submit" | "reset" | "button";
+}
+
+const { type = "button", class: className, ...props } = Astro.props;
+---
+
+<button 
+    type={type}
+    class:list={[
+        "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 dark:ring-offset-zinc-950 dark:focus-visible:ring-zinc-300 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50", 
+        className
+    ]}
+    {...props}
+    >
+    <slot />
+</button>
