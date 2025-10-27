@@ -1,11 +1,11 @@
 ---
+import { getCollection } from "astro:content";
+import { availableLanguages } from "@/config/i18n/messages";
+import { getBlogNameFromLang, getLangFromUrl } from "@/config/i18n/utils";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
+import PostCard from "@/presentation/components/cross/PostCard.astro";
 import BaseHead from "@/presentation/components/nav/BaseHead.astro";
 import Body from "@/presentation/layouts/Body.astro";
-import { getCollection } from "astro:content";
-import { getBlogNameFromLang, getLangFromUrl } from "@/config/i18n/utils";
-import PostCard from "@/presentation/components/cross/PostCard.astro";
-import { availableLanguages } from "@/config/i18n/messages";
 
 export const prerender = true;
 

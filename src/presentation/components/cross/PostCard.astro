@@ -1,10 +1,10 @@
 ---
+import { Image } from "astro:assets";
 import { getLangFromUrl } from "@/config/i18n/utils";
 import { paths } from "@/config/paths";
 import type { PostEntry } from "@/content.config";
-import FormattedDate from "../ui/FormattedDate.astro";
-import { Image } from "astro:assets";
 import defaultBlogImage from "@/presentation/assets/blog-placeholder-1.png";
+import FormattedDate from "../ui/FormattedDate.astro";
 
 interface Props {
     post: PostEntry;

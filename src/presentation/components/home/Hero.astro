@@ -1,11 +1,11 @@
 ---
-import HeaderLink from "../nav/HeaderLink.astro";
-import LinkedIn from "../ui/LinkedIn.astro";
+import { Image } from "astro:assets";
 import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
 import { GITHUB_URL, LINKEDIN_URL } from "@/consts";
-import Github from "../ui/Github.astro";
 import profileImg from "@/presentation/assets/profile.jpg";
-import { Image } from "astro:assets";
+import HeaderLink from "../nav/HeaderLink.astro";
+import Github from "../ui/Github.astro";
+import LinkedIn from "../ui/LinkedIn.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang, "home");

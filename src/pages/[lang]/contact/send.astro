@@ -1,10 +1,10 @@
 ---
+import { availableLanguages } from "@/config/i18n/messages";
 import { getLangFromUrl } from "@/config/i18n/utils";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
+import SendConfirmation from "@/presentation/components/contact/SendConfirmation.astro";
 import BaseHead from "@/presentation/components/nav/BaseHead.astro";
 import Body from "@/presentation/layouts/Body.astro";
-import { availableLanguages } from "@/config/i18n/messages";
-import SendConfirmation from "@/presentation/components/contact/SendConfirmation.astro";
 
 export const prerender = true;
 

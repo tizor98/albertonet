@@ -1,9 +1,9 @@
 import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro:schema";
-import { sendNotification } from "@/core/usecases/SendNotification";
-import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
 import { isValidEmail } from "@/config/helper";
+import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
 import type { ContactMessage } from "@/core/types";
+import { sendNotification } from "@/core/usecases/SendNotification";
 
 export const server = {
     sendNotification: defineAction({

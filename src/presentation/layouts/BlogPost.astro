@@ -1,11 +1,11 @@
 ---
-import BaseHead from "../components/nav/BaseHead.astro";
-import Body from "./Body.astro";
-import FormattedDate from "../components/ui/FormattedDate.astro";
 import { Image } from "astro:assets";
-import type { PostEntry } from "@/content.config";
 import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
+import type { PostEntry } from "@/content.config";
 import defaultBlogImage from "@/presentation/assets/blog-placeholder-1.png";
+import BaseHead from "../components/nav/BaseHead.astro";
+import FormattedDate from "../components/ui/FormattedDate.astro";
+import Body from "./Body.astro";
 
 type Props = PostEntry["data"];
 

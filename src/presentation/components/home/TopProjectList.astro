@@ -1,9 +1,9 @@
 ---
 import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
+import { GITHUB_ACCOUNT } from "@/consts";
 import { GetTopProjects } from "@/core/usecases/GetTopProjects";
 import ProjectCard from "../cross/ProjectCard.astro";
 import Link from "../ui/Link.astro";
-import { GITHUB_ACCOUNT } from "@/consts";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang, "home");

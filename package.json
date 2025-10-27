@@ -39,6 +39,6 @@
         "lint-staged": "16.2.6"
     },
     "lint-staged": {
-        "*": "echo 'ok'"
+        "*": "pnpm check"
     }
 }

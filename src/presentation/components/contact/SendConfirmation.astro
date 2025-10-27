@@ -1,8 +1,8 @@
 ---
+import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
 import { paths } from "@/config/paths";
 import DefaultLink from "../ui/DefaultLink.astro";
 import SecondaryLink from "../ui/SecondaryLink.astro";
-import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang, "contact");

@@ -1,9 +1,9 @@
 ---
 import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
-import Link from "../ui/Link.astro";
-import LanguageSwitcher from "../cross/LanguageSwitcher.astro";
 import { paths } from "@/config/paths";
+import LanguageSwitcher from "../cross/LanguageSwitcher.astro";
 import ThemeSwitcher from "../cross/ThemeSwitcher.astro";
+import Link from "../ui/Link.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang, "home");
