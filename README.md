@@ -26,4 +26,5 @@ Albertonet is built using modern web technologies:
 
 - **Framework**: Astro
 - **Styling**: TailwindCss
-- **Hosting**: AWS services (amplify)
+- **Email**: AWS SES
+- **Hosting**: Vercel
