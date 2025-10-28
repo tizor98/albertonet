@@ -1,6 +1,6 @@
 ---
 import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
-import { GITHUB_ACCOUNT } from "@/consts";
+import { GITHUB_URL } from "@/consts";
 import { GetTopProjects } from "@/core/usecases/GetTopProjects";
 import ProjectCard from "../cross/ProjectCard.astro";
 import Link from "../ui/Link.astro";
@@ -25,7 +25,7 @@ const projects = await GetTopProjects();
             />
         ))}
     </div>
-        <Link class="self-start" href={GITHUB_ACCOUNT}>
+        <Link class="self-start" href={GITHUB_URL}>
             <div class="flex items-center text-lg gap-1">
                 <span class="icon-[mdi--arrow-right-box]"></span>
                 <p>{t("seeMore")}</p>

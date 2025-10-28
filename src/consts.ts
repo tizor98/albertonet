@@ -11,5 +11,3 @@ export const LINKEDIN_URL = import.meta.env.LINKEDIN_URL;
 export const GITHUB_URL = import.meta.env.GITHUB_URL;
 
 export const BASE_URL = "https://www.albertonet.com";
-
-export const GITHUB_ACCOUNT = "https://www.github.com/tizor98";

@@ -1,5 +1,5 @@
 ---
-import { GITHUB_ACCOUNT, LINKEDIN_URL } from "@/consts";
+import { GITHUB_URL, LINKEDIN_URL } from "@/consts";
 import Github from "../ui/Github.astro";
 import LinkedIn from "../ui/LinkedIn.astro";
 
@@ -13,7 +13,7 @@ const today = new Date();
 			<span class="sr-only">Follow me on LinkedIn</span>
 			<LinkedIn />
 		</a>
-		<a href={GITHUB_ACCOUNT} target="_blank" class="adaptive-text">
+		<a href={GITHUB_URL} target="_blank" class="adaptive-text">
 			<span class="sr-only">Follow me on GitHub</span>
 			<Github />
 		</a>
