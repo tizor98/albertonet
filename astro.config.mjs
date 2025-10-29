@@ -28,7 +28,7 @@ export default defineConfig({
         plugins: [tailwindcss()],
     },
     experimental: {
-        csp: true,
+        failOnPrerenderConflict: true,
         fonts: [
             {
                 provider: fontProviders.google(),
