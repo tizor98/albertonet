@@ -2,7 +2,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import expressiveCode from "astro-expressive-code";
 
 // https://astro.build/config
@@ -26,5 +26,16 @@ export default defineConfig({
     ],
     vite: {
         plugins: [tailwindcss()],
+    },
+    experimental: {
+        csp: true,
+        fonts: [
+            {
+                provider: fontProviders.google(),
+                name: "Poppins",
+                cssVariable: "--font-poppins",
+                weights: [400, 500, 600, 700],
+            },
+        ],
     },
 });

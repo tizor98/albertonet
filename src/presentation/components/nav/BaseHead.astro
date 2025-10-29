@@ -4,6 +4,7 @@
 import type { ImageMetadata } from "astro";
 import FallbackImage from "@/presentation/assets/blog-placeholder-1.png";
 import "@/presentation/styles/global.css";
+import { Font } from "astro:assets";
 import { SITE_TITLE } from "@/consts";
 
 interface Props {
@@ -30,11 +31,6 @@ const { title, description, image = FallbackImage } = Astro.props;
 />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Font preloads -->
-<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
-<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
-
-<!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
 <!-- Primary Meta Tags -->
@@ -55,3 +51,11 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image.src, Astro.url)} />
+
+<Font cssVariable='--font-poppins' preload />
+
+<style is:global>
+	body {
+		font-family: var(--font-poppins);
+	}
+</style>
