@@ -12,7 +12,8 @@
             "!**/node_modules/**/*",
             "!**/.astro/**/*",
             "!**/.css/**/*",
-            "!**/.pnpm-store/**/*"
+            "!**/.pnpm-store/**/*",
+            "!**/.github/**/*"
         ]
     },
     "formatter": {
