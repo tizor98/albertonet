@@ -940,171 +940,149 @@ El patrón reduce la cantidad de clases necesarias en un programa y ofrece flexi
 
 **Ejemplo: Sistema de plantillas de documentos**
 
-```java
-public sealed interface DocumentPrototype extends Cloneable 
-        permits ReportTemplate, InvoiceTemplate, ContractTemplate {
-    
-    DocumentPrototype clone();
-    void customize(Map<String, String> placeholders);
-    String render();
-    String getType();
+```javascript
+// Clase base para documentos
+class DocumentTemplate {
+  constructor(title, content, author) {
+    this.title = title;
+    this.content = content;
+    this.author = author;
+    this.createdAt = new Date();
+  }
+
+  clone() {
+    return new DocumentTemplate(
+      this.title,
+      this.content,
+      this.author
+    );
+  }
+
+  display() {
+    console.log(`Título: ${this.title}`);
+    console.log(`Autor: ${this.author}`);
+    console.log(`Contenido: ${this.content}`);
+  }
 }
 
-@RequiredArgsConstructor
-public final class ReportTemplate implements DocumentPrototype {
-    private String title;
-    private String header;
-    private String body;
-    private String footer;
-    private Map<String, String> styles;
-    
-    @Override
-    public DocumentPrototype clone() {
-        return new ReportTemplate(title, header, body, footer, new HashMap<>(styles));
+// Usando Proxy para crear un sistema de prototipos dinámico
+class PrototypeRegistry {
+  constructor() {
+    this.prototypes = new Map();
+  }
+
+  register(name, prototype) {
+    this.prototypes.set(name, prototype);
+  }
+
+  create(name, overrides = {}) {
+    const prototype = this.prototypes.get(name);
+    if (!prototype) {
+      throw new Error(`Prototipo "${name}" no encontrado`);
     }
+
+    // Crear un proxy que permite clonar y personalizar el prototipo
+    const cloned = prototype.clone();
     
-    @Override
-    public void customize(Map<String, String> placeholders) {
-        for (var entry : placeholders.entrySet()) {
-            String placeholder = "{{" + entry.getKey() + "}}";
-            title = title.replace(placeholder, entry.getValue());
-            header = header.replace(placeholder, entry.getValue());
-            body = body.replace(placeholder, entry.getValue());
-            footer = footer.replace(placeholder, entry.getValue());
+    // Proxy para interceptar y personalizar propiedades
+    return new Proxy(cloned, {
+      get(target, prop) {
+        // Si la propiedad está en overrides, devolverla
+        if (prop in overrides) {
+          return overrides[prop];
         }
-    }
-    
-    @Override
-    public String render() {
-        return """
-            ═══════════════════════════════════════
-            %s
-            ───────────────────────────────────────
-            %s
-            
-            %s
-            
-            ───────────────────────────────────────
-            %s
-            ═══════════════════════════════════════
-            """.formatted(title, header, body, footer);
-    }
-    
-    @Override
-    public String getType() { return "REPORT"; }
-    
-    public void setStyle(String key, String value) {
-        styles.put(key, value);
-    }
-}
-
-@RequiredArgsConstructor
-public final class InvoiceTemplate implements DocumentPrototype {
-    private String companyName;
-    private String invoiceNumber;
-    private List<LineItem> items;
-    private String terms;
-    
-    public record LineItem(String description, int quantity, double unitPrice) {
-        public double total() { return quantity * unitPrice; }
-    }
-    
-    @Override
-    public DocumentPrototype clone() {
-        return new InvoiceTemplate(companyName, invoiceNumber, new ArrayList<>(items), terms);
-    }
-    
-    @Override
-    public void customize(Map<String, String> placeholders) {
-        companyName = placeholders.getOrDefault("company", companyName);
-        invoiceNumber = placeholders.getOrDefault("invoiceNumber", invoiceNumber);
-    }
-    
-    public void addItem(LineItem item) {
-        items.add(item);
-    }
-    
-    @Override
-    public String render() {
-        var itemsStr = items.stream()
-            .map(i -> "  %s x%d @ $%.2f = $%.2f".formatted(i.description(), i.quantity(), i.unitPrice(), i.total()))
-            .collect(Collectors.joining("\n"));
-        
-        double total = items.stream().mapToDouble(LineItem::total).sum();
-        
-        return """
-            FACTURA: %s
-            Empresa: %s
-            ─────────────────────────────
-            %s
-            ─────────────────────────────
-            TOTAL: $%.2f
-            
-            Términos: %s
-            """.formatted(invoiceNumber, companyName, itemsStr, total, terms);
-    }
-    
-    @Override
-    public String getType() { return "INVOICE"; }
-}
-
-// Registro de prototipos
-public class DocumentRegistry {
-    private final Map<String, DocumentPrototype> prototypes = new ConcurrentHashMap<>();
-    
-    public void register(String key, DocumentPrototype prototype) {
-        prototypes.put(key, prototype);
-    }
-    
-    public DocumentPrototype create(String key) {
-        DocumentPrototype prototype = prototypes.get(key);
-        if (prototype == null) {
-            throw new IllegalArgumentException("Prototype not found: " + key);
+        // De lo contrario, devolver la propiedad del objeto clonado
+        return target[prop];
+      },
+      
+      set(target, prop, value) {
+        // Permitir modificar propiedades
+        target[prop] = value;
+        return true;
+      },
+      
+      has(target, prop) {
+        // Verificar si la propiedad existe en overrides o en el target
+        return prop in overrides || prop in target;
+      },
+      
+      ownKeys(target) {
+        // Combinar las claves del target y de overrides
+        const targetKeys = Reflect.ownKeys(target);
+        const overrideKeys = Object.keys(overrides);
+        return [...new Set([...targetKeys, ...overrideKeys])];
+      },
+      
+      getOwnPropertyDescriptor(target, prop) {
+        if (prop in overrides) {
+          return {
+            enumerable: true,
+            configurable: true,
+            value: overrides[prop]
+          };
         }
-        return prototype.clone();
-    }
-    
-    public DocumentPrototype createCustomized(String key, Map<String, String> customizations) {
-        DocumentPrototype doc = create(key);
-        doc.customize(customizations);
-        return doc;
-    }
+        return Reflect.getOwnPropertyDescriptor(target, prop);
+      }
+    });
+  }
 }
 
-// Uso del patrón Prototype
-final var registry = new DocumentRegistry();
+// Uso del sistema de prototipos con Proxy
+const registry = new PrototypeRegistry();
 
 // Registrar prototipos base
-registry.register("monthly-report", new ReportTemplate(
-    "Reporte Mensual - {{month}}",
-    "Departamento: {{department}}",
-    "Este es el resumen de actividades del mes {{month}}...",
-    "Generado automáticamente el {{date}}",
-    Map.of("font", "Arial", "fontSize", "12pt")
-));
+const blogPostTemplate = new DocumentTemplate(
+  "Título del Post",
+  "Contenido por defecto...",
+  "Autor Anónimo"
+);
 
-registry.register("standard-invoice", new InvoiceTemplate(
-    "{{company}}",
-    "INV-{{invoiceNumber}}",
-    List.of(),
-    "Pago a 30 días"
-));
+const reportTemplate = new DocumentTemplate(
+  "Reporte",
+  "Este es un reporte estándar.",
+  "Sistema"
+);
 
-// Crear documentos a partir de prototipos
-final var octoberReport = registry.createCustomized("monthly-report", Map.of(
-    "month", "Octubre 2024",
-    "department", "Ingeniería",
-    "date", "01/11/2024"
-));
-IO.println(octoberReport.render());
+registry.register("blog-post", blogPostTemplate);
+registry.register("report", reportTemplate);
 
-final var invoice = (InvoiceTemplate) registry.createCustomized("standard-invoice", Map.of(
-    "company", "Tech Solutions S.A.",
-    "invoiceNumber", "2024-001"
-));
-invoice.addItem(new InvoiceTemplate.LineItem("Consultoría", 10, 150.0));
-invoice.addItem(new InvoiceTemplate.LineItem("Desarrollo", 40, 100.0));
-IO.println(invoice.render());
+// Crear instancias personalizadas usando el proxy
+const post1 = registry.create("blog-post", {
+  title: "Introducción a Design Patterns",
+  content: "Los patrones de diseño son soluciones reutilizables...",
+  author: "Juan Pérez"
+});
+
+const post2 = registry.create("blog-post", {
+  title: "JavaScript Avanzado",
+  content: "JavaScript ofrece características poderosas...",
+  author: "María García"
+});
+
+const report1 = registry.create("report", {
+  title: "Reporte Mensual",
+  content: "Resumen de actividades del mes..."
+});
+
+// Los objetos proxyados mantienen las propiedades del prototipo
+// pero pueden ser personalizados
+post1.display();
+// Título: Introducción a Design Patterns
+// Autor: Juan Pérez
+// Contenido: Los patrones de diseño son soluciones reutilizables...
+
+post2.display();
+// Título: JavaScript Avanzado
+// Autor: María García
+// Contenido: JavaScript ofrece características poderosas...
+
+// El proxy permite acceso dinámico a propiedades
+console.log(post1.createdAt); // Fecha de creación del prototipo
+console.log(post1.title);      // "Introducción a Design Patterns" (del override)
+
+// También se pueden modificar propiedades después de la creación
+post1.title = "Nuevo Título";
+console.log(post1.title); // "Nuevo Título"
 ```
 
 ---
