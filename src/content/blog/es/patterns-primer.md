@@ -10,7 +10,7 @@ heroImage: '@/presentation/assets/patterns-primer-1.png'
 
 # Software Patterns
 
-Este documento presenta una guía completa sobre los patrones de diseño de software más importantes y utilizados en la industria. Los patrones están organizados en categorías según su propósito: patrones modernos, principios SOLID, patrones de creación, patrones de estructura y patrones de comportamiento.
+Este documento presenta una guía completa sobre los patrones de diseño de software más importantes y utilizados en la industria con ejemplos en Java 25. Los patrones están organizados en categorías según su propósito: patrones modernos, principios SOLID, patrones de creación, patrones de estructura y patrones de comportamiento.
 
 ---
 
@@ -511,7 +511,7 @@ Los clientes trabajan exclusivamente con las interfaces abstractas, tanto de la 
 
 ```java
 // Productos abstractos
-public sealed interface Button permits WindowsButton, MacButton, LinuxButton {
+public interface Button {
     void render();
     void onClick(Runnable action);
 }
@@ -812,7 +812,7 @@ A diferencia del Abstract Factory que crea familias de objetos relacionados, el 
 **Ejemplo: Sistema de notificaciones con Factory Method**
 
 ```java
-public sealed interface Notification {
+public interface Notification {
     void send(String recipient, String message);
     String getType();
 }
