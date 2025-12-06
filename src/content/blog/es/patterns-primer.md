@@ -226,8 +226,7 @@ Una clase debería estar abierta para extensión pero cerrada para modificación
 
 ```java
 // Abstracción que permite extensión
-public sealed interface DiscountStrategy permits 
-        NoDiscount, PercentageDiscount, FixedAmountDiscount, SeasonalDiscount {
+public interface DiscountStrategy {
     
     double apply(double originalPrice);
 }
@@ -516,19 +515,19 @@ public interface Button {
     void onClick(Runnable action);
 }
 
-public sealed interface TextField permits WindowsTextField, MacTextField, LinuxTextField {
+public sealed interface TextField permits WindowsTextField, MacTextField {
     void render();
     String getValue();
     void setValue(String value);
 }
 
-public sealed interface Dialog permits WindowsDialog, MacDialog, LinuxDialog {
+public sealed interface Dialog permits WindowsDialog, MacDialog {
     void show(String title, String message);
     boolean confirm(String title, String message);
 }
 
 // Fábrica abstracta
-public sealed interface UIFactory permits WindowsUIFactory, MacUIFactory, LinuxUIFactory {
+public sealed interface UIFactory permits WindowsUIFactory, MacUIFactory {
     
     Button createButton(String label);
     TextField createTextField(String placeholder);
@@ -540,7 +539,6 @@ public sealed interface UIFactory permits WindowsUIFactory, MacUIFactory, LinuxU
         return switch (os) {
             case String s when s.contains("win") -> new WindowsUIFactory();
             case String s when s.contains("mac") -> new MacUIFactory();
-            default -> new LinuxUIFactory();
         };
     }
 }
@@ -563,57 +561,22 @@ public final class WindowsUIFactory implements UIFactory {
     }
 }
 
-public record WindowsButton(String label) implements Button {
-    @Override
-    public void render() {
-        IO.println("[Windows Button: " + label + "]");
-    }
-    
-    @Override
-    public void onClick(Runnable action) {
-        IO.println("Windows click event registered");
-        action.run();
-    }
-}
-
-public record WindowsTextField(String placeholder) implements TextField {
-    private static String value = "";
-    
-    @Override
-    public void render() {
-        IO.println("|__Windows: " + placeholder + "__|");
-    }
-    
-    @Override
-    public String getValue() { return value; }
-    
-    @Override
-    public void setValue(String newValue) { value = newValue; }
-}
-
-public final class WindowsDialog implements Dialog {
-    @Override
-    public void show(String title, String message) {
-        IO.println("╔═══ Windows Dialog: " + title + " ═══╗");
-        IO.println("║ " + message);
-        IO.println("╚═══════════════════════════════════╝");
-    }
-    
-    @Override
-    public boolean confirm(String title, String message) {
-        show(title, message + " [OK] [Cancel]");
-        return true;
-    }
-}
-
 // Implementaciones Mac (similares, con estilo diferente)
 public final class MacUIFactory implements UIFactory {
     @Override
-    public Button createButton(String label) { return new MacButton(label); }
+    public Button createButton(String label) { 
+        return new MacButton(label); 
+    }
+
     @Override
-    public TextField createTextField(String placeholder) { return new MacTextField(placeholder); }
+    public TextField createTextField(String placeholder) { 
+        return new MacTextField(placeholder); 
+    }
+
     @Override
-    public Dialog createDialog() { return new MacDialog(); }
+    public Dialog createDialog() { 
+        return new MacDialog(); 
+    }
 }
 
 // ... implementaciones Mac concretas ...
@@ -657,8 +620,8 @@ public class LoginForm {
 }
 
 // Uso
-var factory = UIFactory.forCurrentPlatform();
-var loginForm = new LoginForm(factory);
+final var factory = UIFactory.forCurrentPlatform();
+final var loginForm = new LoginForm(factory);
 loginForm.render();
 ```
 
@@ -1116,78 +1079,7 @@ public final class AppConfiguration {
         return Holder.INSTANCE;
     }
     
-    private Map<String, String> loadProperties() {
-        // Cargar desde archivo, variables de entorno, etc.
-        final var props = new ConcurrentHashMap<String, String>();
-        
-        // Cargar desde archivo application.properties
-        try (var input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
-            if (input != null) {
-                final var p = new Properties();
-                p.load(input);
-                p.forEach((k, v) -> props.put(k.toString(), v.toString()));
-            }
-        } catch (IOException e) {
-            System.err.println("No se pudo cargar application.properties");
-        }
-        
-        // Variables de entorno sobrescriben archivo
-        System.getenv().forEach((k, v) -> {
-            if (k.startsWith("APP_")) {
-                props.put(k.substring(4).toLowerCase().replace('_', '.'), v);
-            }
-        });
-        
-        return props;
-    }
-    
-    public String get(String key) {
-        return properties.get(key);
-    }
-    
-    public String get(String key, String defaultValue) {
-        return properties.getOrDefault(key, defaultValue);
-    }
-    
-    public int getInt(String key, int defaultValue) {
-        String value = properties.get(key);
-        if (value == null) return defaultValue;
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return defaultValue;
-        }
-    }
-    
-    public boolean getBoolean(String key, boolean defaultValue) {
-        String value = properties.get(key);
-        if (value == null) return defaultValue;
-        return Boolean.parseBoolean(value);
-    }
-    
-    public <T> T getAs(String key, Function<String, T> parser, T defaultValue) {
-        String value = properties.get(key);
-        if (value == null) return defaultValue;
-        try {
-            return parser.apply(value);
-        } catch (Exception e) {
-            return defaultValue;
-        }
-    }
-    
-    public Duration getDuration(String key, Duration defaultValue) {
-        return getAs(key, Duration::parse, defaultValue);
-    }
-    
-    public Instant getLoadedAt() {
-        return loadedAt;
-    }
-    
-    // Para testing - permite recargar configuración
-    public void reload() {
-        properties.clear();
-        properties.putAll(loadProperties());
-    }
+    // Otros métodos
 }
 
 // Alternativa moderna usando enum (inherentemente thread-safe)
@@ -1218,6 +1110,8 @@ final class EventManager {
     CompletionStage<ProcessResult> processAsync(T event, Set<EventListeners> listeners) {
         return manager.get().parallelProcess(event, listeners).combine();
     }
+
+    // Otros métodos
 }
 
 // Uso
@@ -1363,41 +1257,6 @@ public class StripePaymentAdapter implements PaymentProcessor {
     }
 }
 
-// Otro adaptador para PayPal (misma interfaz objetivo)
-public class PayPalPaymentAdapter implements PaymentProcessor {
-    
-    private final PayPalHttpClient paypalClient;
-    private final String clientId;
-    private final String clientSecret;
-    
-    public PayPalPaymentAdapter(String clientId, String clientSecret) {
-        this.paypalClient = new PayPalHttpClient();
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
-    }
-    
-    @Override
-    public PaymentResult process(PaymentRequest request) {
-        // Adaptar a formato PayPal
-        var order = new PayPalOrder();
-        order.setIntent("CAPTURE");
-        order.setPurchaseUnits(List.of(
-            new PurchaseUnit(request.amount().toString(), request.description())
-        ));
-        
-        PayPalOrderResponse response = paypalClient.createOrder(authenticate(), order);
-        
-        return new PaymentResult(
-            response.getId(),
-            mapPayPalStatus(response.getStatus()),
-            Instant.now(),
-            "PayPal order created"
-        );
-    }
-    
-    // ... otros métodos adaptados
-}
-
 // Uso - el cliente trabaja con la interfaz unificada
 public class CheckoutService {
     private final PaymentProcessor paymentProcessor;
@@ -1488,38 +1347,6 @@ public class SVGRenderer implements RenderingEngine {
         this.height = height;
         this.svgContent = new StringBuilder();
         clear();
-    }
-    
-    @Override
-    public void drawLine(int x1, int y1, int x2, int y2, Color color) {
-        svgContent.append("<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke=\"%s\" />\n"
-            .formatted(x1, y1, x2, y2, toHexColor(color)));
-    }
-    
-    @Override
-    public void drawCircle(int x, int y, int radius, Color color, boolean filled) {
-        svgContent.append("<circle cx=\"%d\" cy=\"%d\" r=\"%d\" %s />\n"
-            .formatted(x, y, radius, filled ? 
-                "fill=\"" + toHexColor(color) + "\"" : 
-                "stroke=\"" + toHexColor(color) + "\" fill=\"none\""));
-    }
-    
-    @Override
-    public void clear() {
-        svgContent.setLength(0);
-        svgContent.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        svgContent.append("<svg width=\"%d\" height=\"%d\" xmlns=\"http://www.w3.org/2000/svg\">\n"
-            .formatted(width, height));
-    }
-    
-    @Override
-    public byte[] exportAsImage(String format) {
-        svgContent.append("</svg>");
-        return svgContent.toString().getBytes(StandardCharsets.UTF_8);
-    }
-    
-    private String toHexColor(Color c) {
-        return "#%02x%02x%02x".formatted(c.getRed(), c.getGreen(), c.getBlue());
     }
     
     // ... otros métodos
@@ -1676,182 +1503,46 @@ Este patrón organiza los componentes en hojas (elementos primitivos sin hijos) 
 
 **Ejemplo: Sistema de archivos con Composite**
 
-```java
+```javascript
+// Composite en React: Componentes de menú anidados
+
 // Componente base
-public sealed interface FileSystemNode permits File, Directory {
-    String name();
-    long size();
-    void display(int indent);
-    
-    default String indent(int level) {
-        return "  ".repeat(level);
-    }
-    
-    // Operaciones de búsqueda con comportamiento por defecto
-    default List<FileSystemNode> find(Predicate<FileSystemNode> predicate) {
-        return predicate.test(this) ? List.of(this) : List.of();
-    }
-    
-    default Optional<FileSystemNode> findFirst(Predicate<FileSystemNode> predicate) {
-        return predicate.test(this) ? Optional.of(this) : Optional.empty();
-    }
+export function Menu({ children }) {
+  return <ul>{children}</ul>;
 }
 
-// Hoja (Leaf) - archivo individual
-public record File(String name, long size, FileType type, Instant createdAt) implements FileSystemNode {
-    
-    public enum FileType { TEXT, IMAGE, VIDEO, AUDIO, BINARY }
-    
-    @Override
-    public void display(int indent) {
-        IO.println(indent(indent) + "📄 " + name + " (" + formatSize(size) + ")");
-    }
-    
-    private String formatSize(long bytes) {
-        if (bytes < 1024) return bytes + " B";
-        if (bytes < 1024 * 1024) return bytes / 1024 + " KB";
-        if (bytes < 1024 * 1024 * 1024) return bytes / (1024 * 1024) + " MB";
-        return bytes / (1024 * 1024 * 1024) + " GB";
-    }
+// "Hoja": ítem de menú simple
+export function MenuItem({ label }) {
+  return <li>{label}</li>;
 }
 
-// Composite - directorio que contiene otros nodos
-public final class Directory implements FileSystemNode {
-    private final String name;
-    private final List<FileSystemNode> children;
-    private final Instant createdAt;
-    
-    public Directory(String name) {
-        this.name = name;
-        this.children = new ArrayList<>();
-        this.createdAt = Instant.now();
-    }
-    
-    @Override
-    public String name() { return name; }
-    
-    @Override
-    public long size() {
-        return children.stream()
-            .mapToLong(FileSystemNode::size)
-            .sum();
-    }
-    
-    @Override
-    public void display(int indent) {
-        IO.println(indent(indent) + "📁 " + name + "/");
-        children.forEach(child -> child.display(indent + 1));
-    }
-    
-    @Override
-    public List<FileSystemNode> find(Predicate<FileSystemNode> predicate) {
-        var results = new ArrayList<FileSystemNode>();
-        if (predicate.test(this)) {
-            results.add(this);
-        }
-        children.stream()
-            .flatMap(child -> child.find(predicate).stream())
-            .forEach(results::add);
-        return results;
-    }
-    
-    @Override
-    public Optional<FileSystemNode> findFirst(Predicate<FileSystemNode> predicate) {
-        if (predicate.test(this)) return Optional.of(this);
-        return children.stream()
-            .map(child -> child.findFirst(predicate))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .findFirst();
-    }
-    
-    // Operaciones específicas de Directory
-    public Directory add(FileSystemNode node) {
-        children.add(node);
-        return this;
-    }
-    
-    public Directory addAll(FileSystemNode... nodes) {
-        children.addAll(Arrays.asList(nodes));
-        return this;
-    }
-    
-    public boolean remove(FileSystemNode node) {
-        return children.remove(node);
-    }
-    
-    public List<FileSystemNode> children() {
-        return Collections.unmodifiableList(children);
-    }
-    
-    public int fileCount() {
-        return (int) children.stream()
-            .mapToLong(child -> switch (child) {
-                case File f -> 1;
-                case Directory d -> d.fileCount();
-            })
-            .sum();
-    }
-    
-    public int directoryCount() {
-        return (int) children.stream()
-            .mapToLong(child -> switch (child) {
-                case File f -> 0;
-                case Directory d -> 1 + d.directoryCount();
-            })
-            .sum();
-    }
+// "Composite": ítem de menú con hijos (submenú)
+export function SubMenu({ label, children }) {
+  return (
+    <li>
+      <span>{label}</span>
+      <ul>{children}</ul>
+    </li>
+  );
 }
 
-// Uso del Composite
-var root = new Directory("proyecto")
-    .add(new File("README.md", 2048, File.FileType.TEXT, Instant.now()))
-    .add(new File("pom.xml", 4096, File.FileType.TEXT, Instant.now()))
-    .add(new Directory("src")
-        .add(new Directory("main")
-            .add(new Directory("java")
-                .add(new File("App.java", 1024, File.FileType.TEXT, Instant.now()))
-                .add(new File("Service.java", 2048, File.FileType.TEXT, Instant.now())))
-            .add(new Directory("resources")
-                .add(new File("application.properties", 512, File.FileType.TEXT, Instant.now()))))
-        .add(new Directory("test")
-            .add(new Directory("java")
-                .add(new File("AppTest.java", 1536, File.FileType.TEXT, Instant.now())))))
-    .add(new Directory("target")
-        .add(new File("app.jar", 1024 * 1024, File.FileType.BINARY, Instant.now())));
-
-// Mostrar estructura
-root.display(0);
-/*
-📁 proyecto/
-  📄 README.md (2 KB)
-  📄 pom.xml (4 KB)
-  📁 src/
-    📁 main/
-      📁 java/
-        📄 App.java (1 KB)
-        📄 Service.java (2 KB)
-      📁 resources/
-        📄 application.properties (512 B)
-    📁 test/
-      📁 java/
-        📄 AppTest.java (1 KB)
-  📁 target/
-    📄 app.jar (1 MB)
-*/
-
-// Operaciones uniformes en toda la estructura
-IO.println("Tamaño total: " + root.size() + " bytes");
-IO.println("Total archivos: " + root.fileCount());
-IO.println("Total directorios: " + root.directoryCount());
-
-// Búsqueda
-var javaFiles = root.find(node -> 
-    node instanceof File f && f.name().endsWith(".java"));
-IO.println("Archivos Java: " + javaFiles.size());
-
-var largeFiles = root.find(node -> 
-    node instanceof File f && f.size() > 10_000);
+// Ejemplo de uso:
+export function AppMenu() {
+  return (
+    <Menu>
+      <MenuItem label="Inicio" />
+      <MenuItem label="Acerca de" />
+      <SubMenu label="Productos">
+        <MenuItem label="Producto A" />
+        <MenuItem label="Producto B" />
+        <SubMenu label="Más productos">
+          <MenuItem label="Producto C" />
+        </SubMenu>
+      </SubMenu>
+      <MenuItem label="Contacto" />
+    </Menu>
+  );
+}
 ```
 
 
@@ -1894,17 +1585,6 @@ public abstract class TextProcessorDecorator implements TextProcessor {
 }
 
 // Decoradores concretos
-public class TrimmingDecorator extends TextProcessorDecorator {
-    public TrimmingDecorator(TextProcessor wrapped) {
-        super(wrapped);
-    }
-    
-    @Override
-    public String process(String text) {
-        return super.process(text.strip());
-    }
-}
-
 public class UpperCaseDecorator extends TextProcessorDecorator {
     public UpperCaseDecorator(TextProcessor wrapped) {
         super(wrapped);
@@ -1916,45 +1596,8 @@ public class UpperCaseDecorator extends TextProcessorDecorator {
     }
 }
 
-public class CensoringDecorator extends TextProcessorDecorator {
-    private final Set<String> bannedWords;
-    private final String replacement;
-    
-    public CensoringDecorator(TextProcessor wrapped, Set<String> bannedWords) {
-        super(wrapped);
-        this.bannedWords = bannedWords;
-        this.replacement = "***";
-    }
-    
-    @Override
-    public String process(String text) {
-        String processed = super.process(text);
-        for (String word : bannedWords) {
-            processed = processed.replaceAll("(?i)" + Pattern.quote(word), replacement);
-        }
-        return processed;
-    }
-}
-
-public class HtmlEncodingDecorator extends TextProcessorDecorator {
-    public HtmlEncodingDecorator(TextProcessor wrapped) {
-        super(wrapped);
-    }
-    
-    @Override
-    public String process(String text) {
-        String processed = super.process(text);
-        return processed
-            .replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-            .replace("\"", "&quot;");
-    }
-}
-
+@Slf4j
 public class LoggingDecorator extends TextProcessorDecorator {
-    private static final Logger log = Logger.getLogger(LoggingDecorator.class.getName());
-    
     public LoggingDecorator(TextProcessor wrapped) {
         super(wrapped);
     }
@@ -1969,7 +1612,7 @@ public class LoggingDecorator extends TextProcessorDecorator {
 }
 
 // Uso con decoradores apilados
-TextProcessor processor = new LoggingDecorator(
+final TextProcessor processor = new LoggingDecorator(
     new HtmlEncodingDecorator(
         new CensoringDecorator(
             new TrimmingDecorator(
@@ -1980,7 +1623,7 @@ TextProcessor processor = new LoggingDecorator(
     )
 );
 
-String result = processor.process("  <script>spam content</script>  ");
+final String result = processor.process("  <script>spam content</script>  ");
 // Output: &lt;script&gt;*** content&lt;/script&gt;
 
 // Alternativa funcional usando composición de funciones
@@ -2019,14 +1662,14 @@ public class FunctionalTextProcessor {
 }
 
 // Uso funcional
-var processor = FunctionalTextProcessor.compose(
+final var processor = FunctionalTextProcessor.compose(
     FunctionalTextProcessor.trim(),
     FunctionalTextProcessor.censor(Set.of("spam")),
     FunctionalTextProcessor.htmlEncode(),
     FunctionalTextProcessor.toUpperCase()
 );
 
-String result = processor.apply("  <spam>hello</spam>  ");
+final String result = processor.apply("  <spam>hello</spam>  ");
 // Output: &LT;***&GT;HELLO&LT;/***&GT;
 ```
 
@@ -2036,223 +1679,44 @@ String result = processor.apply("  <spam>hello</spam>  ");
 
 El patrón **Facade** proporciona una interfaz unificada y simplificada para un conjunto de interfaces en un subsistema. Reduce la complejidad del sistema al ocultar sus componentes internos detrás de una fachada que expone solo las operaciones más comunes.
 
-Este patrón es útil cuando existe un sistema complejo con múltiples clases interdependientes y se desea proporcionar una forma simple de usarlo para los casos de uso más frecuentes. La fachada no impide el acceso directo a los componentes del subsistema cuando se necesita funcionalidad avanzada, pero ofrece un punto de entrada conveniente para la mayoría de situaciones.
+Este patrón es útil cuando existe un sistema complejo con múltiples clases interdependientes y se desea proporcionar una forma simple de usarlo para los casos de uso más frecuentes. 
+
+Por ejemplo, se desea proveer una fachada de uso de una base de datos relacional, pero se desea ocultar la complejidad del cambio de implementaciones cuando se trabaja con OracleDB vs Autora RDS. Así que se brinda solo una interfaz e internamente se hace los cambios correspondientes dependiendo de qué base de datos se este usando. 
+
+La fachada no impide el acceso directo a los componentes del subsistema cuando se necesita funcionalidad avanzada, pero ofrece un punto de entrada conveniente para la mayoría de situaciones.
 
 **Ejemplo: Facade para sistema de e-commerce**
 
-```java
-// Subsistemas complejos
-public class InventoryService {
-    public boolean checkAvailability(String productId, int quantity) {
-        // Verificar stock en múltiples almacenes
-        return true;
-    }
-    
-    public void reserveStock(String productId, int quantity, String orderId) {
-        // Reservar inventario
-    }
-    
-    public void releaseStock(String productId, int quantity, String orderId) {
-        // Liberar reserva
-    }
-}
+```php
+// Ejemplo de uso de Facade en Laravel
 
-public class PaymentGateway {
-    public PaymentAuthorization authorize(String customerId, Money amount, CardInfo card) {
-        // Autorizar pago con el banco
-        return new PaymentAuthorization("auth_123", true);
-    }
-    
-    public void capture(String authorizationId, Money amount) {
-        // Capturar el pago autorizado
-    }
-    
-    public void refund(String authorizationId, Money amount) {
-        // Procesar reembolso
-    }
-}
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
 
-public class ShippingService {
-    public ShippingQuote getQuote(Address from, Address to, List<PackageInfo> packages) {
-        // Calcular costos de envío
-        return new ShippingQuote(new Money(15.99, "USD"), Duration.ofDays(3));
-    }
-    
-    public String createShipment(Address from, Address to, List<PackageInfo> packages) {
-        // Crear orden de envío
-        return "SHIP_" + UUID.randomUUID();
-    }
-    
-    public ShipmentStatus trackShipment(String shipmentId) {
-        return new ShipmentStatus(shipmentId, "IN_TRANSIT", Instant.now());
-    }
-}
+Route::get('/facade-ejemplo', function () {
+    // Acceder a una base de datos (puede ser posgresql, mysql, etc.) usando la fachada DB
+    $users = DB::table('users')->where('active', true)->get();
 
-public class NotificationService {
-    public void sendOrderConfirmation(String email, Order order) {
-        // Enviar email de confirmación
-    }
-    
-    public void sendShippingNotification(String email, String trackingNumber) {
-        // Notificar envío
-    }
-}
+    // Guardar datos temporalmente con la fachada Cache
+    Cache::put('active_users', $users, 60);
 
-public class CustomerService {
-    public Customer findById(String customerId) {
-        return new Customer(customerId, "John Doe", "john@example.com");
-    }
-    
-    public void addLoyaltyPoints(String customerId, int points) {
-        // Agregar puntos de fidelidad
-    }
-}
+    // Enviar un correo usando la fachada Mail
+    Mail::raw('Bienvenido!', function ($message) {
+        $message->to('correo@ejemplo.com')
+                ->subject('Saludos desde Laravel');
+    });
 
-// Facade - interfaz simplificada para el proceso de compra
-public class OrderFacade {
-    
-    private final InventoryService inventoryService;
-    private final PaymentGateway paymentGateway;
-    private final ShippingService shippingService;
-    private final NotificationService notificationService;
-    private final CustomerService customerService;
-    
-    public OrderFacade() {
-        this.inventoryService = new InventoryService();
-        this.paymentGateway = new PaymentGateway();
-        this.shippingService = new ShippingService();
-        this.notificationService = new NotificationService();
-        this.customerService = new CustomerService();
-    }
-    
-    // Método facade principal - oculta toda la complejidad
-    public OrderResult placeOrder(OrderRequest request) {
-        String orderId = generateOrderId();
-        
-        try {
-            // 1. Verificar disponibilidad
-            for (var item : request.items()) {
-                if (!inventoryService.checkAvailability(item.productId(), item.quantity())) {
-                    return OrderResult.failed(orderId, "Product not available: " + item.productId());
-                }
-            }
-            
-            // 2. Reservar inventario
-            for (var item : request.items()) {
-                inventoryService.reserveStock(item.productId(), item.quantity(), orderId);
-            }
-            
-            // 3. Calcular envío
-            var customer = customerService.findById(request.customerId());
-            var shippingQuote = shippingService.getQuote(
-                getWarehouseAddress(),
-                request.shippingAddress(),
-                calculatePackages(request.items())
-            );
-            
-            // 4. Procesar pago
-            Money total = calculateTotal(request.items()).add(shippingQuote.cost());
-            var authorization = paymentGateway.authorize(
-                request.customerId(),
-                total,
-                request.paymentInfo()
-            );
-            
-            if (!authorization.approved()) {
-                // Liberar inventario si el pago falla
-                releaseAllStock(request.items(), orderId);
-                return OrderResult.failed(orderId, "Payment declined");
-            }
-            
-            // 5. Capturar pago
-            paymentGateway.capture(authorization.id(), total);
-            
-            // 6. Crear envío
-            String shipmentId = shippingService.createShipment(
-                getWarehouseAddress(),
-                request.shippingAddress(),
-                calculatePackages(request.items())
-            );
-            
-            // 7. Agregar puntos de fidelidad
-            customerService.addLoyaltyPoints(request.customerId(), calculatePoints(total));
-            
-            // 8. Enviar notificación
-            Order order = createOrder(orderId, request, shipmentId, total);
-            notificationService.sendOrderConfirmation(customer.email(), order);
-            
-            return OrderResult.success(order);
-            
-        } catch (Exception e) {
-            releaseAllStock(request.items(), orderId);
-            return OrderResult.failed(orderId, "Order processing failed: " + e.getMessage());
-        }
-    }
-    
-    // Métodos facade secundarios para operaciones comunes
-    public ShipmentStatus trackOrder(String orderId) {
-        // Simplificar tracking
-        String shipmentId = getShipmentIdForOrder(orderId);
-        return shippingService.trackShipment(shipmentId);
-    }
-    
-    public RefundResult requestRefund(String orderId) {
-        // Proceso simplificado de reembolso
-        Order order = getOrder(orderId);
-        paymentGateway.refund(order.paymentAuthId(), order.total());
-        releaseAllStock(order.items(), orderId);
-        return new RefundResult(orderId, true, "Refund processed");
-    }
-    
-    // Métodos auxiliares privados
-    private void releaseAllStock(List<OrderItem> items, String orderId) {
-        items.forEach(item -> 
-            inventoryService.releaseStock(item.productId(), item.quantity(), orderId));
-    }
-    
-    private String generateOrderId() {
-        return "ORD_" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-    }
-    
-    // ... otros métodos auxiliares
-}
+    return 'Operaciones realizadas mediante facades.';
+});
 
-// Records para datos
-public record OrderRequest(
-    String customerId,
-    List<OrderItem> items,
-    Address shippingAddress,
-    CardInfo paymentInfo
-) {}
+/*
+Las Facades en Laravel permiten acceder a funcionalidades complejas (bases de datos, cache, email, etc.)
+a través de una interfaz global y sencilla, usando solo una clase estática como punto de acceso.
+Esto simplifica el código y elimina la necesidad de instanciar manualmente los servicios o dependencias.
+De fondo cada una puede usar diferentes servicios (ej: redis, valkey, etc.)
+*/
 
-public record OrderResult(String orderId, boolean success, String message, Order order) {
-    public static OrderResult success(Order order) {
-        return new OrderResult(order.id(), true, "Order placed successfully", order);
-    }
-    
-    public static OrderResult failed(String orderId, String reason) {
-        return new OrderResult(orderId, false, reason, null);
-    }
-}
-
-// Uso del Facade - el cliente no conoce la complejidad interna
-var facade = new OrderFacade();
-
-var result = facade.placeOrder(new OrderRequest(
-    "CUST_001",
-    List.of(
-        new OrderItem("PROD_A", 2),
-        new OrderItem("PROD_B", 1)
-    ),
-    new Address("123 Main St", "City", "12345"),
-    new CardInfo("4111111111111111", "12/25", "123")
-));
-
-if (result.success()) {
-    IO.println("Orden creada: " + result.orderId());
-    var status = facade.trackOrder(result.orderId());
-    IO.println("Estado del envío: " + status.status());
-}
 ```
 
 ---
@@ -2266,154 +1730,33 @@ Este patrón es aplicable cuando se utilizan muchos objetos cuyo almacenamiento 
 **Ejemplo: Editor de texto con caracteres compartidos**
 
 ```java
-// Flyweight - estado intrínseco inmutable
-public record CharacterGlyph(char character, String fontFamily, int fontSize) {
-    
-    public void render(int x, int y, Color color, Graphics2D g) {
-        g.setFont(new Font(fontFamily, Font.PLAIN, fontSize));
-        g.setColor(color);
-        g.drawString(String.valueOf(character), x, y);
-    }
-    
-    public int width() {
-        return fontSize / 2; // Simplificado
-    }
-    
-    public int height() {
-        return fontSize;
+// Ejemplo: pool de String (flyweight implícito en Java)
+public class PoolStringFlyweightDemo {
+    public static void main(String[] args) {
+        // Literales: ambos apuntan al mismo objeto en el pool
+        String a = "hola";
+        String b = "hola";
+        System.out.println(a == b); // true
+
+        // new String: crea un nuevo objeto SÓLO si no se usa intern()
+        String c = new String("hola");
+        System.out.println(a == c); // false
+
+        // intern(): obliga a usar el objeto único del pool (flyweight)
+        String d = c.intern();
+        System.out.println(a == d); // true
+
+        // Siempre que un string sea internado, se comparte la instancia en memoria
     }
 }
-
-// Flyweight Factory con caché
-public class GlyphFactory {
-    
-    private static final Map<String, CharacterGlyph> glyphCache = new ConcurrentHashMap<>();
-    
-    public static CharacterGlyph getGlyph(char character, String fontFamily, int fontSize) {
-        String key = character + "_" + fontFamily + "_" + fontSize;
-        
-        return glyphCache.computeIfAbsent(key, 
-            k -> new CharacterGlyph(character, fontFamily, fontSize));
-    }
-    
-    public static int cacheSize() {
-        return glyphCache.size();
-    }
-    
-    public static void clearCache() {
-        glyphCache.clear();
-    }
-    
-    // Estadísticas de uso
-    public static Map<String, Long> getCacheStats() {
-        return glyphCache.entrySet().stream()
-            .collect(Collectors.groupingBy(
-                e -> e.getValue().fontFamily(),
-                Collectors.counting()
-            ));
-    }
-}
-
-// Contexto - almacena estado extrínseco
-public record CharacterContext(int x, int y, Color color) {}
-
-// Documento que usa flyweights
-public class TextDocument {
-    
-    private final List<FormattedCharacter> characters = new ArrayList<>();
-    private String defaultFont = "Monospace";
-    private int defaultSize = 12;
-    
-    public record FormattedCharacter(CharacterGlyph glyph, CharacterContext context) {
-        public void render(Graphics2D g) {
-            glyph.render(context.x(), context.y(), context.color(), g);
-        }
-    }
-    
-    public void insertText(String text, int startX, int startY, Color color) {
-        int x = startX;
-        int y = startY;
-        
-        for (char c : text.toCharArray()) {
-            if (c == '\n') {
-                x = startX;
-                y += defaultSize + 2;
-                continue;
-            }
-            
-            // Obtener glyph compartido (flyweight)
-            CharacterGlyph glyph = GlyphFactory.getGlyph(c, defaultFont, defaultSize);
-            
-            // Crear contexto único para esta posición
-            CharacterContext context = new CharacterContext(x, y, color);
-            
-            characters.add(new FormattedCharacter(glyph, context));
-            
-            x += glyph.width();
-        }
-    }
-    
-    public void insertFormattedText(String text, int startX, int startY, 
-                                     String font, int size, Color color) {
-        int x = startX;
-        int y = startY;
-        
-        for (char c : text.toCharArray()) {
-            if (c == '\n') {
-                x = startX;
-                y += size + 2;
-                continue;
-            }
-            
-            CharacterGlyph glyph = GlyphFactory.getGlyph(c, font, size);
-            CharacterContext context = new CharacterContext(x, y, color);
-            
-            characters.add(new FormattedCharacter(glyph, context));
-            
-            x += glyph.width();
-        }
-    }
-    
-    public void render(Graphics2D g) {
-        characters.forEach(fc -> fc.render(g));
-    }
-    
-    public int characterCount() {
-        return characters.size();
-    }
-    
-    public void printMemoryStats() {
-        IO.println("Caracteres en documento: " + characterCount());
-        IO.println("Glyphs únicos en caché: " + GlyphFactory.cacheSize());
-        IO.println("Ahorro estimado: " + 
-            (characterCount() - GlyphFactory.cacheSize()) + " objetos");
-    }
-}
-
-// Uso del Flyweight
-var document = new TextDocument();
-
-// Insertar mucho texto - los caracteres repetidos comparten glyphs
-document.insertText("""
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
-    """, 10, 10, Color.BLACK);
-
-document.insertFormattedText("TÍTULO IMPORTANTE", 10, 100, "Arial", 24, Color.RED);
-
-document.insertText("""
-    Más texto con muchos caracteres repetidos que comparten glyphs...
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-    bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-    """, 10, 130, Color.DARK_GRAY);
-
-document.printMemoryStats();
 /*
-Caracteres en documento: 458
-Glyphs únicos en caché: 52
-Ahorro estimado: 406 objetos
+En Java, los strings literales y los internados se almacenan en un pool.
+Esto implementa el patrón flyweight: si dos partes del programa usan el mismo literal o intern(), 
+obtienen la misma referencia inmutable y compartida — ahorrando memoria.
+Nota: como el resultado de == cambia dependiendo de cómo se creó el String
+sigue siendo mala prácitca en Java comparar dos Strings con ==. Siempre usar método equals
 */
+
 ```
 
 ---
@@ -2439,30 +1782,7 @@ public record ImageMetadata(String path, long size, String format, Instant creat
 
 // Implementación real (costosa)
 public class DiskImageLoader implements ImageLoader {
-    
-    @Override
-    public Image load(String path) {
-        IO.println("Cargando imagen del disco: " + path);
-        // Simular carga costosa
-        try { Thread.sleep(100); } catch (InterruptedException e) {}
-        byte[] data = readFromDisk(path);
-        return new Image(path, 800, 600, data);
-    }
-    
-    @Override
-    public byte[] loadRaw(String path) {
-        return readFromDisk(path);
-    }
-    
-    @Override
-    public ImageMetadata getMetadata(String path) {
-        return new ImageMetadata(path, 1024000, "PNG", Instant.now());
-    }
-    
-    private byte[] readFromDisk(String path) {
-        // Leer archivo real
-        return new byte[1024];
-    }
+    // Implementa lógica para cargar imagen desde el disco
 }
 
 // Proxy virtual con lazy loading y caché
@@ -2514,117 +1834,16 @@ public class CachingImageProxy implements ImageLoader {
     }
 }
 
-// Proxy de protección con control de acceso
-public class SecureImageProxy implements ImageLoader {
-    
-    private final ImageLoader delegate;
-    private final SecurityContext securityContext;
-    private final Set<String> restrictedPaths;
-    
-    public SecureImageProxy(ImageLoader delegate, SecurityContext securityContext) {
-        this.delegate = delegate;
-        this.securityContext = securityContext;
-        this.restrictedPaths = Set.of("/admin/", "/private/", "/internal/");
-    }
-    
-    @Override
-    public Image load(String path) {
-        checkAccess(path, "READ");
-        return delegate.load(path);
-    }
-    
-    @Override
-    public byte[] loadRaw(String path) {
-        checkAccess(path, "READ_RAW");
-        return delegate.loadRaw(path);
-    }
-    
-    @Override
-    public ImageMetadata getMetadata(String path) {
-        checkAccess(path, "READ_METADATA");
-        return delegate.getMetadata(path);
-    }
-    
-    private void checkAccess(String path, String operation) {
-        if (isRestricted(path) && !securityContext.hasPermission("ADMIN")) {
-            throw new SecurityException(
-                "Access denied to %s for operation %s".formatted(path, operation));
-        }
-    }
-    
-    private boolean isRestricted(String path) {
-        return restrictedPaths.stream().anyMatch(path::startsWith);
-    }
-}
-
-// Proxy de logging/auditoría
-public class AuditingImageProxy implements ImageLoader {
-    
-    private final ImageLoader delegate;
-    private final AuditLog auditLog;
-    
-    public AuditingImageProxy(ImageLoader delegate, AuditLog auditLog) {
-        this.delegate = delegate;
-        this.auditLog = auditLog;
-    }
-    
-    @Override
-    public Image load(String path) {
-        long start = System.currentTimeMillis();
-        try {
-            Image image = delegate.load(path);
-            auditLog.log(new AuditEntry(
-                "IMAGE_LOAD",
-                path,
-                true,
-                System.currentTimeMillis() - start
-            ));
-            return image;
-        } catch (Exception e) {
-            auditLog.log(new AuditEntry(
-                "IMAGE_LOAD",
-                path,
-                false,
-                System.currentTimeMillis() - start,
-                e.getMessage()
-            ));
-            throw e;
-        }
-    }
-    
-    @Override
-    public byte[] loadRaw(String path) {
-        auditLog.log(new AuditEntry("IMAGE_LOAD_RAW", path, true, 0));
-        return delegate.loadRaw(path);
-    }
-    
-    @Override
-    public ImageMetadata getMetadata(String path) {
-        return delegate.getMetadata(path);
-    }
-}
-
 // Uso combinado de proxies (decorador de proxies)
-ImageLoader loader = new AuditingImageProxy(
-    new SecureImageProxy(
+final ImageLoader loader =
         new CachingImageProxy(
             new DiskImageLoader(),
             100  // max cache size
-        ),
-        SecurityContext.current()
-    ),
-    AuditLog.getInstance()
-);
+        );
 
 // El cliente usa la interfaz sin saber de los proxies
-Image img1 = loader.load("/images/photo.png");  // Carga del disco
-Image img2 = loader.load("/images/photo.png");  // Desde caché
-
-try {
-    loader.load("/admin/secret.png");  // SecurityException si no es admin
-} catch (SecurityException e) {
-    IO.println("Acceso denegado: " + e.getMessage());
-}
+final Image img1 = loader.load("/images/photo.png");  // Carga del disco
+final Image img2 = loader.load("/images/photo.png");  // Desde caché
 ```
 
 
@@ -2799,7 +2018,7 @@ Cada comando es un objeto autónomo que contiene toda la información necesaria 
 
 ```java
 // Interfaz Command
-public sealed interface TextCommand permits InsertCommand, DeleteCommand, ReplaceCommand, MacroCommand {
+public interface TextCommand {
     void execute();
     void undo();
     String description();
@@ -2912,41 +2131,7 @@ public final class DeleteCommand implements TextCommand {
     }
 }
 
-public final class ReplaceCommand implements TextCommand {
-    private final TextDocument document;
-    private final int start;
-    private final int end;
-    private final String newText;
-    private String replacedText;
-    
-    public ReplaceCommand(TextDocument document, int start, int end, String newText) {
-        this.document = document;
-        this.start = start;
-        this.end = end;
-        this.newText = newText;
-    }
-    
-    @Override
-    public void execute() {
-        replacedText = document.replace(start, end, newText);
-    }
-    
-    @Override
-    public void undo() {
-        document.replace(start, start + newText.length(), replacedText);
-    }
-    
-    @Override
-    public String description() {
-        return "Replace '%s' with '%s'".formatted(
-            replacedText != null ? truncate(replacedText) : "?",
-            truncate(newText));
-    }
-    
-    private String truncate(String s) {
-        return s.length() > 10 ? s.substring(0, 10) + "..." : s;
-    }
-}
+// Otros comandos ...
 
 // Comando compuesto (Macro)
 public final class MacroCommand implements TextCommand {
@@ -3069,7 +2254,7 @@ public class TextEditor {
 }
 
 // Uso del patrón Command
-var editor = new TextEditor();
+final var editor = new TextEditor();
 
 editor.type("Hello ");
 editor.type("World");
@@ -3138,18 +2323,6 @@ public record PropertyExpression<T>(String propertyName) implements FilterExpres
     
     public Object getValue(FilterContext<T> context) {
         return context.getProperty(propertyName);
-    }
-}
-
-public record LiteralExpression<T>(Object value) implements FilterExpression<T> {
-    @Override
-    public boolean interpret(FilterContext<T> context) {
-        return value instanceof Boolean b ? b : value != null;
-    }
-    
-    @Override
-    public String toQueryString() {
-        return value instanceof String ? "'" + value + "'" : String.valueOf(value);
     }
 }
 
@@ -3232,35 +2405,7 @@ public record OrExpression<T>(FilterExpression<T> left, FilterExpression<T> righ
     }
 }
 
-public record NotExpression<T>(FilterExpression<T> expression) implements FilterExpression<T> {
-    @Override
-    public boolean interpret(FilterContext<T> context) {
-        return !expression.interpret(context);
-    }
-    
-    @Override
-    public String toQueryString() {
-        return "NOT " + expression.toQueryString();
-    }
-}
-
-public record InExpression<T>(PropertyExpression<T> property, List<Object> values) 
-        implements FilterExpression<T> {
-    
-    @Override
-    public boolean interpret(FilterContext<T> context) {
-        Object propValue = property.getValue(context);
-        return values.contains(propValue);
-    }
-    
-    @Override
-    public String toQueryString() {
-        String valuesList = values.stream()
-            .map(v -> v instanceof String ? "'" + v + "'" : String.valueOf(v))
-            .collect(Collectors.joining(", "));
-        return "%s IN (%s)".formatted(property.toQueryString(), valuesList);
-    }
-}
+// Otras implementaciones
 
 // Builder DSL para construir expresiones
 public class FilterBuilder<T> {
@@ -3315,10 +2460,10 @@ public class FilterBuilder<T> {
 // Uso del Interpreter
 public record Product(String name, String category, double price, boolean active) {}
 
-var filter = new FilterBuilder<Product>();
+final var filter = new FilterBuilder<Product>();
 
 // Construir expresión: category = 'Electronics' AND price > 100 AND active = true
-FilterExpression<Product> expression = FilterBuilder.and(
+final FilterExpression<Product> expression = FilterBuilder.and(
     FilterBuilder.and(
         filter.where("category").equals("Electronics"),
         filter.where("price").greaterThan(100.0)
@@ -3330,14 +2475,14 @@ IO.println("Query: " + expression.toQueryString());
 // Output: ((category = 'Electronics' AND price > 100.0) AND active = true)
 
 // Filtrar productos
-List<Product> products = List.of(
+final List<Product> products = List.of(
     new Product("Laptop", "Electronics", 999.99, true),
     new Product("Mouse", "Electronics", 29.99, true),
     new Product("Desk", "Furniture", 199.99, true),
     new Product("Monitor", "Electronics", 299.99, false)
 );
 
-var filtered = products.stream()
+final var filtered = products.stream()
     .filter(p -> expression.interpret(new FilterContext<>(p, Map.of())))
     .toList();
 
@@ -4024,21 +3169,6 @@ public class EventBus {
 }
 
 // Observers concretos
-public class NotificationService implements EventListener<OrderCreated> {
-    
-    private final EmailSender emailSender;
-    
-    public NotificationService(EmailSender emailSender) {
-        this.emailSender = emailSender;
-    }
-    
-    @Override
-    public void onEvent(OrderCreated event) {
-        IO.println("📧 Sending order confirmation for order: " + event.aggregateId());
-        // emailSender.send(buildConfirmationEmail(event));
-    }
-}
-
 public class InventoryService implements EventListener<OrderCreated> {
     
     @Override
@@ -4061,13 +3191,7 @@ public class AnalyticsService {
     }
 }
 
-public class ShippingNotifier implements EventListener<OrderShipped> {
-    
-    @Override
-    public void onEvent(OrderShipped event) {
-        IO.println("🚚 Notifying customer about shipment: " + event.trackingNumber());
-    }
-}
+// Otras implementaciones de observers...
 
 // Uso del patrón Observer
 final var eventBus = new EventBus();
@@ -4247,110 +3371,11 @@ public final class PendingPaymentState implements OrderState {
     }
 }
 
-public final class PaidState implements OrderState {
-    public static final PaidState INSTANCE = new PaidState();
-    private PaidState() {}
-    
-    @Override
-    public String stateName() { return "PAID"; }
-    
-    @Override
-    public void addItem(OrderContext order, OrderItem item) { throwInvalidOperation("add items"); }
-    @Override
-    public void removeItem(OrderContext order, String productId) { throwInvalidOperation("remove items"); }
-    @Override
-    public void submitOrder(OrderContext order) { throwInvalidOperation("submit"); }
-    @Override
-    public void processPayment(OrderContext order, PaymentInfo payment) { throwInvalidOperation("pay again"); }
-    
-    @Override
-    public void shipOrder(OrderContext order, ShippingInfo shipping) {
-        order.setShippingInfo(shipping);
-        order.setState(ShippedState.INSTANCE);
-        IO.println("✓ Order shipped: " + shipping.trackingNumber());
-    }
-    
-    @Override
-    public void deliverOrder(OrderContext order) {
-        throwInvalidOperation("deliver");
-    }
-    
-    @Override
-    public void cancelOrder(OrderContext order, String reason) {
-        // Requiere reembolso
-        order.setState(CancelledState.INSTANCE);
-        order.setCancellationReason(reason);
-        order.setRefundRequired(true);
-        IO.println("✓ Paid order cancelled, refund required: " + reason);
-    }
-}
-
-public final class ShippedState implements OrderState {
-    public static final ShippedState INSTANCE = new ShippedState();
-    private ShippedState() {}
-    
-    @Override
-    public String stateName() { return "SHIPPED"; }
-    
-    @Override
-    public void addItem(OrderContext order, OrderItem item) { throwInvalidOperation("add items"); }
-    @Override
-    public void removeItem(OrderContext order, String productId) { throwInvalidOperation("remove items"); }
-    @Override
-    public void submitOrder(OrderContext order) { throwInvalidOperation("submit"); }
-    @Override
-    public void processPayment(OrderContext order, PaymentInfo payment) { throwInvalidOperation("pay"); }
-    @Override
-    public void shipOrder(OrderContext order, ShippingInfo shipping) { throwInvalidOperation("ship again"); }
-    
-    @Override
-    public void deliverOrder(OrderContext order) {
-        order.setDeliveredAt(Instant.now());
-        order.setState(DeliveredState.INSTANCE);
-        IO.println("✓ Order delivered!");
-    }
-    
-    @Override
-    public void cancelOrder(OrderContext order, String reason) {
-        throwInvalidOperation("cancel shipped order");
-    }
-}
-
-public final class DeliveredState implements OrderState {
-    public static final DeliveredState INSTANCE = new DeliveredState();
-    private DeliveredState() {}
-    
-    @Override
-    public String stateName() { return "DELIVERED"; }
-    
-    // Todas las operaciones no permitidas en estado final
-    @Override public void addItem(OrderContext order, OrderItem item) { throwInvalidOperation("modify"); }
-    @Override public void removeItem(OrderContext order, String productId) { throwInvalidOperation("modify"); }
-    @Override public void submitOrder(OrderContext order) { throwInvalidOperation("submit"); }
-    @Override public void processPayment(OrderContext order, PaymentInfo payment) { throwInvalidOperation("pay"); }
-    @Override public void shipOrder(OrderContext order, ShippingInfo shipping) { throwInvalidOperation("ship"); }
-    @Override public void deliverOrder(OrderContext order) { throwInvalidOperation("deliver again"); }
-    @Override public void cancelOrder(OrderContext order, String reason) { throwInvalidOperation("cancel delivered"); }
-}
-
-public final class CancelledState implements OrderState {
-    public static final CancelledState INSTANCE = new CancelledState();
-    private CancelledState() {}
-    
-    @Override
-    public String stateName() { return "CANCELLED"; }
-    
-    // Ninguna operación permitida
-    @Override public void addItem(OrderContext order, OrderItem item) { throwInvalidOperation("modify cancelled"); }
-    @Override public void removeItem(OrderContext order, String productId) { throwInvalidOperation("modify cancelled"); }
-    @Override public void submitOrder(OrderContext order) { throwInvalidOperation("submit cancelled"); }
-    @Override public void processPayment(OrderContext order, PaymentInfo payment) { throwInvalidOperation("pay cancelled"); }
-    @Override public void shipOrder(OrderContext order, ShippingInfo shipping) { throwInvalidOperation("ship cancelled"); }
-    @Override public void deliverOrder(OrderContext order) { throwInvalidOperation("deliver cancelled"); }
-    @Override public void cancelOrder(OrderContext order, String reason) { throwInvalidOperation("cancel again"); }
-}
+// Implementación de otros estados
 
 // Context
+@Getter
+@Setter
 public class OrderContext {
     private final String orderId;
     private final List<OrderItem> items = new ArrayList<>();
@@ -4374,23 +3399,11 @@ public class OrderContext {
     public void deliver() { state.deliverOrder(this); }
     public void cancel(String reason) { state.cancelOrder(this, reason); }
     
-    // Getters y setters
-    public String getOrderId() { return orderId; }
-    public List<OrderItem> getItems() { return items; }
-    public OrderState getState() { return state; }
-    public void setState(OrderState state) { this.state = state; }
     public Money getTotal() {
         return items.stream()
             .map(i -> i.price().multiply(i.quantity()))
             .reduce(Money.ZERO, Money::add);
     }
-    
-    // Otros setters...
-    public void setPaymentInfo(PaymentInfo info) { this.paymentInfo = info; }
-    public void setShippingInfo(ShippingInfo info) { this.shippingInfo = info; }
-    public void setCancellationReason(String reason) { this.cancellationReason = reason; }
-    public void setRefundRequired(boolean required) { this.refundRequired = required; }
-    public void setDeliveredAt(Instant at) { this.deliveredAt = at; }
     
     public void printStatus() {
         IO.println("\n=== Order " + orderId + " ===");
@@ -4401,7 +3414,7 @@ public class OrderContext {
 }
 
 // Uso del patrón State
-var order = new OrderContext("ORD-001");
+final var order = new OrderContext("ORD-001");
 
 order.addItem(new OrderItem("LAPTOP", 1, new Money(999.99, "USD")));
 order.addItem(new OrderItem("MOUSE", 2, new Money(29.99, "USD")));
@@ -4699,8 +3712,6 @@ Este patrón es ideal cuando la estructura de objetos es estable pero las operac
 public interface DocumentVisitor<T> {
     T visitParagraph(Paragraph paragraph);
     T visitHeading(Heading heading);
-    T visitImage(Image image);
-    T visitTable(Table table);
     T visitCodeBlock(CodeBlock codeBlock);
     
     // Método por defecto para elementos compuestos
@@ -4733,20 +3744,6 @@ public record Heading(String text, int level) implements DocumentElement {
     @Override
     public <T> T accept(DocumentVisitor<T> visitor) {
         return visitor.visitHeading(this);
-    }
-}
-
-public record Image(String src, String alt, int width, int height) implements DocumentElement {
-    @Override
-    public <T> T accept(DocumentVisitor<T> visitor) {
-        return visitor.visitImage(this);
-    }
-}
-
-public record Table(List<String> headers, List<List<String>> rows) implements DocumentElement {
-    @Override
-    public <T> T accept(DocumentVisitor<T> visitor) {
-        return visitor.visitTable(this);
     }
 }
 
@@ -4789,27 +3786,6 @@ public class MarkdownExportVisitor implements DocumentVisitor<String> {
     }
     
     @Override
-    public String visitImage(Image image) {
-        String result = "![%s](%s)".formatted(image.alt(), image.src());
-        markdown.append(result).append("\n\n");
-        return result;
-    }
-    
-    @Override
-    public String visitTable(Table table) {
-        var sb = new StringBuilder();
-        sb.append("| ").append(String.join(" | ", table.headers())).append(" |\n");
-        sb.append("| ").append(table.headers().stream().map(h -> "---").collect(Collectors.joining(" | "))).append(" |\n");
-        
-        for (var row : table.rows()) {
-            sb.append("| ").append(String.join(" | ", row)).append(" |\n");
-        }
-        
-        markdown.append(sb).append("\n");
-        return sb.toString();
-    }
-    
-    @Override
     public String visitCodeBlock(CodeBlock codeBlock) {
         String result = "```%s\n%s\n```".formatted(codeBlock.language(), codeBlock.code());
         markdown.append(result).append("\n\n");
@@ -4833,16 +3809,8 @@ final var document = new Document("Mi Documento", List.of(
     new Heading("Introducción", 1),
     new Paragraph("Este es un documento de ejemplo.", Paragraph.TextStyle.NORMAL),
     new Heading("Datos", 2),
-    new Table(
-        List.of("Nombre", "Edad", "Ciudad"),
-        List.of(
-            List.of("Ana", "25", "Madrid"),
-            List.of("Juan", "30", "Barcelona")
-        )
-    ),
     new Heading("Código", 2),
-    new CodeBlock("IO.println(\"Hello!\");", "java"),
-    new Image("/images/logo.png", "Logo", 200, 100)
+    new CodeBlock("IO.println(\"Hello!\");", "java")
 ));
 
 // Exportar a Markdown
