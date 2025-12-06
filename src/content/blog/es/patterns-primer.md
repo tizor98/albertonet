@@ -2665,58 +2665,6 @@ public abstract class Middleware implements HttpHandler {
     }
 }
 
-// Middleware de autenticación
-public class AuthenticationMiddleware extends Middleware {
-    
-    private final TokenValidator tokenValidator;
-    
-    public AuthenticationMiddleware(TokenValidator tokenValidator) {
-        this.tokenValidator = tokenValidator;
-    }
-    
-    @Override
-    public HttpResponse handle(HttpRequest request) {
-        String token = request.header("Authorization");
-        
-        if (token == null || token.isEmpty()) {
-            return HttpResponse.unauthorized("Missing authentication token");
-        }
-        
-        try {
-            String tokenValue = token.replace("Bearer ", "");
-            UserPrincipal principal = tokenValidator.validate(tokenValue);
-            request.setAttribute("user", principal);
-            return passToNext(request);
-        } catch (InvalidTokenException e) {
-            return HttpResponse.unauthorized("Invalid token: " + e.getMessage());
-        }
-    }
-}
-
-// Middleware de autorización
-public class AuthorizationMiddleware extends Middleware {
-    
-    private final Map<String, Set<String>> routePermissions;
-    
-    public AuthorizationMiddleware(Map<String, Set<String>> routePermissions) {
-        this.routePermissions = routePermissions;
-    }
-    
-    @Override
-    public HttpResponse handle(HttpRequest request) {
-        UserPrincipal user = request.getAttribute("user", UserPrincipal.class);
-        String route = request.path();
-        
-        Set<String> requiredPermissions = routePermissions.getOrDefault(route, Set.of());
-        
-        if (!requiredPermissions.isEmpty() && !user.hasAnyPermission(requiredPermissions)) {
-            return HttpResponse.forbidden("Insufficient permissions for " + route);
-        }
-        
-        return passToNext(request);
-    }
-}
-
 // Middleware de logging
 public class LoggingMiddleware extends Middleware {
     
@@ -2773,38 +2721,6 @@ public class CacheMiddleware extends Middleware {
     }
 }
 
-// Middleware de rate limiting
-public class RateLimitingMiddleware extends Middleware {
-    
-    private final Map<String, TokenBucket> buckets = new ConcurrentHashMap<>();
-    private final int maxRequests;
-    private final Duration window;
-    
-    public RateLimitingMiddleware(int maxRequests, Duration window) {
-        this.maxRequests = maxRequests;
-        this.window = window;
-    }
-    
-    @Override
-    public HttpResponse handle(HttpRequest request) {
-        String clientId = extractClientId(request);
-        TokenBucket bucket = buckets.computeIfAbsent(clientId, 
-            k -> new TokenBucket(maxRequests, window));
-        
-        if (!bucket.tryConsume()) {
-            return HttpResponse.tooManyRequests("Rate limit exceeded")
-                .withHeader("Retry-After", String.valueOf(bucket.getSecondsUntilRefill()));
-        }
-        
-        return passToNext(request);
-    }
-    
-    private String extractClientId(HttpRequest request) {
-        UserPrincipal user = request.getAttribute("user", UserPrincipal.class);
-        return user != null ? user.id() : request.remoteAddress();
-    }
-}
-
 // Controlador final (termina la cadena)
 public class ApiController implements HttpHandler {
     
@@ -2858,18 +2774,12 @@ public class MiddlewarePipeline {
 }
 
 // Uso del Chain of Responsibility
-var controller = new ApiController();
+final var controller = new ApiController();
 controller.addRoute("/api/users", req -> HttpResponse.ok("{\"users\": []}"));
 controller.addRoute("/api/products", req -> HttpResponse.ok("{\"products\": []}"));
 
-var pipeline = new MiddlewarePipeline()
+final var pipeline = new MiddlewarePipeline()
     .use(new LoggingMiddleware())
-    .use(new RateLimitingMiddleware(100, Duration.ofMinutes(1)))
-    .use(new AuthenticationMiddleware(new JwtTokenValidator()))
-    .use(new AuthorizationMiddleware(Map.of(
-        "/api/admin", Set.of("ADMIN"),
-        "/api/users", Set.of("USER", "ADMIN")
-    )))
     .use(new CacheMiddleware(new LRUCache<>(), Duration.ofMinutes(5)))
     .endpoint(controller)
     .build();
@@ -3470,7 +3380,7 @@ public class BinaryTree<T> implements Iterable<T> {
     
     private TreeNode<T> root;
     
-    public enum TraversalOrder { IN_ORDER, PRE_ORDER, POST_ORDER, LEVEL_ORDER }
+    public enum TraversalOrder { IN_ORDER }
     
     private TraversalOrder defaultOrder = TraversalOrder.IN_ORDER;
     
@@ -3490,22 +3400,11 @@ public class BinaryTree<T> implements Iterable<T> {
     public Iterator<T> iterator(TraversalOrder order) {
         return switch (order) {
             case IN_ORDER -> new InOrderIterator<>(root);
-            case PRE_ORDER -> new PreOrderIterator<>(root);
-            case POST_ORDER -> new PostOrderIterator<>(root);
-            case LEVEL_ORDER -> new LevelOrderIterator<>(root);
         };
     }
     
     public Iterable<T> inOrder() {
         return () -> iterator(TraversalOrder.IN_ORDER);
-    }
-    
-    public Iterable<T> preOrder() {
-        return () -> iterator(TraversalOrder.PRE_ORDER);
-    }
-    
-    public Iterable<T> levelOrder() {
-        return () -> iterator(TraversalOrder.LEVEL_ORDER);
     }
     
     // Stream support
@@ -3550,100 +3449,15 @@ class InOrderIterator<T> implements Iterator<T> {
     }
 }
 
-// Iterador Pre-Order (raíz -> izquierda -> derecha)
-class PreOrderIterator<T> implements Iterator<T> {
-    private final Deque<TreeNode<T>> stack = new ArrayDeque<>();
-    
-    PreOrderIterator(TreeNode<T> root) {
-        if (root != null) stack.push(root);
-    }
-    
-    @Override
-    public boolean hasNext() {
-        return !stack.isEmpty();
-    }
-    
-    @Override
-    public T next() {
-        if (!hasNext()) throw new NoSuchElementException();
-        TreeNode<T> current = stack.pop();
-        if (current.right() != null) stack.push(current.right());
-        if (current.left() != null) stack.push(current.left());
-        return current.value();
-    }
-}
-
-// Iterador Post-Order (izquierda -> derecha -> raíz)
-class PostOrderIterator<T> implements Iterator<T> {
-    private final Deque<TreeNode<T>> stack = new ArrayDeque<>();
-    private final Set<TreeNode<T>> visited = new HashSet<>();
-    
-    PostOrderIterator(TreeNode<T> root) {
-        if (root != null) stack.push(root);
-    }
-    
-    @Override
-    public boolean hasNext() {
-        return !stack.isEmpty();
-    }
-    
-    @Override
-    public T next() {
-        while (!stack.isEmpty()) {
-            TreeNode<T> current = stack.peek();
-            
-            boolean leftVisited = current.left() == null || visited.contains(current.left());
-            boolean rightVisited = current.right() == null || visited.contains(current.right());
-            
-            if (leftVisited && rightVisited) {
-                visited.add(current);
-                stack.pop();
-                return current.value();
-            }
-            
-            if (!rightVisited && current.right() != null) {
-                stack.push(current.right());
-            }
-            if (!leftVisited && current.left() != null) {
-                stack.push(current.left());
-            }
-        }
-        throw new NoSuchElementException();
-    }
-}
-
-// Iterador Level-Order (BFS - por niveles)
-class LevelOrderIterator<T> implements Iterator<T> {
-    private final Queue<TreeNode<T>> queue = new LinkedList<>();
-    
-    LevelOrderIterator(TreeNode<T> root) {
-        if (root != null) queue.offer(root);
-    }
-    
-    @Override
-    public boolean hasNext() {
-        return !queue.isEmpty();
-    }
-    
-    @Override
-    public T next() {
-        if (!hasNext()) throw new NoSuchElementException();
-        TreeNode<T> current = queue.poll();
-        if (current.left() != null) queue.offer(current.left());
-        if (current.right() != null) queue.offer(current.right());
-        return current.value();
-    }
-}
-
 // Uso del patrón Iterator
-var tree = new BinaryTree<Integer>();
+final var tree = new BinaryTree<Integer>();
 //        4
 //       / \
 //      2   6
 //     / \ / \
 //    1  3 5  7
 
-var root = new TreeNode<>(4);
+final var root = new TreeNode<>(4);
 root.setLeft(new TreeNode<>(2));
 root.setRight(new TreeNode<>(6));
 root.left().setLeft(new TreeNode<>(1));
@@ -3655,12 +3469,6 @@ tree.setRoot(root);
 // Diferentes formas de iterar
 IO.println("In-Order: " + tree.stream(TraversalOrder.IN_ORDER).toList());
 // [1, 2, 3, 4, 5, 6, 7]
-
-IO.println("Pre-Order: " + tree.stream(TraversalOrder.PRE_ORDER).toList());
-// [4, 2, 1, 3, 6, 5, 7]
-
-IO.println("Level-Order: " + tree.stream(TraversalOrder.LEVEL_ORDER).toList());
-// [4, 2, 6, 1, 3, 5, 7]
 
 // Uso con for-each
 for (Integer value : tree.inOrder()) {
@@ -4129,9 +3937,7 @@ El subject mantiene una lista de observers sin conocer sus clases concretas, pro
 
 ```java
 // Eventos tipados
-public sealed interface DomainEvent permits 
-        OrderCreated, OrderShipped, OrderDelivered, PaymentReceived, InventoryUpdated {
-    
+public interface DomainEvent {
     String eventId();
     Instant occurredAt();
     String aggregateId();
@@ -4152,14 +3958,6 @@ public record OrderShipped(
     String aggregateId,
     String trackingNumber,
     String carrier
-) implements DomainEvent {}
-
-public record PaymentReceived(
-    String eventId,
-    Instant occurredAt,
-    String aggregateId,
-    Money amount,
-    String paymentMethod
 ) implements DomainEvent {}
 
 // Observer interface con soporte genérico
@@ -4261,11 +4059,6 @@ public class AnalyticsService {
                         .incrementAndGet();
         IO.println("📊 Analytics: New order tracked for customer " + event.customerId());
     }
-    
-    public void trackPayment(PaymentReceived event) {
-        totalRevenue.addAndGet(event.amount().toCents());
-        IO.println("📊 Analytics: Payment of " + event.amount() + " tracked");
-    }
 }
 
 public class ShippingNotifier implements EventListener<OrderShipped> {
@@ -4277,24 +4070,23 @@ public class ShippingNotifier implements EventListener<OrderShipped> {
 }
 
 // Uso del patrón Observer
-var eventBus = new EventBus();
+final var eventBus = new EventBus();
 
 // Registrar observers
-var emailSender = new EmailSender();
-var notificationService = new NotificationService(emailSender);
-var inventoryService = new InventoryService();
-var analyticsService = new AnalyticsService();
-var shippingNotifier = new ShippingNotifier();
+final var emailSender = new EmailSender();
+final var notificationService = new NotificationService(emailSender);
+final var inventoryService = new InventoryService();
+final var analyticsService = new AnalyticsService();
+final var shippingNotifier = new ShippingNotifier();
 
 // Suscripciones - diferentes observers para el mismo evento
-var sub1 = eventBus.subscribe(OrderCreated.class, notificationService);
-var sub2 = eventBus.subscribe(OrderCreated.class, inventoryService);
-var sub3 = eventBus.subscribe(OrderCreated.class, analyticsService::trackOrderCreated);
-var sub4 = eventBus.subscribe(PaymentReceived.class, analyticsService::trackPayment);
-var sub5 = eventBus.subscribe(OrderShipped.class, shippingNotifier);
+final var sub1 = eventBus.subscribe(OrderCreated.class, notificationService);
+final var sub2 = eventBus.subscribe(OrderCreated.class, inventoryService);
+final var sub3 = eventBus.subscribe(OrderCreated.class, analyticsService::trackOrderCreated);
+final var sub4 = eventBus.subscribe(OrderShipped.class, shippingNotifier);
 
 // Publicar eventos
-var orderCreated = new OrderCreated(
+final var orderCreated = new OrderCreated(
     UUID.randomUUID().toString(),
     Instant.now(),
     "ORD-001",
@@ -4310,15 +4102,6 @@ eventBus.publish(orderCreated);
 //   - Reserving 2 x PROD-A
 //   - Reserving 1 x PROD-B
 // 📊 Analytics: New order tracked for customer CUST-123
-
-eventBus.publish(new PaymentReceived(
-    UUID.randomUUID().toString(),
-    Instant.now(),
-    "ORD-001",
-    new Money(299.99, "USD"),
-    "CREDIT_CARD"
-));
-// 📊 Analytics: Payment of $299.99 tracked
 
 // Desuscribirse
 sub1.unsubscribe();
@@ -4661,8 +4444,7 @@ A diferencia del patrón State donde el comportamiento cambia según el estado i
 ```java
 // Interfaz Strategy
 @FunctionalInterface
-public interface PricingStrategy {
-    Money calculatePrice(Order order);
+public interface CalculatePrice extends Function<Order, Money> {
     
     default String strategyName() {
         return this.getClass().getSimpleName();
@@ -4672,7 +4454,7 @@ public interface PricingStrategy {
 // Estrategias concretas
 public class StandardPricing implements PricingStrategy {
     @Override
-    public Money calculatePrice(Order order) {
+    public Money apply(Order order) {
         return order.subtotal();
     }
     
@@ -4683,12 +4465,12 @@ public class StandardPricing implements PricingStrategy {
 public class MembershipPricing implements PricingStrategy {
     private final MembershipLevel level;
     
+    @Getter
+    @RequiredArgsConstructor
     public enum MembershipLevel {
         SILVER(0.05), GOLD(0.10), PLATINUM(0.15);
         
         private final double discount;
-        MembershipLevel(double discount) { this.discount = discount; }
-        public double discount() { return discount; }
     }
     
     public MembershipPricing(MembershipLevel level) {
@@ -4696,62 +4478,13 @@ public class MembershipPricing implements PricingStrategy {
     }
     
     @Override
-    public Money calculatePrice(Order order) {
-        return order.subtotal().multiply(1 - level.discount());
+    public Money apply(Order order) {
+        return order.subtotal().multiply(1 - level.getDiscount());
     }
     
     @Override
     public String strategyName() { 
-        return level + " Membership (" + (int)(level.discount() * 100) + "% off)"; 
-    }
-}
-
-public class PromotionalPricing implements PricingStrategy {
-    private final String promoCode;
-    private final double discountPercent;
-    private final Money minimumPurchase;
-    
-    public PromotionalPricing(String promoCode, double discountPercent, Money minimumPurchase) {
-        this.promoCode = promoCode;
-        this.discountPercent = discountPercent;
-        this.minimumPurchase = minimumPurchase;
-    }
-    
-    @Override
-    public Money calculatePrice(Order order) {
-        if (order.subtotal().compareTo(minimumPurchase) >= 0) {
-            return order.subtotal().multiply(1 - discountPercent);
-        }
-        return order.subtotal();
-    }
-    
-    @Override
-    public String strategyName() {
-        return "Promo " + promoCode + " (" + (int)(discountPercent * 100) + "% off)";
-    }
-}
-
-public class BulkPricing implements PricingStrategy {
-    private final int minimumQuantity;
-    private final double discount;
-    
-    public BulkPricing(int minimumQuantity, double discount) {
-        this.minimumQuantity = minimumQuantity;
-        this.discount = discount;
-    }
-    
-    @Override
-    public Money calculatePrice(Order order) {
-        int totalItems = order.items().stream().mapToInt(OrderItem::quantity).sum();
-        if (totalItems >= minimumQuantity) {
-            return order.subtotal().multiply(1 - discount);
-        }
-        return order.subtotal();
-    }
-    
-    @Override
-    public String strategyName() {
-        return "Bulk Pricing (min " + minimumQuantity + " items)";
+        return level + " Membership (" + (int)(level.getDiscount() * 100) + "% off)"; 
     }
 }
 
@@ -4768,17 +4501,17 @@ public class CompositePricingStrategy implements PricingStrategy {
     }
     
     @Override
-    public Money calculatePrice(Order order) {
+    public Money apply(Order order) {
         return switch (mode) {
             case BEST_PRICE -> strategies.stream()
-                .map(s -> s.calculatePrice(order))
+                .map(PricingStrategy)
                 .min(Comparator.naturalOrder())
                 .orElse(order.subtotal());
             case STACK_ALL -> {
                 Money current = order.subtotal();
                 for (var strategy : strategies) {
                     Order tempOrder = order.withSubtotal(current);
-                    current = strategy.calculatePrice(tempOrder);
+                    current = strategy.apply(tempOrder);
                 }
                 yield current;
             }
@@ -4791,72 +4524,11 @@ public class CompositePricingStrategy implements PricingStrategy {
     }
 }
 
-// Selector de estrategia basado en contexto
-public class PricingStrategySelector {
-    
-    private final Map<String, PricingStrategy> promoStrategies = new HashMap<>();
-    
-    public PricingStrategySelector() {
-        // Registrar promociones activas
-        promoStrategies.put("SUMMER20", new PromotionalPricing("SUMMER20", 0.20, new Money(50, "USD")));
-        promoStrategies.put("FLASH10", new PromotionalPricing("FLASH10", 0.10, Money.ZERO));
-    }
-    
-    public PricingStrategy selectStrategy(Customer customer, Order order, String promoCode) {
-        List<PricingStrategy> applicableStrategies = new ArrayList<>();
-        
-        // Estrategia base
-        applicableStrategies.add(new StandardPricing());
-        
-        // Estrategia de membresía si aplica
-        if (customer.membershipLevel() != null) {
-            applicableStrategies.add(new MembershipPricing(customer.membershipLevel()));
-        }
-        
-        // Estrategia de código promocional si es válido
-        if (promoCode != null && promoStrategies.containsKey(promoCode)) {
-            applicableStrategies.add(promoStrategies.get(promoCode));
-        }
-        
-        // Estrategia de compra al por mayor
-        applicableStrategies.add(new BulkPricing(10, 0.08));
-        
-        // Retornar la mejor oferta
-        return new CompositePricingStrategy(
-            CompositePricingStrategy.CombinationMode.BEST_PRICE,
-            applicableStrategies.toArray(PricingStrategy[]::new)
-        );
-    }
-}
-
-// Context
-public class CheckoutService {
-    private final PricingStrategySelector strategySelector;
-    
-    public CheckoutService(PricingStrategySelector strategySelector) {
-        this.strategySelector = strategySelector;
-    }
-    
-    public Receipt checkout(Customer customer, Order order, String promoCode) {
-        PricingStrategy strategy = strategySelector.selectStrategy(customer, order, promoCode);
-        
-        Money originalPrice = order.subtotal();
-        Money finalPrice = strategy.calculatePrice(order);
-        Money savings = originalPrice.subtract(finalPrice);
-        
-        IO.println("Strategy applied: " + strategy.strategyName());
-        IO.println("Original: " + originalPrice);
-        IO.println("Final: " + finalPrice);
-        IO.println("Savings: " + savings);
-        
-        return new Receipt(order.id(), finalPrice, strategy.strategyName(), savings);
-    }
-}
-
 // Uso con lambdas - estrategias como funciones
+@RequiredArgsConstructor
 public class FunctionalPricingExample {
-    
-    public static Money applyDiscount(Order order, Function<Order, Money> strategy) {
+
+    public Money applyDiscount(Order order, PricingStrategy strategy) {
         return strategy.apply(order);
     }
     
@@ -4867,24 +4539,12 @@ public class FunctionalPricingExample {
         ));
         
         // Estrategias como lambdas
-        Function<Order, Money> noDiscount = Order::subtotal;
-        Function<Order, Money> tenPercentOff = o -> o.subtotal().multiply(0.9);
-        Function<Order, Money> freeShipping = o -> o.subtotal(); // Lógica de envío gratis
+        PricingStrategy standard = new StandardPricing();
+        PricingStrategy members = new MembershipPricing(GOLD);
         
-        // Estrategia condicional inline
-        Function<Order, Money> conditionalDiscount = o -> {
-            int totalItems = o.items().stream().mapToInt(OrderItem::quantity).sum();
-            return totalItems > 5 ? o.subtotal().multiply(0.85) : o.subtotal();
-        };
-        
-        IO.println("No discount: " + applyDiscount(order, noDiscount));
-        IO.println("10% off: " + applyDiscount(order, tenPercentOff));
-        IO.println("Conditional: " + applyDiscount(order, conditionalDiscount));
-        
-        // Componer estrategias
-        Function<Order, Money> combined = noDiscount
-            .andThen(price -> price.multiply(0.95))  // 5% adicional
-            .andThen(price -> price.subtract(new Money(5, "USD"))); // -$5
+        IO.println("Standard discount: " + applyDiscount(order, standard));
+        IO.println("10% off for members: " + applyDiscount(order, members));
+        IO.println("Compound: " + applyDiscount(order, new CompositePricingStrategy(BEST_PRICE, standard, members)));
     }
 }
 ```
@@ -4905,30 +4565,30 @@ public abstract class DataProcessor<T, R> {
     
     // Template method - define la estructura del algoritmo
     public final ProcessingResult<R> process(DataSource<T> source) {
-        var startTime = Instant.now();
-        var metrics = new ProcessingMetrics();
+        final var startTime = Instant.now();
+        final var metrics = new ProcessingMetrics();
         
         try {
             // Hook - preparación opcional
             beforeProcessing(source);
             
             // Paso 1: Extraer datos (abstracto)
-            List<T> rawData = extractData(source);
+            final List<T> rawData = extractData(source);
             metrics.setRecordsRead(rawData.size());
             
             // Paso 2: Validar datos (con implementación por defecto)
-            List<T> validData = validateData(rawData, metrics);
+            final List<T> validData = validateData(rawData, metrics);
             
             // Paso 3: Transformar datos (abstracto)
-            List<R> transformedData = transformData(validData);
+            final List<R> transformedData = transformData(validData);
             metrics.setRecordsTransformed(transformedData.size());
             
             // Paso 4: Filtrar datos (con implementación por defecto)
-            List<R> filteredData = filterData(transformedData);
+            final List<R> filteredData = filterData(transformedData);
             metrics.setRecordsFiltered(transformedData.size() - filteredData.size());
             
             // Paso 5: Cargar/guardar datos (abstracto)
-            int loaded = loadData(filteredData);
+            final int loaded = loadData(filteredData);
             metrics.setRecordsLoaded(loaded);
             
             // Hook - finalización opcional
@@ -4975,123 +4635,12 @@ public abstract class DataProcessor<T, R> {
     }
 }
 
-// Records auxiliares
-public record ProcessingMetrics(
-    int recordsRead,
-    int recordsTransformed,
-    int recordsFiltered,
-    int recordsLoaded,
-    String error,
-    Duration duration
-) {
-    public ProcessingMetrics() {
-        this(0, 0, 0, 0, null, Duration.ZERO);
-    }
-    
-    // Builder-style setters que retornan nueva instancia
-    public ProcessingMetrics withRecordsRead(int n) { 
-        return new ProcessingMetrics(n, recordsTransformed, recordsFiltered, recordsLoaded, error, duration); 
-    }
-    // ... otros métodos similares
-}
-
-public record ProcessingResult<R>(boolean success, List<R> data, String errorMessage, ProcessingMetrics metrics) {
-    public static <R> ProcessingResult<R> success(List<R> data, ProcessingMetrics metrics) {
-        return new ProcessingResult<>(true, data, null, metrics);
-    }
-    public static <R> ProcessingResult<R> failure(String error, ProcessingMetrics metrics) {
-        return new ProcessingResult<>(false, List.of(), error, metrics);
-    }
-}
-
-// Implementación concreta: procesador de CSV a JSON
-public class CsvToJsonProcessor extends DataProcessor<String[], JsonObject> {
-    
-    private final String[] expectedHeaders;
-    private final Path outputPath;
-    
-    public CsvToJsonProcessor(String[] expectedHeaders, Path outputPath) {
-        this.expectedHeaders = expectedHeaders;
-        this.outputPath = outputPath;
-    }
-    
-    @Override
-    protected void beforeProcessing(DataSource<String[]> source) {
-        IO.println("Starting CSV processing from: " + source.name());
-    }
-    
-    @Override
-    protected List<String[]> extractData(DataSource<String[]> source) {
-        // Leer todas las filas del CSV
-        return source.readAll();
-    }
-    
-    @Override
-    protected List<String[]> validateData(List<String[]> data, ProcessingMetrics metrics) {
-        // Validar que las filas tengan el número correcto de columnas
-        return data.stream()
-            .filter(row -> row.length == expectedHeaders.length)
-            .peek(row -> {
-                if (row.length != expectedHeaders.length) {
-                    IO.println("Skipping invalid row");
-                }
-            })
-            .toList();
-    }
-    
-    @Override
-    protected List<JsonObject> transformData(List<String[]> data) {
-        return data.stream()
-            .map(row -> {
-                var json = new JsonObject();
-                for (int i = 0; i < expectedHeaders.length; i++) {
-                    json.addProperty(expectedHeaders[i], row[i]);
-                }
-                return json;
-            })
-            .toList();
-    }
-    
-    @Override
-    protected List<JsonObject> filterData(List<JsonObject> data) {
-        // Filtrar registros vacíos o inválidos
-        return data.stream()
-            .filter(json -> !json.entrySet().isEmpty())
-            .filter(json -> json.entrySet().stream()
-                .anyMatch(e -> !e.getValue().getAsString().isBlank()))
-            .toList();
-    }
-    
-    @Override
-    protected int loadData(List<JsonObject> data) {
-        // Escribir JSON a archivo
-        try (var writer = Files.newBufferedWriter(outputPath)) {
-            var gson = new GsonBuilder().setPrettyPrinting().create();
-            gson.toJson(data, writer);
-            return data.size();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to write output", e);
-        }
-    }
-    
-    @Override
-    protected void afterProcessing(ProcessingMetrics metrics) {
-        IO.println("Processing complete!");
-        IO.println("Records processed: " + metrics.recordsLoaded());
-        IO.println("Duration: " + metrics.duration().toMillis() + "ms");
-    }
-}
-
 // Implementación concreta: procesador de API a Base de datos
+@RequiredArgsConstructor
 public class ApiToDatabaseProcessor extends DataProcessor<ApiResponse, DatabaseRecord> {
     
     private final DatabaseConnection db;
     private final String tableName;
-    
-    public ApiToDatabaseProcessor(DatabaseConnection db, String tableName) {
-        this.db = db;
-        this.tableName = tableName;
-    }
     
     @Override
     protected List<ApiResponse> extractData(DataSource<ApiResponse> source) {
@@ -5124,15 +4673,12 @@ public class ApiToDatabaseProcessor extends DataProcessor<ApiResponse, DatabaseR
 }
 
 // Uso del Template Method
-var csvProcessor = new CsvToJsonProcessor(
-    new String[]{"id", "name", "email", "age"},
-    Path.of("/output/users.json")
-);
+final var apiToDbProcessor = new ApiToDatabaseProcessor(posgresqlConn, "processingTable");
 
-var result = csvProcessor.process(new CsvDataSource(Path.of("/input/users.csv")));
+final var result = apiToDbProcessor.process(apiResponse);
 
 if (result.success()) {
-    IO.println("Processed " + result.data().size() + " records");
+    IO.println("Created %d records".formatted(result.data().size()));
 } else {
     System.err.println("Processing failed: " + result.errorMessage());
 }
@@ -5165,7 +4711,7 @@ public interface DocumentVisitor<T> {
 }
 
 // Interfaz Element
-public sealed interface DocumentElement permits Paragraph, Heading, Image, Table, CodeBlock, Document {
+public interface DocumentElement {
     <T> T accept(DocumentVisitor<T> visitor);
 }
 
@@ -5215,87 +4761,6 @@ public record Document(String title, List<DocumentElement> elements) implements 
     @Override
     public <T> T accept(DocumentVisitor<T> visitor) {
         return visitor.visitDocument(this);
-    }
-}
-
-// Visitor concreto: Exportar a HTML
-public class HtmlExportVisitor implements DocumentVisitor<String> {
-    
-    private final StringBuilder html = new StringBuilder();
-    
-    @Override
-    public String visitParagraph(Paragraph paragraph) {
-        String tag = switch (paragraph.style()) {
-            case NORMAL -> "p";
-            case BOLD -> "strong";
-            case ITALIC -> "em";
-            case QUOTE -> "blockquote";
-        };
-        String result = "<%s>%s</%s>".formatted(tag, escapeHtml(paragraph.text()), tag);
-        html.append(result).append("\n");
-        return result;
-    }
-    
-    @Override
-    public String visitHeading(Heading heading) {
-        String result = "<h%d>%s</h%d>".formatted(heading.level(), escapeHtml(heading.text()), heading.level());
-        html.append(result).append("\n");
-        return result;
-    }
-    
-    @Override
-    public String visitImage(Image image) {
-        String result = "<img src=\"%s\" alt=\"%s\" width=\"%d\" height=\"%d\" />"
-            .formatted(image.src(), escapeHtml(image.alt()), image.width(), image.height());
-        html.append(result).append("\n");
-        return result;
-    }
-    
-    @Override
-    public String visitTable(Table table) {
-        var sb = new StringBuilder("<table>\n<thead><tr>");
-        table.headers().forEach(h -> sb.append("<th>").append(escapeHtml(h)).append("</th>"));
-        sb.append("</tr></thead>\n<tbody>\n");
-        
-        for (var row : table.rows()) {
-            sb.append("<tr>");
-            row.forEach(cell -> sb.append("<td>").append(escapeHtml(cell)).append("</td>"));
-            sb.append("</tr>\n");
-        }
-        sb.append("</tbody></table>");
-        
-        html.append(sb).append("\n");
-        return sb.toString();
-    }
-    
-    @Override
-    public String visitCodeBlock(CodeBlock codeBlock) {
-        String result = "<pre><code class=\"language-%s\">%s</code></pre>"
-            .formatted(codeBlock.language(), escapeHtml(codeBlock.code()));
-        html.append(result).append("\n");
-        return result;
-    }
-    
-    @Override
-    public String visitDocument(Document document) {
-        html.append("<!DOCTYPE html>\n<html>\n<head><title>")
-            .append(escapeHtml(document.title()))
-            .append("</title></head>\n<body>\n");
-        
-        document.elements().forEach(e -> e.accept(this));
-        
-        html.append("</body>\n</html>");
-        return html.toString();
-    }
-    
-    private String escapeHtml(String text) {
-        return text.replace("&", "&amp;")
-                   .replace("<", "&lt;")
-                   .replace(">", "&gt;");
-    }
-    
-    public String getHtml() {
-        return html.toString();
     }
 }
 
@@ -5363,68 +4828,8 @@ public class MarkdownExportVisitor implements DocumentVisitor<String> {
     }
 }
 
-// Visitor concreto: Estadísticas del documento
-public class DocumentStatsVisitor implements DocumentVisitor<Void> {
-    
-    private int wordCount = 0;
-    private int imageCount = 0;
-    private int tableCount = 0;
-    private int codeBlockCount = 0;
-    private int headingCount = 0;
-    private final Map<Integer, Integer> headingsByLevel = new HashMap<>();
-    
-    @Override
-    public Void visitParagraph(Paragraph paragraph) {
-        wordCount += paragraph.text().split("\\s+").length;
-        return null;
-    }
-    
-    @Override
-    public Void visitHeading(Heading heading) {
-        headingCount++;
-        headingsByLevel.merge(heading.level(), 1, Integer::sum);
-        wordCount += heading.text().split("\\s+").length;
-        return null;
-    }
-    
-    @Override
-    public Void visitImage(Image image) {
-        imageCount++;
-        return null;
-    }
-    
-    @Override
-    public Void visitTable(Table table) {
-        tableCount++;
-        // Contar palabras en celdas
-        table.rows().stream()
-            .flatMap(List::stream)
-            .forEach(cell -> wordCount += cell.split("\\s+").length);
-        return null;
-    }
-    
-    @Override
-    public Void visitCodeBlock(CodeBlock codeBlock) {
-        codeBlockCount++;
-        return null;
-    }
-    
-    public DocumentStats getStats() {
-        return new DocumentStats(wordCount, imageCount, tableCount, codeBlockCount, headingCount, headingsByLevel);
-    }
-}
-
-public record DocumentStats(
-    int wordCount, 
-    int imageCount, 
-    int tableCount, 
-    int codeBlockCount,
-    int headingCount,
-    Map<Integer, Integer> headingsByLevel
-) {}
-
 // Uso del patrón Visitor
-var document = new Document("Mi Documento", List.of(
+final var document = new Document("Mi Documento", List.of(
     new Heading("Introducción", 1),
     new Paragraph("Este es un documento de ejemplo.", Paragraph.TextStyle.NORMAL),
     new Heading("Datos", 2),
@@ -5440,21 +4845,8 @@ var document = new Document("Mi Documento", List.of(
     new Image("/images/logo.png", "Logo", 200, 100)
 ));
 
-// Exportar a HTML
-var htmlVisitor = new HtmlExportVisitor();
-document.accept(htmlVisitor);
-IO.println(htmlVisitor.getHtml());
-
 // Exportar a Markdown
-var markdownVisitor = new MarkdownExportVisitor();
+final var markdownVisitor = new MarkdownExportVisitor();
 document.accept(markdownVisitor);
 IO.println(markdownVisitor.getMarkdown());
-
-// Obtener estadísticas
-var statsVisitor = new DocumentStatsVisitor();
-document.accept(statsVisitor);
-var stats = statsVisitor.getStats();
-IO.println("Words: " + stats.wordCount());
-IO.println("Images: " + stats.imageCount());
-IO.println("Tables: " + stats.tableCount());
 ```
