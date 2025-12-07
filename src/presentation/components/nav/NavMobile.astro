@@ -2,7 +2,6 @@
 import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
 import { paths } from "@/config/paths";
 import LanguageSwitcher from "../cross/LanguageSwitcher.astro";
-import ThemeSwitcher from "../cross/ThemeSwitcher.astro";
 import Link from "../ui/Link.astro";
 
 const lang = getLangFromUrl(Astro.url);
@@ -15,7 +14,7 @@ const t = useTranslations(lang, "home");
         <span id="close" class="hidden icon-[mdi--cross-circle-outline] adaptive-text w-4 h-4 ease-in-out transition-all" />
     </button>
     <LanguageSwitcher />
-    <ThemeSwitcher />
+    <!-- <ThemeSwitcher /> Remove for conflicts with Astro transitions -->
     <button
         onclick="showNav()"
         id="navbar-mobile"
