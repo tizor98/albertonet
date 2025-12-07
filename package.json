@@ -11,7 +11,7 @@
         "lint:fix": "biome lint --write .",
         "format": "biome format .",
         "format:fix": "biome format --write .",
-        "check": "biome check",
+        "check": "biome check --no-errors-on-unmatched",
         "check:fix": "biome check --write",
         "prepare": "husky"
     },

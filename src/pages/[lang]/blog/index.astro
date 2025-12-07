@@ -25,11 +25,13 @@ const posts = (await getCollection(blogName)).sort(
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
-	<Body class="container mx-auto h-full flex flex-col items-start justify-start gap-5">
-		<section class="container flex items-start gap-5 px-8 justify-start">
+	<Body class="container mx-auto h-full flex flex-col items-center md:items-start justify-center md:justify-start gap-5">
+		<section class="container flex flex-col md:flex-row items-center md:items-start gap-5 px-8 justify-center md:justify-start">
 			{
 				posts.map((post) => (
-					<PostCard post={post} showDescription />
+					<div class="w-full max-w-[450px] md:w-[450px] md:h-[480px]">
+						<PostCard post={post} showDescription />
+					</div>
 				))
 			}
 		</section>
