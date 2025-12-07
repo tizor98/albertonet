@@ -5,6 +5,7 @@ import type { ImageMetadata } from "astro";
 import FallbackImage from "@/presentation/assets/blog-placeholder-1.png";
 import "@/presentation/styles/global.css";
 import { Font } from "astro:assets";
+import { ClientRouter } from "astro:transitions";
 import { SITE_TITLE } from "@/consts";
 
 interface Props {
@@ -53,6 +54,8 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta property="twitter:image" content={new URL(image.src, Astro.url)} />
 
 <Font cssVariable='--font-poppins' preload />
+
+<ClientRouter />
 
 <style is:global>
 	body {

@@ -17,9 +17,9 @@ const lang = getLangFromUrl(Astro.url);
 
 <a href={paths.blogPost(lang, post.data.slug)} class="w-full h-full flex flex-col items-start justify-start gap-2 shadow-2xl dark:shadow-none rounded-xl border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-950">
     <div class="w-full">
-        <Image loading="eager" transition:name={post.data.title} transition:persist id={post.data.title} width={575} height={275} fit="cover" class="block m-auto rounded-t-xl" src={post.data.heroImage ?? defaultBlogImage} alt={post.data.title} />
+        <Image loading="eager" transition:name={`img-${post.data.title}`} id={`img-${post.data.title}`} width={575} height={275} fit="cover" class="block m-auto rounded-t-xl" src={post.data.heroImage ?? defaultBlogImage} alt={post.data.title} />
     </div>
-    <h4 transition:name={post.data.title}  transition:persist class:list={["title text-sm md:text-base font-bold adaptive-text px-4 line-clamp-2 h-12"]}>{post.data.title}</h4>
+    <h4 transition:name={`title-${post.data.title}`} id={`title-${post.data.title}`} class:list={["title text-sm md:text-base font-bold adaptive-text px-4 line-clamp-2 h-12"]}>{post.data.title}</h4>
     <p class="text-gray-700 dark:text-gray-200 px-4 text-sm">
         <FormattedDate date={post.data.pubDate} />
     </p>
