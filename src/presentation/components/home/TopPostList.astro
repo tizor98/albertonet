@@ -25,8 +25,12 @@ const t = useTranslations(lang, "home");
     <h2 class="text-3xl font-semibold tracking-wide adaptive-text">
         {t("topPosts")}
     </h2>
-    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 self-center md:self-start">
-        {topPosts.map((post) => (<PostCard post={post} />))}
+    <section class="flex flex-wrap gap-5 self-center xl:self-start justify-center xl:justify-start">
+        {topPosts.map((post) => (
+            <div class="w-full max-w-[450px] xl:w-[450px] xl:h-[440px]">
+                <PostCard post={post} />
+            </div>
+        ))}
     </section>
     <Link href={paths.blog(lang)} class="self-start">
         <div class="flex items-center text-lg gap-1">

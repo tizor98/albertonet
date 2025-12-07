@@ -4,7 +4,7 @@ lang: 'es'
 title: "¿Cuáles son los principales patrones de diseño?"
 description: 'Referencia de los patrones de diseño más fundamentales en desarrollo de software con ejemplos.'
 categories: 'software;patterns;design'
-pubDate: '2025-12-01'
+pubDate: '2025-12-06'
 heroImage: '@/presentation/assets/patterns-primer-1.png'
 ---
 
