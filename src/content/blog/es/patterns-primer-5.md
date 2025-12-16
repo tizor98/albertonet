@@ -1,18 +1,14 @@
 ---
 slug: 'patterns-primer-5'
 lang: 'es'
-title: "Parte 5 de 5: ¿Cuáles son los principales patrones de diseño?"
-description: 'Referencia de los patrones de diseño más fundamentales en desarrollo de software con ejemplos.'
-categories: 'software;patterns;design'
+title: "Patrones de comportamiento — colaboración y orquestación - Parte 5 de 5"
+description: 'Quinta entrega: Chain of Responsibility, Command, Observer, Strategy, State, Mediator, Memento, Visitor y más — cómo coordinar interacciones entre objetos en Java 25.'
+categories: ['software','patterns','design']
 pubDate: '2025-12-06'
 heroImage: '@/presentation/assets/patterns-primer-1.png'
 ---
 
-# Software Patterns
-
-Este documento presenta una guía completa sobre los patrones de diseño de software más importantes y utilizados en la industria con ejemplos en Java 25. Los patrones están organizados en categorías según su propósito: patrones modernos, principios SOLID, patrones de creación, patrones de estructura y patrones de comportamiento.
-
----
+Esta quinta y última entrega se centra en los patrones de comportamiento: cómo colaboran los objetos, cómo se comunican y cómo reparten responsabilidades. Verás cuándo elegir cada patrón para desacoplar lógica, encapsular decisiones, propagar eventos o modelar flujos de trabajo, con implementaciones modernas en Java 25.
 
 ## Patrones de Diseño de Comportamiento
 

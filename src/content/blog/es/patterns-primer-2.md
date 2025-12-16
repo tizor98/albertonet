@@ -1,18 +1,14 @@
 ---
 slug: 'patterns-primer-2'
 lang: 'es'
-title: "Parte 2 de 5: ¿Cuáles son los principales patrones de diseño?"
-description: 'Referencia de los patrones de diseño más fundamentales en desarrollo de software con ejemplos.'
-categories: 'software;patterns;design'
+title: "Principios SOLID — Parte 2 de 5"
+description: 'Segunda entrega: guía práctica de los cinco principios SOLID con ejemplos en Java 25 para construir sistemas flexibles, robustos y fáciles de evolucionar.'
+categories: ['software','patterns','design']
 pubDate: '2025-12-06'
 heroImage: '@/presentation/assets/patterns-primer-1.png'
 ---
 
-# Software Patterns
-
-Este documento presenta una guía completa sobre los patrones de diseño de software más importantes y utilizados en la industria con ejemplos en Java 25. Los patrones están organizados en categorías según su propósito: patrones modernos, principios SOLID, patrones de creación, patrones de estructura y patrones de comportamiento.
-
----
+Esta es la segunda entrega de la serie. Nos enfocamos en SOLID, cinco principios que sirven de brújula para escribir código orientado a objetos limpio y fácil de cambiar. Repasaremos cada principio con ejemplos actuales en Java 25 y pautas prácticas para aplicarlos sin caer en sobre‑ingeniería.
 
 ## Principios SOLID
 

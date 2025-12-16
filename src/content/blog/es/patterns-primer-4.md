@@ -1,18 +1,14 @@
 ---
 slug: 'patterns-primer-4'
 lang: 'es'
-title: "Parte 4 de 5: ¿Cuáles son los principales patrones de diseño?"
-description: 'Referencia de los patrones de diseño más fundamentales en desarrollo de software con ejemplos.'
-categories: 'software;patterns;design'
+title: "Patrones estructurales — componer clases y objetos - Parte 4 de 5"
+description: 'Cuarta entrega: Adapter, Bridge, Composite, Decorator, Facade, Flyweight y Proxy — cuándo aplicarlos, sus trade‑offs y ejemplos en Java 25.'
+categories: ['software','patterns','design']
 pubDate: '2025-12-06'
 heroImage: '@/presentation/assets/patterns-primer-1.png'
 ---
 
-# Software Patterns
-
-Este documento presenta una guía completa sobre los patrones de diseño de software más importantes y utilizados en la industria con ejemplos en Java 25. Los patrones están organizados en categorías según su propósito: patrones modernos, principios SOLID, patrones de creación, patrones de estructura y patrones de comportamiento.
-
----
+Esta cuarta entrega explora los patrones estructurales: maneras de organizar y conectar clases y objetos para construir sistemas flexibles y reutilizables. Verás cómo adaptar interfaces, separar abstracción de implementación, componer jerárquicamente, extender comportamiento sin herencia y optimizar memoria, con ejemplos claros en Java 25.
 
 ## Patrones de Diseño de Estructura
 

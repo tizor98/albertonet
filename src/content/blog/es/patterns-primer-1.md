@@ -1,18 +1,14 @@
 ---
 slug: 'patterns-primer-1'
 lang: 'es'
-title: "Parte 1 de 5: ¿Cuáles son los principales patrones de diseño?"
-description: 'Referencia de los patrones de diseño más fundamentales en desarrollo de software con ejemplos.'
-categories: 'software;patterns;design'
+title: "Fluent Interfaces y Loan Pattern — APIs expresivas y recursos seguros - Parte 1 de 5"
+description: 'Primera entrega de la serie: cómo diseñar APIs legibles con Fluent Interfaces y gestionar el ciclo de vida con Loan Pattern, con ejemplos claros en Java 25.'
+categories: ['software','patterns','design']
 pubDate: '2025-12-06'
 heroImage: '@/presentation/assets/patterns-primer-1.png'
 ---
 
-# Software Patterns
-
-Este documento presenta una guía completa sobre los patrones de diseño de software más importantes y utilizados en la industria con ejemplos en Java 25. Los patrones están organizados en categorías según su propósito: patrones modernos, principios SOLID, patrones de creación, patrones de estructura y patrones de comportamiento.
-
----
+Esta es la primera entrega de una serie práctica sobre patrones. Aquí nos enfocamos en dos ideas muy útiles en código moderno: usar Fluent Interfaces para construir APIs legibles mediante encadenamiento y aplicar el Loan Pattern para exponer capacidades sin ceder el control del ciclo de vida del recurso. Verás cuándo conviene cada enfoque y cómo implementarlo en Java 25 con ejemplos simples y reutilizables.
 
 ## Patrones de Diseño Modernos
 

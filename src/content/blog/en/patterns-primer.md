@@ -3,7 +3,7 @@ slug: 'patterns-primer'
 lang: 'en'
 title: "What are the main design patterns?"
 description: 'Reference guide to the most fundamental design patterns in software development with examples.'
-categories: 'software;patterns;design'
+categories: ['software','patterns','design']
 pubDate: '2025-12-06'
 heroImage: '@/presentation/assets/patterns-primer-1.png'
 ---
