@@ -25,7 +25,7 @@ const lang = getLangFromUrl(Astro.url);
     </p>
     {showDescription && <p class="adaptive-text prose prose-sm text-xs px-4 line-clamp-2">{post.data.description}</p>}
     <div class="m-0 text-xs tracking-tight flex flex-wrap gap-1 px-4 pb-4">
-        {post.data.categories.split(";").map((category) => {
+        {post.data.categories.map((category) => {
             return (
                 <p
                     class="bg-yellow-300 dark:bg-yellow-800 text-xs md:text-sm text-center text-black dark:text-white px-2 py-1 rounded-lg"

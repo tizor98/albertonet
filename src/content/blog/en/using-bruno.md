@@ -3,7 +3,7 @@ slug: 'using-bruno'
 lang: 'en'
 title: 'If you want to test your APIs, just use Bruno! Stop using Postman'
 description: 'Bruno gives you a modern HTTP client experience. Add your collections to your version control system!'
-categories: 'http-clients;testing;software;open-source'
+categories: ['http-clients','testing','software','open-source']
 pubDate: '2024-12-29'
 updatedDate: '2025-10-22'
 ---
