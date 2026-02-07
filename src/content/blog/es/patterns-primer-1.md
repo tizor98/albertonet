@@ -1,7 +1,7 @@
 ---
 slug: 'patterns-primer-1'
 lang: 'es'
-title: "Fluent Interfaces y Loan Pattern — APIs expresivas y recursos seguros - Parte 1 de 5"
+title: "APIs expresivas y recursos seguros - Parte 1 de 5"
 description: 'Primera entrega de la serie: cómo diseñar APIs legibles con Fluent Interfaces y gestionar el ciclo de vida con Loan Pattern, con ejemplos claros en Java 25.'
 categories: ['software','patterns','design']
 pubDate: '2025-12-06'

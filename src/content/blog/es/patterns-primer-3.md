@@ -1,11 +1,11 @@
 ---
 slug: 'patterns-primer-3'
 lang: 'es'
-title: "Patrones creacionales — cómo y cuándo instanciar objetos - Parte 3 de 5"
+title: "Cómo y cuándo instanciar objetos - Parte 3 de 5"
 description: 'Tercera entrega: Factory, Abstract Factory, Builder, Prototype y Singleton en Java 25 — cuándo usarlos, qué ventajas ofrecen y los errores que debes evitar.'
 categories: ['software','patterns','design']
 pubDate: '2025-12-06'
-heroImage: '@/presentation/assets/patterns-primer-1.png'
+heroImage: '@/presentation/assets/patterns-primer-3.png'
 ---
 
 Esta tercera entrega trata sobre patrones creacionales. Verás técnicas para separar la construcción del uso, reducir el acoplamiento a constructores concretos y seleccionar familias de productos de forma coherente. También cuándo un builder aporta claridad, cómo clonar con seguridad y qué riesgos evitar con Singleton, todo con ejemplos en Java 25.

@@ -1,11 +1,11 @@
 ---
 slug: 'patterns-primer-5'
 lang: 'es'
-title: "Patrones de comportamiento — colaboración y orquestación - Parte 5 de 5"
+title: "Colaboración y orquestación - Parte 5 de 5"
 description: 'Quinta entrega: Chain of Responsibility, Command, Observer, Strategy, State, Mediator, Memento, Visitor y más — cómo coordinar interacciones entre objetos en Java 25.'
 categories: ['software','patterns','design']
 pubDate: '2025-12-06'
-heroImage: '@/presentation/assets/patterns-primer-1.png'
+heroImage: '@/presentation/assets/patterns-primer-5.png'
 ---
 
 Esta quinta y última entrega se centra en los patrones de comportamiento: cómo colaboran los objetos, cómo se comunican y cómo reparten responsabilidades. Verás cuándo elegir cada patrón para desacoplar lógica, encapsular decisiones, propagar eventos o modelar flujos de trabajo, con implementaciones modernas en Java 25.

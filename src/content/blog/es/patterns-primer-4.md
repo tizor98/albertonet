@@ -1,11 +1,11 @@
 ---
 slug: 'patterns-primer-4'
 lang: 'es'
-title: "Patrones estructurales — componer clases y objetos - Parte 4 de 5"
+title: "Componer clases y objetos - Parte 4 de 5"
 description: 'Cuarta entrega: Adapter, Bridge, Composite, Decorator, Facade, Flyweight y Proxy — cuándo aplicarlos, sus trade‑offs y ejemplos en Java 25.'
 categories: ['software','patterns','design']
 pubDate: '2025-12-06'
-heroImage: '@/presentation/assets/patterns-primer-1.png'
+heroImage: '@/presentation/assets/patterns-primer-4.png'
 ---
 
 Esta cuarta entrega explora los patrones estructurales: maneras de organizar y conectar clases y objetos para construir sistemas flexibles y reutilizables. Verás cómo adaptar interfaces, separar abstracción de implementación, componer jerárquicamente, extender comportamiento sin herencia y optimizar memoria, con ejemplos claros en Java 25.

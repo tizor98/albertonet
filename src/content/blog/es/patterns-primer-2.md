@@ -5,7 +5,7 @@ title: "Principios SOLID — Parte 2 de 5"
 description: 'Segunda entrega: guía práctica de los cinco principios SOLID con ejemplos en Java 25 para construir sistemas flexibles, robustos y fáciles de evolucionar.'
 categories: ['software','patterns','design']
 pubDate: '2025-12-06'
-heroImage: '@/presentation/assets/patterns-primer-1.png'
+heroImage: '@/presentation/assets/patterns-primer-2.png'
 ---
 
 Esta es la segunda entrega de la serie. Nos enfocamos en SOLID, cinco principios que sirven de brújula para escribir código orientado a objetos limpio y fácil de cambiar. Repasaremos cada principio con ejemplos actuales en Java 25 y pautas prácticas para aplicarlos sin caer en sobre‑ingeniería.
