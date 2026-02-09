@@ -3,6 +3,7 @@ import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import { getLangFromUrl, useTranslations } from "@/config/i18n/utils";
 import { paths } from "@/config/paths";
+import ThemeSwitcher from "@/presentation/components/cross/ThemeSwitcher.astro";
 import LanguageSwitcher from "../cross/LanguageSwitcher.astro";
 import HeaderLink from "./HeaderLink.astro";
 import NavMobile from "./NavMobile.astro";
@@ -36,7 +37,7 @@ const t = useTranslations(lang, "home");
 				{t("contactLink")}
 			</HeaderLink>
 			<LanguageSwitcher />
-			<!-- <ThemeSwitcher /> Remove for conflicts with Astro transitions -->
+			<ThemeSwitcher />
 		</div>
 		<NavMobile />
 	</nav>
