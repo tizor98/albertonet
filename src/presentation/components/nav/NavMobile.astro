@@ -10,9 +10,9 @@ const t = useTranslations(lang, "home");
 ---
 
 <div class="lg:hidden flex items-center gap-0.5 md:gap-1">
-    <button onclick="showNav()" class="btn rounded-2xl bg-white text-black dark:bg-base-100 dark:text-white">
+    <button onclick="showNav()" class="btn rounded-2xl bg-white text-black dark:bg-zinc-800 dark:text-zinc-100">
         <span id="open" class="icon-[mdi--hamburger-menu] w-4 h-4 transition-all ease-in-out trasition-all"  />
-        <span id="close" class="hidden icon-[mdi--cross-circle-outline] adaptive-text w-4 h-4 ease-in-out transition-all" />
+        <span id="close" class="hidden icon-[mdi--cross-circle-outline] w-4 h-4 ease-in-out transition-all text-inherit" />
     </button>
     <LanguageSwitcher />
     <ThemeSwitcher />
