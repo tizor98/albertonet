@@ -87,7 +87,7 @@ const errors = document.getElementById("errors") as HTMLDivElement;
 const fieldIds = ["name", "email", "message"] as const;
 
 if (form && errors) {
-    form.addEventListener("submit", e => {
+    document.addEventListener("submit", e => {
         e.preventDefault();
         sendForm(form, errors);
     });
