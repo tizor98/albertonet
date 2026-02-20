@@ -7,6 +7,6 @@ interface Props {
 const { href, class: className } = Astro.props;
 ---
 
-<a href={href} class:list={["text-zinc-900 underline-offset-4 hover:underline dark:text-zinc-50 duration-200", className]}>
+<a href={href} class:list={["ui-link-inline duration-150", className]}>
     <slot />
 </a>

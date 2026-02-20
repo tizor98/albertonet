@@ -11,30 +11,48 @@ const t = useTranslations(lang);
 >
     <form
         id="contact-form"
-        class="w-full max-w-xl flex flex-col gap-5 mt-5 lg:mt-10 adaptive-text"
+        class="w-full max-w-xl flex flex-col gap-5 mt-5 lg:mt-10 adaptive-text ui-card p-6 md:p-8"
+        novalidate
     >
-        <input
-            class="custom-input"
-            name="name"
-            type="text"
-            placeholder={t("contact.name")}
-            required
-        />
-        <input
-            class="custom-input"
-            name="email"
-            type="email"
-            placeholder={t("contact.email")}
-            required
-        />
-        <input
-            class="custom-text-area"
-            type="text"
-            name="message"
-            minlength=10
-            placeholder={t("contact.message")}
-            required
-        />
+        <div class="flex flex-col gap-1.5">
+            <label class="custom-label" for="name">{t("contact.name")}</label>
+            <input
+                id="name"
+                class="custom-input"
+                name="name"
+                type="text"
+                placeholder={t("contact.name")}
+                required
+                aria-invalid="false"
+            />
+            <p id="name-error" class="custom-field-error" data-visible="false"></p>
+        </div>
+        <div class="flex flex-col gap-1.5">
+            <label class="custom-label" for="email">{t("contact.email")}</label>
+            <input
+                id="email"
+                class="custom-input"
+                name="email"
+                type="email"
+                placeholder={t("contact.email")}
+                required
+                aria-invalid="false"
+            />
+            <p id="email-error" class="custom-field-error" data-visible="false"></p>
+        </div>
+        <div class="flex flex-col gap-1.5">
+            <label class="custom-label" for="message">{t("contact.message")}</label>
+            <textarea
+                id="message"
+                class="custom-text-area"
+                name="message"
+                minlength=10
+                placeholder={t("contact.message")}
+                required
+                aria-invalid="false"
+            ></textarea>
+            <p id="message-error" class="custom-field-error" data-visible="false"></p>
+        </div>
         <div class="w-full flex gap-3 items-center justify-between">
             <label class="custom-label" for="isCompany">{t("contact.isCompany")}</label>
             <input
@@ -47,7 +65,7 @@ const t = useTranslations(lang);
         <div id="errors" class="text-red-500 flex flex-col gap-0 text-sm tracking-tight">
         </div>
         
-        <DefaultButton id="contact-button" type="submit" class="uppercase cursor-pointer">
+        <DefaultButton id="contact-button" type="submit" class="uppercase cursor-pointer" data-default-label={t("generic.send")}>
             {t("generic.send")}
         </DefaultButton>
     </form>
@@ -66,9 +84,10 @@ import { navigate } from "astro:transitions/client";
 
 const form = document.getElementById("contact-form") as HTMLFormElement;
 const errors = document.getElementById("errors") as HTMLDivElement;
+const fieldIds = ["name", "email", "message"] as const;
 
 if (form && errors) {
-    document.addEventListener("submit", e => {
+    form.addEventListener("submit", e => {
         e.preventDefault();
         sendForm(form, errors);
     });
@@ -76,7 +95,7 @@ if (form && errors) {
 
 async function sendForm(form: HTMLFormElement, errors: HTMLDivElement) {
     try {
-        clearErrors(errors);
+        clearErrors(form, errors);
 
         showLoading(true);
         const formData = new FormData(form);
@@ -88,8 +107,8 @@ async function sendForm(form: HTMLFormElement, errors: HTMLDivElement) {
                 p.textContent = issue;
                 return p;
             });
+            applyFieldErrors(response.error.message.split(";").map((issue) => issue.trim()));
             errors.append(...issues);
-            showErrorModal();
             return;
         }
 
@@ -107,7 +126,20 @@ async function sendForm(form: HTMLFormElement, errors: HTMLDivElement) {
     }
 }
 
-function clearErrors(errors: HTMLDivElement) {
+function clearErrors(form: HTMLFormElement, errors: HTMLDivElement) {
+    for (const fieldId of fieldIds) {
+        const field = form.elements.namedItem(fieldId) as HTMLInputElement | HTMLTextAreaElement | null;
+        const fieldError = document.getElementById(`${fieldId}-error`);
+        if (field) {
+            field.classList.remove("custom-input-error", "custom-text-area-error");
+            field.setAttribute("aria-invalid", "false");
+        }
+        if (fieldError) {
+            fieldError.textContent = "";
+            fieldError.setAttribute("data-visible", "false");
+        }
+    }
+
     if (!errors.hasChildNodes()) return;
     const maxIterations = 100;
     let iterations = 0;
@@ -116,6 +148,49 @@ function clearErrors(errors: HTMLDivElement) {
         const node = errors.firstChild;
         if (node) errors.removeChild(node);
         iterations++;
+    }
+}
+
+function applyFieldErrors(issues: string[]) {
+    const messageForField: Record<string, string | undefined> = {
+        name: undefined,
+        email: undefined,
+        message: undefined,
+    };
+
+    for (const issue of issues) {
+        const normalized = issue.toLowerCase();
+        if (
+            normalized.includes("name")
+            || normalized.includes("nombre")
+        ) {
+            messageForField.name = issue;
+        }
+        if (
+            normalized.includes("email")
+            || normalized.includes("correo")
+            || normalized.includes("mail")
+        ) {
+            messageForField.email = issue;
+        }
+        if (
+            normalized.includes("message")
+            || normalized.includes("mensaje")
+        ) {
+            messageForField.message = issue;
+        }
+    }
+
+    for (const fieldId of fieldIds) {
+        const field = document.getElementById(fieldId) as HTMLInputElement | HTMLTextAreaElement | null;
+        const fieldError = document.getElementById(`${fieldId}-error`);
+        const issue = messageForField[fieldId];
+        if (!field || !fieldError || !issue) continue;
+
+        field.classList.add(fieldId === "message" ? "custom-text-area-error" : "custom-input-error");
+        field.setAttribute("aria-invalid", "true");
+        fieldError.textContent = issue;
+        fieldError.setAttribute("data-visible", "true");
     }
 }
 
@@ -148,11 +223,19 @@ function redirectToSendConfirmation() {
 }
 
 function showLoading(show: boolean) {
+    const button = document.getElementById("contact-button");
+    if (!(button instanceof HTMLButtonElement)) return;
+    const label = button.getAttribute("data-default-label") ?? "Send";
+
     if (show) {
-        document.getElementById("contact-button")?.setAttribute("disabled", "true");
+        button.setAttribute("disabled", "true");
+        button.setAttribute("aria-busy", "true");
+        button.textContent = `${label}...`;
         return;
     }
 
-    document.getElementById("contact-button")?.removeAttribute("disabled");
+    button.removeAttribute("disabled");
+    button.setAttribute("aria-busy", "false");
+    button.textContent = label;
 }
 </script>
