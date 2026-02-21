@@ -27,7 +27,7 @@ const t = useTranslations(lang, "home");
     </h2>
     <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
         {topPosts.map((post) => (
-            <div class="w-full min-h-[420px] flex">
+            <div class="w-full flex md:min-h-[420px]">
                 <PostCard post={post} />
             </div>
         ))}

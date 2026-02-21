@@ -13,19 +13,19 @@ const t = useTranslations(lang, "home");
     <button
         type="button"
         id="navbar-mobile-toggle"
-        class="ui-control"
+        class="ui-control relative z-[60]"
         aria-controls="navbar-mobile"
         aria-expanded="false"
     >
-        <span id="open" class="icon-[mdi--hamburger-menu] w-4 h-4 transition-all ease-in-out"  />
-        <span id="close" class="hidden icon-[mdi--cross-circle-outline] w-4 h-4 ease-in-out transition-all text-inherit" />
+        <span id="navbar-mobile-open" class="icon-[mdi--hamburger-menu] w-4 h-4 transition-all ease-in-out"  />
+        <span id="navbar-mobile-close" class="hidden icon-[mdi--cross-circle-outline] w-4 h-4 ease-in-out transition-all text-inherit" />
     </button>
     <LanguageSwitcher />
     <ThemeSwitcher />
-    <button id="navbar-mobile-backdrop" type="button" class="hidden fixed inset-0 z-40 bg-black/40" aria-hidden="true"></button>
+    <button id="navbar-mobile-backdrop" type="button" class="hidden fixed top-20 inset-x-0 bottom-0 z-30 bg-black/40" aria-hidden="true"></button>
     <div
         id="navbar-mobile"
-        class="hidden fixed z-50 top-20 left-4 right-4 p-6 flex-col items-start justify-start gap-4 text-xl ui-card"
+        class="hidden fixed z-40 top-20 left-4 right-4 p-6 flex-col items-start justify-start gap-4 text-xl ui-card"
         role="dialog"
         aria-modal="true"
         aria-label="Mobile navigation"
@@ -44,46 +44,110 @@ const t = useTranslations(lang, "home");
 </div>
 
 <script is:inline>
-const panel = document.getElementById("navbar-mobile");
-const toggle = document.getElementById("navbar-mobile-toggle");
-const backdrop = document.getElementById("navbar-mobile-backdrop");
+(() => {
+    const CLEANUP_KEY = "__navMobileCleanup";
 
-function openNav() {
-    panel?.classList.remove("hidden");
-    panel?.classList.add("flex");
-    backdrop?.classList.remove("hidden");
-    document.getElementById("open")?.classList.add("hidden");
-    document.getElementById("close")?.classList.remove("hidden");
-    toggle?.setAttribute("aria-expanded", "true");
-}
-
-function closeNav() {
-    panel?.classList.add("hidden");
-    panel?.classList.remove("flex");
-    backdrop?.classList.add("hidden");
-    document.getElementById("open")?.classList.remove("hidden");
-    document.getElementById("close")?.classList.add("hidden");
-    toggle?.setAttribute("aria-expanded", "false");
-}
-
-function toggleNav() {
-    if (panel?.classList.contains("hidden")) {
-        openNav();
-        return;
+    if (typeof window[CLEANUP_KEY] === "function") {
+        window[CLEANUP_KEY]();
     }
 
-    closeNav();
-}
+    function getNavElements() {
+        const panel = document.getElementById("navbar-mobile");
+        const toggle = document.getElementById("navbar-mobile-toggle");
+        const backdrop = document.getElementById("navbar-mobile-backdrop");
+        const openIcon = document.getElementById("navbar-mobile-open");
+        const closeIcon = document.getElementById("navbar-mobile-close");
 
-toggle?.addEventListener("click", toggleNav);
-backdrop?.addEventListener("click", closeNav);
-panel?.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", closeNav);
-});
+        if (!(panel instanceof HTMLElement)) {
+            return null;
+        }
 
-document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
+        if (!(toggle instanceof HTMLElement)) {
+            return null;
+        }
+
+        if (!(backdrop instanceof HTMLElement)) {
+            return null;
+        }
+
+        return { panel, toggle, backdrop, openIcon, closeIcon };
+    }
+
+    function openNav() {
+        const nav = getNavElements();
+        if (!nav) {
+            return;
+        }
+
+        nav.panel.classList.remove("hidden");
+        nav.panel.classList.add("flex");
+        nav.backdrop.classList.remove("hidden");
+        nav.openIcon?.classList.add("hidden");
+        nav.closeIcon?.classList.remove("hidden");
+        nav.toggle.setAttribute("aria-expanded", "true");
+    }
+
+    function closeNav() {
+        const nav = getNavElements();
+        if (!nav) {
+            return;
+        }
+
+        nav.panel.classList.add("hidden");
+        nav.panel.classList.remove("flex");
+        nav.backdrop.classList.add("hidden");
+        nav.openIcon?.classList.remove("hidden");
+        nav.closeIcon?.classList.add("hidden");
+        nav.toggle.setAttribute("aria-expanded", "false");
+    }
+
+    function toggleNav() {
+        const nav = getNavElements();
+        if (!nav) {
+            return;
+        }
+
+        if (nav.panel.classList.contains("hidden")) {
+            openNav();
+            return;
+        }
+
         closeNav();
     }
-});
+
+    function onDocumentClick(event) {
+        const target = event.target;
+        if (!(target instanceof Element)) {
+            return;
+        }
+
+        if (target.closest("#navbar-mobile-toggle")) {
+            toggleNav();
+            return;
+        }
+
+        if (target.closest("#navbar-mobile-backdrop")) {
+            closeNav();
+            return;
+        }
+
+        if (target.closest("#navbar-mobile a")) {
+            closeNav();
+        }
+    }
+
+    function onKeydown(event) {
+        if (event.key === "Escape") {
+            closeNav();
+        }
+    }
+
+    document.addEventListener("click", onDocumentClick);
+    document.addEventListener("keydown", onKeydown);
+
+    window[CLEANUP_KEY] = () => {
+        document.removeEventListener("click", onDocumentClick);
+        document.removeEventListener("keydown", onKeydown);
+    };
+})();
 </script>
