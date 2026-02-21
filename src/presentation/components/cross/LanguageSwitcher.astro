@@ -7,10 +7,10 @@ const lang = getLangFromUrl(currentRoute);
 ---
 
 <div class="dropdown dropdown-hover dropdown-end">
-  <summary role="button" class="btn rounded-2xl adaptive-text bg-white dark:bg-zinc-800">
+  <button type="button" class="ui-control adaptive-text" aria-label="Language switcher">
     <span class="icon-[mdi--language] w-4 h-4"></span>
-  </summary>
-  <ul class="menu dropdown-content rounded-box z-1 w-32 p-2 shadow-sm adaptive-text bg-white dark:bg-zinc-800">
+  </button>
+  <ul class="menu dropdown-content ui-dropdown-panel z-1 w-32 p-2 adaptive-text shadow-none">
       <li><a id="en" class={lang === "en" ? "pointer-events-none text-gray-500" : ""} href={transformUrlToLang(currentRoute, "en")}>{languages.en}</a></li>
       <li><a id="es" class={lang === "es" ? "pointer-events-none text-gray-500" : ""} href={transformUrlToLang(currentRoute, "es")}>{languages.es}</a></li>
   </ul>

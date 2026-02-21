@@ -15,21 +15,44 @@ const { post, showDescription = false } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 ---
 
-<a href={paths.blogPost(lang, post.data.slug)} class="w-full h-full flex flex-col items-start justify-start gap-2 shadow-2xl dark:shadow-none rounded-xl border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-zinc-950">
+<a
+    href={paths.blogPost(lang, post.data.slug)}
+    class="ui-card ui-card-hover w-full h-full flex flex-col items-start justify-start"
+>
     <div class="w-full">
-        <Image loading="eager" transition:name={`img-${post.data.title}`} id={`img-${post.data.title}`} width={575} height={275} fit="cover" class="block m-auto rounded-t-xl" src={post.data.heroImage ?? defaultBlogImage} alt={post.data.title} />
+        <Image
+            loading="lazy"
+            transition:name={`img-${post.data.title}`}
+            id={`img-${post.data.title}`}
+            width={575}
+            height={275}
+            fit="cover"
+            class="block m-auto aspect-[575/275] object-cover"
+            src={post.data.heroImage ?? defaultBlogImage}
+            alt={post.data.title}
+        />
     </div>
-    <h4 transition:name={`title-${post.data.title}`} id={`title-${post.data.title}`} class:list={["title text-sm md:text-base font-bold adaptive-text px-4 line-clamp-2 h-12"]}>{post.data.title}</h4>
-    <p class="text-gray-700 dark:text-gray-200 px-4 text-sm">
+    <h4
+        transition:name={`title-${post.data.title}`}
+        id={`title-${post.data.title}`}
+        class:list={[
+            "title text-base font-semibold adaptive-text px-4 pt-4 line-clamp-2 min-h-[3rem]",
+        ]}
+    >
+        {post.data.title}
+    </h4>
+    <p class="ui-meta px-4">
         <FormattedDate date={post.data.pubDate} />
     </p>
-    {showDescription && <p class="adaptive-text prose prose-sm text-xs px-4 line-clamp-2">{post.data.description}</p>}
-    <div class="m-0 text-xs tracking-tight flex flex-wrap gap-1 px-4 pb-4">
+    {showDescription && (
+        <p class="ui-muted prose prose-sm text-sm px-4 line-clamp-3 mt-1">
+            {post.data.description}
+        </p>
+    )}
+    <div class="mt-3 text-xs tracking-tight flex flex-wrap gap-2 px-4 pb-4">
         {post.data.categories.map((category) => {
             return (
-                <p
-                    class="bg-yellow-300 dark:bg-yellow-800 text-xs md:text-sm text-center text-black dark:text-white px-2 py-1 rounded-lg"
-                >
+                <p class="ui-chip text-center">
                     {category}
                 </p>
             );

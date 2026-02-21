@@ -32,10 +32,10 @@ const posts = (await getCollection(blogName)).sort(
 	</head>
 	<Body class="flex flex-col flex-1 w-full">
 		<section class="w-full max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
-			<h1 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200 mb-6 sm:mb-8">
+			<h1 class="text-2xl sm:text-3xl font-bold tracking-tight adaptive-text mb-6 sm:mb-8">
 				{t("title")}
 			</h1>
-			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 				{
 					posts.map((post) => (
 						<div class="w-full min-h-[420px] flex">

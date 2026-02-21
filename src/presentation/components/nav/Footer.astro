@@ -6,14 +6,14 @@ import LinkedIn from "../ui/LinkedIn.astro";
 const today = new Date();
 ---
 
-<footer class="flex flex-col w-full mt-8 pb-5 justify-center gap-1 items-center">
-	<span class="adaptive-text">&copy; {today.getFullYear()} Albertonet. All rights reserved.</span>
+<footer class="flex flex-col w-full mt-10 pb-6 justify-center gap-3 items-center border-t" style="border-color: var(--border-soft);">
+	<span class="ui-meta text-center">&copy; {today.getFullYear()} Albertonet. All rights reserved.</span>
 	<div class="flex gap-2">
-		<a href={LINKEDIN_URL} target="_blank" class="adaptive-text">
+		<a href={LINKEDIN_URL} target="_blank" class="ui-control" aria-label="LinkedIn">
 			<span class="sr-only">Follow me on LinkedIn</span>
 			<LinkedIn />
 		</a>
-		<a href={GITHUB_URL} target="_blank" class="adaptive-text">
+		<a href={GITHUB_URL} target="_blank" class="ui-control" aria-label="GitHub">
 			<span class="sr-only">Follow me on GitHub</span>
 			<Github />
 		</a>

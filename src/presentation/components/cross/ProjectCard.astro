@@ -14,36 +14,36 @@ const t = useTranslations(lang);
 const { project, class: className } = Astro.props;
 ---
 
-<div class:list={["relative rounded-lg border border-zinc-200 bg-white text-zinc-950 shadow-xs dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 min-h-fit md:min-h-full", className]}>
-    <div class="flex flex-col gap-1 p-6 pt-7">
-        <div class="text-2xl font-semibold tracking-tight flex justify-between items-start gap-1">
-            <p class="flex-1">
+<div class:list={["ui-card min-h-fit md:min-h-full h-full flex flex-col", className]}>
+    <div class="flex flex-col gap-3 p-6 pt-7">
+        <div class="text-xl md:text-2xl font-semibold tracking-tight flex justify-between items-start gap-3">
+            <p class="flex-1 leading-tight">
                 {project.locale[lang].title}
             </p>
-            <div class="absolute right-4 top-2 flex gap-1 items-center justify-end w-36">
+            <div class="flex gap-1 items-center justify-end shrink-0">
                 {project.inProgress ? (
-                    <span class="text-yellow-400 icon-[mdi--construction-outline]" />
-                    <span class="text-xs">
-                        {t("generic.underConstruction")}
-                    </span>
+                    <div class="ui-status-badge ui-status-warning">
+                        <span class="icon-[mdi--construction-outline]" />
+                        <span>{t("generic.underConstruction")}</span>
+                    </div>
                 ) : (
-                    <span class="text-green-600 icon-[mdi--check-circle-outline]" />
-                    <span class="text-xs">
-                        {t("generic.completed")}
-                    </span>
+                    <div class="ui-status-badge ui-status-success">
+                        <span class="icon-[mdi--check-circle-outline]" />
+                        <span>{t("generic.completed")}</span>
+                    </div>
                 )}
             </div>
         </div>
-        <div class="text-xs md:text-sm text-zinc-800 dark:text-zinc-300 tracking-tight">
+        <div class="text-sm ui-muted tracking-tight">
             {project.locale[lang].description}
         </div>
     </div>
-    <div class="p-6 pt-0 text-sm font-light text-zinc-700 dark:text-zinc-300">
+    <div class="p-6 pt-0 text-sm font-light ui-muted flex-1">
         <div>
             {project.locale[lang].detail.split("\n").map((line) => <p>{line}</p>)}
         </div>
     </div>
-    <div class="flex items-center p-6 pt-0 justify-between">
+    <div class="flex items-center p-6 pt-0 justify-between gap-3 flex-wrap">
         {project.repoUrl && (
             <TransparentLink href={project.repoUrl}>
                 {t("projects.seeRepo")}

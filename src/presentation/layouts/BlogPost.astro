@@ -28,12 +28,12 @@ const t = useTranslations(lang, "blog");
 
 	<Body>
 		<section class="w-full flex flex-col items-center px-4 sm:px-6 py-6 sm:py-10">
-			<div class="w-full max-w-3xl mx-auto">
-				<Image transition:name={`img-${title}`} id={`img-${title}`} class="block w-full rounded-xl object-cover" width={1020} height={510} fit="cover" src={heroImage} alt="" />
+			<div class="w-full max-w-3xl mx-auto ui-card">
+				<Image transition:name={`img-${title}`} id={`img-${title}`} class="block w-full object-cover" width={1020} height={510} fit="cover" src={heroImage} alt="" />
 			</div>
 			<div class="w-full max-w-3xl mx-auto pt-8 sm:pt-10">
 				<header class="text-center mb-8 sm:mb-10">
-					<div class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+					<div class="ui-meta mb-2">
 						<FormattedDate date={pubDate} />
 						{
 							updatedDate && (
@@ -43,10 +43,10 @@ const t = useTranslations(lang, "blog");
 							)
 						}
 					</div>
-					<h1 transition:name={`title-${title}`} id={`title-${title}`} class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-gray-200">
+					<h1 transition:name={`title-${title}`} id={`title-${title}`} class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight adaptive-text">
 						{title}
 					</h1>
-					<hr class="mt-4 mx-auto w-16 h-0.5 bg-gray-400 dark:bg-gray-500 rounded" />
+					<hr class="mt-4 mx-auto w-16 h-px rounded" style="background-color: var(--border-default);" />
 				</header>
 				<article class="prose prose-custom prose-lg max-w-none">
 					<slot />

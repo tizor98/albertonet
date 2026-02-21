@@ -6,11 +6,11 @@ const t = useTranslations(lang, "home");
 ---
 
 <div class="dropdown dropdown-hover dropdown-end">
-  <summary role="button" class="btn rounded-2xl bg-white text-black dark:bg-zinc-800 dark:text-zinc-100">
+  <button type="button" class="ui-control" aria-label="Theme switcher">
     <span class="icon-[mdi--white-balance-sunny] w-4 h-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"></span>
     <span class="absolute icon-[mdi--moon-and-stars] w-4 h-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"></span>
-  </summary>
-  <ul class="menu dropdown-content bg-white text-black dark:bg-zinc-800 dark:text-zinc-100 rounded-box z-1 w-32 p-2 shadow-sm">
+  </button>
+  <ul class="menu dropdown-content ui-dropdown-panel z-1 w-36 p-2 shadow-none">
       <li><button onclick="setTheme('light')" id="light">{t("lightTheme")}</button></li>
       <li><button onclick="setTheme('dark')" id="dark">{t("darkTheme")}</button></li>
       <li><button onclick="setTheme('system')" id="system">{t("systemTheme")}</button></li>
