@@ -13,7 +13,8 @@
             "!**/.astro/**/*",
             "!**/.css/**/*",
             "!**/.pnpm-store/**/*",
-            "!**/.github/**/*"
+            "!**/.github/**/*",
+            "!**/*-lock.json"
         ]
     },
     "formatter": {
