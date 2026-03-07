@@ -22,7 +22,7 @@ export const server = {
                 );
                 const t = useTranslations(lang, "contact.error");
 
-                if (sendContactInput.name?.length === 0) {
+                if (!sendContactInput.name) {
                     errors.push(t("nameIsBlank"));
                 }
 
@@ -33,7 +33,7 @@ export const server = {
                 }
 
                 if (
-                    sendContactInput.message &&
+                    !sendContactInput.message ||
                     sendContactInput.message.length < 10
                 ) {
                     errors.push(t("messageToShort"));
