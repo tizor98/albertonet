@@ -11,7 +11,7 @@ export const server = {
             name: z.string().optional(),
             email: z.string().optional(),
             message: z.string().optional(),
-            isCompany: z.boolean().optional(),
+            isCompany: z.coerce.boolean().optional(),
         }),
         accept: "form",
         handler: async (sendContactInput, ctx) => {

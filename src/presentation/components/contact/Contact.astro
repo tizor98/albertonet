@@ -82,16 +82,20 @@ import { paths } from "@/config/paths";
 import { actions} from "astro:actions";
 import { navigate } from "astro:transitions/client";
 
-const form = document.getElementById("contact-form") as HTMLFormElement;
-const errors = document.getElementById("errors") as HTMLDivElement;
 const fieldIds = ["name", "email", "message"] as const;
 
-if (form && errors) {
-    document.addEventListener("submit", e => {
+function initContactForm() {
+    const form = document.getElementById("contact-form") as HTMLFormElement;
+    const errors = document.getElementById("errors") as HTMLDivElement;
+    if (!form || !errors) return;
+
+    form.addEventListener("submit", e => {
         e.preventDefault();
-        sendForm(form, errors);
+        void sendForm(form, errors);
     });
 }
+
+document.addEventListener("astro:page-load", initContactForm);
 
 async function sendForm(form: HTMLFormElement, errors: HTMLDivElement) {
     try {
