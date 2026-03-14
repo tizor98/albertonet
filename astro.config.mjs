@@ -27,15 +27,13 @@ export default defineConfig({
     vite: {
         plugins: [tailwindcss()],
     },
-    experimental: {
-        failOnPrerenderConflict: true,
-        fonts: [
-            {
-                provider: fontProviders.google(),
-                name: "Poppins",
-                cssVariable: "--font-poppins",
-                weights: [400, 500, 600, 700],
-            },
-        ],
-    },
+    failOnPrerenderConflict: true,
+    fonts: [
+        {
+            provider: fontProviders.google(),
+            name: "Poppins",
+            cssVariable: "--font-poppins",
+            weights: [400, 500, 600, 700],
+        },
+    ],
 });
