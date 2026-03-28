@@ -20,23 +20,23 @@
         "@astrojs/rss": "4.0.18",
         "@astrojs/sitemap": "3.7.2",
         "@astrojs/vercel": "10.0.3",
-        "@aws-sdk/client-ses": "3.916.0",
-        "@tailwindcss/vite": "4.1.14",
-        "@vercel/analytics": "1.5.0",
-        "@vercel/speed-insights": "1.2.0",
+        "@aws-sdk/client-ses": "3.1019.0",
+        "@tailwindcss/vite": "4.2.2",
+        "@vercel/analytics": "2.0.1",
+        "@vercel/speed-insights": "2.0.0",
         "astro": "6.1.1",
-        "astro-expressive-code": "0.41.3",
+        "astro-expressive-code": "0.41.7",
         "sharp": "0.34.3",
-        "tailwindcss": "4.1.14"
+        "tailwindcss": "4.2.2"
     },
     "devDependencies": {
-        "@biomejs/biome": "2.2.7",
+        "@biomejs/biome": "2.4.9",
         "@iconify-json/mdi": "1.2.3",
-        "@iconify/tailwind4": "1.0.6",
+        "@iconify/tailwind4": "1.2.3",
         "@tailwindcss/typography": "0.5.19",
-        "daisyui": "5.3.3",
+        "daisyui": "5.5.19",
         "husky": "9.1.7",
-        "lint-staged": "16.2.6"
+        "lint-staged": "16.4.0"
     },
     "lint-staged": {
         "*": "pnpm check"
