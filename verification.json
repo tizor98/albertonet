@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "911fac298ccc8edf90f690200c694de0cbfff51b",
+  "updatedCommit": "36836011d9c762c4d667eb0ab30a501507b884a4",
+  "comparison": "Before: original dependencies, development server. After: updated dependencies, production build served locally.",
+  "viewports": {
+    "desktop": [
+      1440,
+      1000
+    ],
+    "mobile": [
+      390,
+      844
+    ]
+  },
+  "screenshots": "Full-page screenshots except the article, captured at the viewport height. Fonts and images loaded; animations and dev toolbar excluded consistently.",
+  "results": [
+    {
+      "scenario": "blog-es-desktop-light",
+      "sha256": "4c7105dff065298fa4a3fc2245d67243ab1380ae09ac7e6883e29e06dd6e4114",
+      "identical": true
+    },
+    {
+      "scenario": "contact-en-desktop-dark",
+      "sha256": "1b1cc11026ce4c7e66f89cf90dcaecda67eb064db7681e89f2e7eca5bca5de79",
+      "identical": true
+    },
+    {
+      "scenario": "contact-es-mobile-light",
+      "sha256": "af9cd4aad850175a6b7cce5bc39badaafff3eed09a2dd29baa53be1f40c883a7",
+      "identical": true
+    },
+    {
+      "scenario": "home-en-desktop-light",
+      "sha256": "00279a94d02c734f51d95157255231b2cb695a65517deb5fc27489d721114c24",
+      "identical": true
+    },
+    {
+      "scenario": "home-es-desktop-dark",
+      "sha256": "bb4f9f3b0feab4873b1e9783260cf6a5b032caa074067ea703a70083ab5821aa",
+      "identical": true
+    },
+    {
+      "scenario": "home-es-desktop-light",
+      "sha256": "b9923a4668b5becdc737f1e4f9d502379c6351ec4a76e846bb88d83d171be032",
+      "identical": true
+    },
+    {
+      "scenario": "home-es-mobile-light",
+      "sha256": "14bbc272fac8855c1181f91ad374333b0f5b37b08058e610fa23c00b0fb10000",
+      "identical": true
+    },
+    {
+      "scenario": "post-es-desktop-dark",
+      "sha256": "2238386150c33dacca0037b2630f34b53d612f266888ae01afb1549053a2a430",
+      "identical": true
+    }
+  ]
+}
