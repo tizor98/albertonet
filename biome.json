@@ -1,5 +1,5 @@
 {
-    "$schema": "https://biomejs.dev/schemas/2.4.9/schema.json",
+    "$schema": "https://biomejs.dev/schemas/2.6.3/schema.json",
     "vcs": {
         "enabled": true,
         "clientKind": "git",
@@ -16,16 +16,23 @@
             "**",
             "!**/node_modules/**/*",
             "!**/.astro/**/*",
+            "!**/.agents/**/*",
             "!**/.css/**/*",
             "!**/.pnpm-store/**/*",
             "!**/.github/**/*",
-            "!**/*-lock.json"
+            "!**/*-lock.json",
+            "!**/pnpm-lock.yaml"
         ]
     },
     "formatter": {
         "enabled": true,
         "indentStyle": "space",
         "indentWidth": 4
+    },
+    "markdown": {
+        "formatter": {
+            "enabled": false
+        }
     },
     "assist": {
         "enabled": true,
@@ -54,7 +61,7 @@
             "security": {
                 "noDangerouslySetInnerHtml": "off"
             },
-            "recommended": false,
+            "preset": "none",
             "suspicious": {
                 "noExplicitAny": "off"
             }

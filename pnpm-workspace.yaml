@@ -1,5 +1,7 @@
 allowBuilds:
-  esbuild: false
-  sharp: false
-minimumReleaseAgeExclude:
-  - astro@7.1.1
+    esbuild: false
+    sharp: false
+overrides:
+    "@tailwindcss/typography>postcss-selector-parser": 7.1.7
+    "@vercel/routing-utils>path-to-regexp": 6.3.0
+    "@vercel/cli-config>zod": 4.6.7
